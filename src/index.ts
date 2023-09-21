@@ -237,6 +237,7 @@ const mempoolMessage = {
 const { status, feed, data } = mempoolMessage;
 
 const response = new WebSocketResponse({ status, feed });
+
 const txs = data.txs.map(
   (tx) =>
     new MempoolTx({
@@ -251,6 +252,7 @@ const txs = data.txs.map(
           },
     })
 );
+
 const mempoolData = new MempoolData({ chainId: data.chainId, txs });
 response.data = new Data({ data: { case: "mempool", value: mempoolData } });
 

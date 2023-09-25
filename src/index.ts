@@ -1,37 +1,14 @@
-import { mempoolMessageParser } from "./deserialize.js";
-import { Buffer } from "buffer";
-import { encodeMempoolMessage } from "./serialize.js";
+import { mempoolMessage } from "./data.ts";
+import { deserialize } from "./deserialize.ts";
+import { serialize } from "./serialize.ts";
 
-import {
-  ErrorMessage,
-  MempoolMessage,
-  Message,
-  MessageParser,
-} from "./types.js";
+export { serialize } from "./serialize.ts";
+export { deserialize } from "./deserialize.ts";
 
-const messageTagToParser: Record<number, MessageParser> = {
-  1: mempoolMessageParser,
-  // 2: ["block"],
-  // 3: ["error"],
-  // 4: ["unsubscribe"],
-};
+const serialized = serialize(mempoolMessage);
 
-export const serialize = (message: Message) => {
-  const { feed } = message;
-  if ((message as ErrorMessage).error) {
-    // error encoder
-  } else if (feed === "mempool") {
-    return encodeMempoolMessage(message as MempoolMessage);
-  } else if (feed === "block") {
-    // block encoder
-  }
+console.log({ serialized });
 
-  throw new Error("Unrecognized message type");
-};
+const deserialized = deserialize(serialized);
 
-export const deserialize = (message: Buffer) => {
-  const messageTag = message.readInt8(0);
-  const parser = messageTagToParser[messageTag];
-  const parsed = parser(message.subarray(1));
-  return parsed;
-};
+console.log({ deserialized });

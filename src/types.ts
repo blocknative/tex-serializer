@@ -23,20 +23,23 @@ export type CompletedTransaction = {
   status: string;
 };
 
+export type Transaction = MempoolTransaction | CompletedTransaction;
+
 export type Error = {
   code: number;
   message: string;
 };
 
-export type MempoolMessage = {
-  feed: "mempool";
+export type MessageBase = {
+  feed: string;
   chainId: string;
+};
+
+export type MempoolMessage = MessageBase & {
   transactions: MempoolTransaction[];
 };
 
-export type BlockMessage = {
-  feed: "block";
-  chainId: string;
+export type BlockMessage = MessageBase & {
   transactions: CompletedTransaction[];
   hash: string;
   height: number;
@@ -46,30 +49,40 @@ export type BlockMessage = {
   baseFeePerGas: string;
 };
 
-export type ErrorMessage = {
-  feed: "mempool" | "block";
-  chainId: string;
+export type ErrorMessage = MessageBase & {
   error: Error;
 };
 
-export type Message = MempoolMessage | BlockMessage | ErrorMessage;
+export type UnsubscribeMessage = MessageBase & {
+  unsubscribe: true;
+};
+
+export type Message =
+  | MempoolMessage
+  | BlockMessage
+  | ErrorMessage
+  | UnsubscribeMessage;
 
 export type MempoolMessageParser = (message: Buffer) => MempoolMessage;
 export type BlockMessageParser = (message: Buffer) => BlockMessage;
 export type ErrorMessageParser = (message: Buffer) => ErrorMessage;
+export type UnsubscribeMessageParser = (message: Buffer) => UnsubscribeMessage;
 
 export type MempoolMessageEncoder = (message: MempoolMessage) => Buffer;
 export type BlockMessageEncoder = (message: BlockMessage) => Buffer;
 export type ErrorMessageEncoder = (message: ErrorMessage) => Buffer;
+export type UnsubscribeMessageEncoder = (message: UnsubscribeMessage) => Buffer;
 
 export type MessageParser =
   | MempoolMessageParser
   | BlockMessageParser
-  | ErrorMessageParser;
+  | ErrorMessageParser
+  | UnsubscribeMessageParser;
 
 export type MessageEncoder =
   | MempoolMessageEncoder
   | BlockMessageEncoder
-  | ErrorMessageEncoder;
+  | ErrorMessageEncoder
+  | UnsubscribeMessageEncoder;
 
 export type ValueOf<Obj> = Obj[keyof Obj];

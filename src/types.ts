@@ -3,6 +3,8 @@ export type PendingTransaction = {
   gasPrice: number;
   to: string;
   timestamp: string;
+  from: string;
+  nonce: number;
 };
 
 export type DroppedTransaction = {
@@ -10,7 +12,9 @@ export type DroppedTransaction = {
   dropped: boolean;
 };
 
-export type ConfirmedTransaction = {
+export type MempoolTransaction = PendingTransaction | DroppedTransaction;
+
+export type CompletedTransaction = {
   hash: string;
   index: number;
   gasPrice: number;
@@ -24,10 +28,48 @@ export type Error = {
   message: string;
 };
 
-export type PendingMessage = {
-  feed: string;
+export type MempoolMessage = {
+  feed: "mempool";
   chainId: string;
-  transactions: PendingTransaction[];
+  transactions: MempoolTransaction[];
 };
 
-export type MessageParser = (buf: Buffer) => PendingMessage;
+export type BlockMessage = {
+  feed: "block";
+  chainId: string;
+  transactions: CompletedTransaction[];
+  hash: string;
+  height: number;
+  timestamp: string;
+  detectedTimestamp: string;
+  txnCount: number;
+  baseFeePerGas: string;
+};
+
+export type ErrorMessage = {
+  feed: "mempool" | "block";
+  chainId: string;
+  error: Error;
+};
+
+export type Message = MempoolMessage | BlockMessage | ErrorMessage;
+
+export type MempoolMessageParser = (message: Buffer) => MempoolMessage;
+export type BlockMessageParser = (message: Buffer) => BlockMessage;
+export type ErrorMessageParser = (message: Buffer) => ErrorMessage;
+
+export type MempoolMessageEncoder = (message: MempoolMessage) => Buffer;
+export type BlockMessageEncoder = (message: BlockMessage) => Buffer;
+export type ErrorMessageEncoder = (message: ErrorMessage) => Buffer;
+
+export type MessageParser =
+  | MempoolMessageParser
+  | BlockMessageParser
+  | ErrorMessageParser;
+
+export type MessageEncoder =
+  | MempoolMessageEncoder
+  | BlockMessageEncoder
+  | ErrorMessageEncoder;
+
+export type ValueOf<Obj> = Obj[keyof Obj];

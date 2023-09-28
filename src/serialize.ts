@@ -1,55 +1,69 @@
 import { parameterToTag } from "./constants.ts";
 import { Buffer } from "buffer";
-import Big from "big.js";
-
 import { CompletedTransaction, MempoolTransaction, Message } from "./types.ts";
 
-const hexEncoder = (hash: string) => {
-  const withoutPrefix = hash.slice(2);
+const hexEncoder = (hash: string | null) => {
+  const withoutPrefix = hash ? hash.slice(2) : "";
   const buf = Buffer.from(withoutPrefix, "hex");
-  const bufLen = Buffer.from([0]);
-  bufLen.writeInt8(buf.byteLength);
-  return Buffer.concat([bufLen, buf]);
-};
-
-const gweiEncoder = (gwei: number) => {
-  const numString = new Big(gwei).toString();
-  const buf = Buffer.from(numString, "utf-8");
-  const bufLen = Buffer.from([0]);
+  const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
 const utf8Encoder = (str: string) => {
   const buf = Buffer.from(str, "utf8");
-  const bufLen = Buffer.from([0]);
+  const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
-const intEncoder = (int: number) => {
-  const buf = Buffer.from([0, 0]);
+const int8Encoder = (int: number) => {
+  const buf = Buffer.allocUnsafe(1);
+  buf.writeInt8(int);
+  const bufLen = Buffer.allocUnsafe(1);
+  bufLen.writeInt8(buf.byteLength);
+  return Buffer.concat([bufLen, buf]);
+};
+
+const int16Encoder = (int: number) => {
+  const buf = Buffer.allocUnsafe(2);
   buf.writeInt16BE(int);
-  const bufLen = Buffer.from([0]);
+  const bufLen = Buffer.allocUnsafe(1);
+  bufLen.writeInt8(buf.byteLength);
+  return Buffer.concat([bufLen, buf]);
+};
+
+const numberEncoder = (gwei: number) => {
+  const buf = Buffer.allocUnsafe(8);
+  buf.writeDoubleBE(gwei);
+  const bufLen = Buffer.allocUnsafe(1);
+  bufLen.writeInt8(buf.byteLength);
+  return Buffer.concat([bufLen, buf]);
+};
+
+const int32Encoder = (int: number) => {
+  const buf = Buffer.allocUnsafe(4);
+  buf.writeInt32BE(int);
+  const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
 const boolEncoder = (bool: boolean) => {
-  const buf = Buffer.from([0]);
+  const buf = Buffer.allocUnsafe(1);
   buf.writeInt8(Number(bool));
-  const bufLen = Buffer.from([0]);
+  const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
 const encode = (key: string, value: unknown): Buffer | null => {
-  const tagBuf = Buffer.from([0]);
+  const tagBuf = Buffer.allocUnsafe(1);
   tagBuf.writeInt8(parameterToTag[key]);
 
   switch (key) {
     case "chainId": {
-      const encodedLengthAndValue = intEncoder(parseInt(value as string, 16));
+      const encodedLengthAndValue = int16Encoder(parseInt(value as string, 16));
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "feed": {
@@ -63,7 +77,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
         | MempoolTransaction
         | CompletedTransaction
       )[]) {
-        let encodedTransaction = Buffer.from("");
+        let encodedTransaction = Buffer.allocUnsafe(0);
 
         Object.entries(transaction).forEach(([key, value]) => {
           const encoded = encode(key, value);
@@ -74,7 +88,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
           }
         });
 
-        const encodedTransactionLength = Buffer.from([0, 0]);
+        const encodedTransactionLength = Buffer.allocUnsafe(2);
         encodedTransactionLength.writeInt16BE(encodedTransaction.byteLength);
 
         allEncodedTransactions = Buffer.concat([
@@ -83,7 +97,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
         ]);
       }
 
-      const txsLength = Buffer.from([0, 0]);
+      const txsLength = Buffer.allocUnsafe(2);
       txsLength.writeInt16BE(allEncodedTransactions.byteLength);
 
       return Buffer.concat([tagBuf, txsLength, allEncodedTransactions]);
@@ -93,7 +107,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "gasPrice": {
-      const encodedLengthAndValue = gweiEncoder(value as number);
+      const encodedLengthAndValue = numberEncoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "to": {
@@ -109,7 +123,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "nonce": {
-      const encodedLengthAndValue = intEncoder(value as number);
+      const encodedLengthAndValue = int32Encoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "dropped": {
@@ -117,23 +131,35 @@ const encode = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "height": {
-      const encodedLengthAndValue = intEncoder(value as number);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "detectedTimestamp": {
-      const encodedLengthAndValue = utf8Encoder(value as string);
+      const encodedLengthAndValue = int32Encoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "txnCount": {
-      const encodedLengthAndValue = intEncoder(value as number);
+      const encodedLengthAndValue = int16Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "gasLimit": {
+      const encodedLengthAndValue = int32Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "gasUsed": {
+      const encodedLengthAndValue = int32Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "index": {
+      const encodedLengthAndValue = int32Encoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "baseFeePerGas": {
-      const encodedLengthAndValue = gweiEncoder(value as number);
+      const encodedLengthAndValue = numberEncoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "maxPriorityFeePerGas": {
+      const encodedLengthAndValue = numberEncoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "error": {
-      let encodedError = Buffer.from("");
+      let encodedError = Buffer.allocUnsafe(0);
 
       Object.entries(value as Error).forEach(([key, value]) => {
         const encoded = encode(key, value);
@@ -145,13 +171,13 @@ const encode = (key: string, value: unknown): Buffer | null => {
         }
       });
 
-      const len = Buffer.from([0, 0]);
+      const len = Buffer.allocUnsafe(2);
       len.writeInt16BE(encodedError.byteLength);
 
       return Buffer.concat([tagBuf, len, encodedError]);
     }
     case "code": {
-      const encodedLengthAndValue = intEncoder(value as number);
+      const encodedLengthAndValue = int8Encoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "message": {
@@ -168,7 +194,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
 };
 
 export const serialize = (message: Message) => {
-  let encoded = Buffer.from("");
+  let encoded = Buffer.allocUnsafe(0);
 
   Object.entries(message).forEach(([key, value]) => {
     const encodedKeyValue = encode(key, value);

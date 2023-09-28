@@ -4,13 +4,15 @@
   "type": "module",
   "devDependencies": {
     "bun-types": "latest",
-    "@types/big.js": "^6.2.0"
+    "vitest": "^0.34.5"
   },
   "peerDependencies": {
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "big.js": "^6.2.1",
     "buffer": "^6.0.3"
+  },
+  "scripts": {
+    "test": "vitest"
   }
 }

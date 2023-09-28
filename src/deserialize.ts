@@ -1,17 +1,16 @@
-import Big from "big.js";
 import { getTagLengthBytes, tagToParameter } from "./constants.ts";
 import { Error, Message, Transaction, ValueOf } from "./types.ts";
 
 export const hexParser = (buf: Buffer) => `0x${buf.toString("hex")}`;
-
-export const gweiParser = (buf: Buffer) => {
-  const numString = buf.toString("utf-8");
-  return new Big(numString).toNumber();
+export const addressParser = (buf: Buffer) => {
+  const parsed = buf.toString("hex");
+  return parsed ? `0x${parsed}` : null;
 };
-
-export const addressParser = (buf: Buffer) => `0x${buf.toString("hex")}`;
 export const utf8Parser = (buf: Buffer) => buf.toString("utf8");
-export const intParser = (buf: Buffer) => parseInt(`0x${buf.toString("hex")}`);
+export const int8Parser = (buf: Buffer) => buf.readInt8();
+export const int16Parser = (buf: Buffer) => buf.readInt16BE();
+export const int32Parser = (buf: Buffer) => buf.readInt32BE();
+export const numberParser = (buf: Buffer) => buf.readDoubleBE();
 
 export const boolParser = (buf: Buffer) =>
   !!parseInt(`0x${buf.toString("hex")}`);
@@ -24,7 +23,7 @@ const decode = (
 
   switch (key) {
     case "chainId": {
-      const decodedValue = intParser(value);
+      const decodedValue = int16Parser(value);
       return { key, value: `0x${decodedValue.toString(16)}` };
     }
     case "feed": {
@@ -82,7 +81,7 @@ const decode = (
       return { key, value: decodedValue };
     }
     case "gasPrice": {
-      const decodedValue = gweiParser(value);
+      const decodedValue = numberParser(value);
       return { key, value: decodedValue };
     }
     case "to": {
@@ -98,7 +97,15 @@ const decode = (
       return { key, value: decodedValue };
     }
     case "nonce": {
-      const decodedValue = intParser(value);
+      const decodedValue = int32Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "gasUsed": {
+      const decodedValue = int32Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "index": {
+      const decodedValue = int32Parser(value);
       return { key, value: decodedValue };
     }
     case "dropped": {
@@ -106,19 +113,23 @@ const decode = (
       return { key, value: decodedValue };
     }
     case "height": {
-      const decodedValue = intParser(value);
-      return { key, value: decodedValue };
-    }
-    case "detectedTimestamp": {
-      const decodedValue = utf8Parser(value);
+      const decodedValue = int32Parser(value);
       return { key, value: decodedValue };
     }
     case "txnCount": {
-      const decodedValue = intParser(value);
+      const decodedValue = int16Parser(value);
       return { key, value: decodedValue };
     }
     case "baseFeePerGas": {
-      const decodedValue = gweiParser(value);
+      const decodedValue = numberParser(value);
+      return { key, value: decodedValue };
+    }
+    case "maxPriorityFeePerGas": {
+      const decodedValue = numberParser(value);
+      return { key, value: decodedValue };
+    }
+    case "gasLimit": {
+      const decodedValue = int32Parser(value);
       return { key, value: decodedValue };
     }
     case "error": {
@@ -146,7 +157,7 @@ const decode = (
       return { key, value: decodedError };
     }
     case "code": {
-      const decodedValue = intParser(value);
+      const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
     }
     case "message": {

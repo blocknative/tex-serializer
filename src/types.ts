@@ -5,6 +5,7 @@ export type PendingTransaction = {
   timestamp: string;
   from: string;
   nonce: number;
+  maxPriorityFeePerGas?: number;
 };
 
 export type DroppedTransaction = {
@@ -18,7 +19,7 @@ export type CompletedTransaction = {
   hash: string;
   index: number;
   gasPrice: number;
-  to: string;
+  to: string | null;
   gasUsed: number;
   status: string;
 };
@@ -44,9 +45,10 @@ export type BlockMessage = MessageBase & {
   hash: string;
   height: number;
   timestamp: string;
-  detectedTimestamp: string;
   txnCount: number;
-  baseFeePerGas: string;
+  baseFeePerGas: number;
+  gasUsed: number;
+  gasLimit: number;
 };
 
 export type ErrorMessage = MessageBase & {

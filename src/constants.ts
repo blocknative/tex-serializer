@@ -10,13 +10,16 @@ export const parameterToTag: Record<string, number> = {
   nonce: 9,
   dropped: 10,
   height: 11,
-  detectedTimestamp: 12,
+  maxPriorityFeePerGas: 12,
   txnCount: 13,
   baseFeePerGas: 14,
   error: 15,
   code: 16,
   message: 17,
   status: 18,
+  gasLimit: 19,
+  gasUsed: 20,
+  index: 21,
 };
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

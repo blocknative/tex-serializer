@@ -22,3 +22,13 @@ export const parameterToTag: Record<string, number> = {
 export const tagToParameter: Record<number, string> = Object.fromEntries(
   Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter])
 );
+
+export const getTagLengthBytes = (tag: number): number => {
+  switch (tag) {
+    case 3:
+    case 15:
+      return 2;
+    default:
+      return 1;
+  }
+};

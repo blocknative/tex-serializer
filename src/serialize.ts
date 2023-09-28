@@ -1,5 +1,6 @@
 import { parameterToTag } from "./constants.ts";
 import { Buffer } from "buffer";
+import Big from "big.js";
 
 import { CompletedTransaction, MempoolTransaction, Message } from "./types.ts";
 
@@ -12,7 +13,8 @@ const hexEncoder = (hash: string) => {
 };
 
 const gweiEncoder = (gwei: number) => {
-  const buf = Buffer.from(gwei.toString(16), "hex");
+  const numString = new Big(gwei).toString();
+  const buf = Buffer.from(numString, "utf-8");
   const bufLen = Buffer.from([0]);
   bufLen.writeInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
@@ -45,11 +47,9 @@ const encode = (key: string, value: unknown): Buffer | null => {
   const tagBuf = Buffer.from([0]);
   tagBuf.writeInt8(parameterToTag[key]);
 
-  console.log("tag:", parameterToTag[key]);
-
   switch (key) {
     case "chainId": {
-      const encodedLengthAndValue = hexEncoder(value as string);
+      const encodedLengthAndValue = intEncoder(parseInt(value as string, 16));
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "feed": {
@@ -141,7 +141,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
         if (encoded) {
           encodedError = Buffer.concat([encodedError, encoded]);
         } else {
-          console.log(`Unknown error parameter: ${key}`);
+          console.warn(`Unknown error parameter: ${key}`);
         }
       });
 

@@ -1,17 +1,13 @@
-import { tagToParameter } from "./constants.ts";
-import {
-  CompletedTransaction,
-  Error,
-  MempoolTransaction,
-  Message,
-  Transaction,
-  ValueOf,
-} from "./types.ts";
+import Big from "big.js";
+import { getTagLengthBytes, tagToParameter } from "./constants.ts";
+import { Error, Message, Transaction, ValueOf } from "./types.ts";
 
 export const hexParser = (buf: Buffer) => `0x${buf.toString("hex")}`;
 
-export const gweiParser = (buf: Buffer) =>
-  parseFloat(`0x${buf.toString("hex")}`);
+export const gweiParser = (buf: Buffer) => {
+  const numString = buf.toString("utf-8");
+  return new Big(numString).toNumber();
+};
 
 export const addressParser = (buf: Buffer) => `0x${buf.toString("hex")}`;
 export const utf8Parser = (buf: Buffer) => buf.toString("utf8");
@@ -28,8 +24,8 @@ const decode = (
 
   switch (key) {
     case "chainId": {
-      const decodedValue = hexParser(value);
-      return { key, value: decodedValue };
+      const decodedValue = intParser(value);
+      return { key, value: `0x${decodedValue.toString(16)}` };
     }
     case "feed": {
       const decodedValue = utf8Parser(value);
@@ -37,14 +33,13 @@ const decode = (
     }
     case "transactions": {
       let transactions: Transaction[] = [];
-
       let cursor = 0;
 
       while (cursor < value.byteLength) {
         const txLen = value.readInt16BE(cursor);
         cursor += 2;
         const txVal = value.subarray(cursor, cursor + txLen);
-        cursor += cursor + txLen;
+        cursor += txLen;
 
         // tx params
         let txCursor = 0;
@@ -53,9 +48,19 @@ const decode = (
         while (txCursor < txVal.byteLength) {
           const tag = txVal.readInt8(txCursor);
           txCursor++;
-          const len = txVal.readInt16BE(txCursor);
-          txCursor += 2;
-          const val = txVal.subarray(txCursor + len);
+
+          let len: number;
+
+          if (getTagLengthBytes(tag) === 2) {
+            len = txVal.readInt16BE(txCursor);
+            txCursor += 2;
+          } else {
+            len = txVal.readInt8(txCursor);
+            txCursor++;
+          }
+
+          const val = txVal.subarray(txCursor, txCursor + len);
+          txCursor += len;
           const decoded = decode(tag, val);
 
           if (decoded) {
@@ -126,12 +131,11 @@ const decode = (
         const len = value.readInt16BE(cursor);
         cursor += 2;
         const val = value.subarray(cursor, len + cursor);
-        cursor += len + cursor;
+        cursor += len;
         const decoded = decode(tag, val);
 
         if (decoded) {
           const { key, value } = decoded;
-          // @TODO - Fix this?
           // @ts-ignore
           decodedError[key as keyof Error] = value as ValueOf<Error>;
         } else {
@@ -165,9 +169,20 @@ export const deserialize = (buf: Buffer): Message => {
   while (cursor < buf.byteLength) {
     const tag = buf.readInt8(cursor);
     cursor++;
-    const len = buf.readInt16BE(cursor);
-    cursor += 2;
+
+    let len: number;
+
+    if (getTagLengthBytes(tag) === 2) {
+      len = buf.readInt16BE(cursor);
+      cursor += 2;
+    } else {
+      len = buf.readInt8(cursor);
+      cursor++;
+    }
+
     const val = buf.subarray(cursor, cursor + len);
+    cursor += len;
+
     const decoded = decode(tag, val);
 
     if (decoded) {

@@ -1,7 +1,7 @@
 {
   "name": "tex-serializer",
   "version": "0.0.1",
-  "module": "index.js",
+  "module": "dist/index.js",
   "type": "module",
   "devDependencies": {
     "bun-plugin-dts": "^0.2.1",
@@ -17,9 +17,8 @@
   },
   "types": "./types.d.ts",
   "files": [
-    "dist",
-    "types.d.ts"
+    "dist"
   ],
-  "browser": "index.js",
-  "main": "index.js"
+  "browser": "dist/index.js",
+  "main": "dist/index.js"
 }

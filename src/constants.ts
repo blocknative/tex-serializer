@@ -1,3 +1,4 @@
+/** Can have up to 255 tags (1 byte length) */
 export const parameterToTag: Record<string, number> = {
   chainId: 1,
   feed: 2,
@@ -20,6 +21,7 @@ export const parameterToTag: Record<string, number> = {
   gasLimit: 19,
   gasUsed: 20,
   index: 21,
+  id: 22,
 };
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

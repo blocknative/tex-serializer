@@ -4,15 +4,15 @@
   "type": "module",
   "devDependencies": {
     "bun-types": "latest",
-    "vitest": "^0.34.5"
+    "tsc": "^2.0.4"
   },
   "peerDependencies": {
     "typescript": "^5.2.2"
   },
-  "dependencies": {
-    "buffer": "^6.0.3"
-  },
   "scripts": {
-    "test": "vitest"
-  }
+    "test": "bun test",
+    "build": "bun build ./src/index.ts --outdir ./dist",
+    "prepare": "npm run build"
+  },
+  "types": "./src/types.d.ts"
 }

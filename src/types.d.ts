@@ -55,36 +55,13 @@ export type ErrorMessage = MessageBase & {
   error: Error;
 };
 
-export type UnsubscribeMessage = MessageBase & {
-  unsubscribe: true;
+export type AckMessage = {
+  id: string;
 };
 
-export type Message =
-  | MempoolMessage
-  | BlockMessage
-  | ErrorMessage
-  | UnsubscribeMessage;
-
-export type MempoolMessageParser = (message: Buffer) => MempoolMessage;
-export type BlockMessageParser = (message: Buffer) => BlockMessage;
-export type ErrorMessageParser = (message: Buffer) => ErrorMessage;
-export type UnsubscribeMessageParser = (message: Buffer) => UnsubscribeMessage;
-
-export type MempoolMessageEncoder = (message: MempoolMessage) => Buffer;
-export type BlockMessageEncoder = (message: BlockMessage) => Buffer;
-export type ErrorMessageEncoder = (message: ErrorMessage) => Buffer;
-export type UnsubscribeMessageEncoder = (message: UnsubscribeMessage) => Buffer;
-
-export type MessageParser =
-  | MempoolMessageParser
-  | BlockMessageParser
-  | ErrorMessageParser
-  | UnsubscribeMessageParser;
-
-export type MessageEncoder =
-  | MempoolMessageEncoder
-  | BlockMessageEncoder
-  | ErrorMessageEncoder
-  | UnsubscribeMessageEncoder;
+export type Message = MempoolMessage | BlockMessage | ErrorMessage | AckMessage;
 
 export type ValueOf<Obj> = Obj[keyof Obj];
+
+export type Serializer = (message: Message) => Buffer;
+export type Deserializer = (message: Buffer) => Message;

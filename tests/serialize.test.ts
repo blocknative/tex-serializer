@@ -1,7 +1,13 @@
-import { expect, test } from "vitest";
+import { expect, test } from "bun:test";
 import { serialize } from "../src/serialize.ts";
-import { blockMessage, mempoolMessage } from "./data.ts";
 import { deserialize } from "../src/deserialize.ts";
+
+import {
+  ackMessage,
+  blockMessage,
+  errorMessage,
+  mempoolMessage,
+} from "./data.ts";
 
 test("Successfully serializes and deserializes a mempool message", () => {
   const serialized = serialize(mempoolMessage);
@@ -17,16 +23,16 @@ test("Successfully serializes and deserializes a block message", () => {
   expect(deserialized).toStrictEqual(blockMessage);
 });
 
-// test("Successfully serializes and deserializes a error message", () => {
-//   const serialized = serialize(mempoolMessage);
-//   const deserialized = deserialize(serialized);
+test("Successfully serializes and deserializes a error message", () => {
+  const serialized = serialize(errorMessage);
+  const deserialized = deserialize(serialized);
 
-//   expect(deserialized).toStrictEqual(mempoolMessage);
-// });
+  expect(deserialized).toStrictEqual(errorMessage);
+});
 
-// test("Successfully serializes and deserializes an ACK message", () => {
-//   const serialized = serialize(mempoolMessage);
-//   const deserialized = deserialize(serialized);
+test("Successfully serializes and deserializes an ACK message", () => {
+  const serialized = serialize(ackMessage);
+  const deserialized = deserialize(serialized);
 
-//   expect(deserialized).toStrictEqual(mempoolMessage);
-// });
+  expect(deserialized).toStrictEqual(ackMessage);
+});

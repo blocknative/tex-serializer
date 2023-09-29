@@ -1,5 +1,5 @@
 import { getTagLengthBytes, tagToParameter } from "./constants.ts";
-import { Error, Message, Transaction, ValueOf } from "./types.ts";
+import { Deserializer, Error, Message, Transaction, ValueOf } from "./types.ts";
 
 export const hexParser = (buf: Buffer) => `0x${buf.toString("hex")}`;
 export const addressParser = (buf: Buffer) => {
@@ -139,8 +139,17 @@ const decode = (
       while (cursor < value.byteLength) {
         const tag = value.readInt8(cursor);
         cursor++;
-        const len = value.readInt16BE(cursor);
-        cursor += 2;
+
+        let len: number;
+
+        if (getTagLengthBytes(tag) === 2) {
+          len = value.readInt16BE(cursor);
+          cursor += 2;
+        } else {
+          len = value.readInt8(cursor);
+          cursor++;
+        }
+
         const val = value.subarray(cursor, len + cursor);
         cursor += len;
         const decoded = decode(tag, val);
@@ -168,12 +177,16 @@ const decode = (
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
+    case "id": {
+      const decodedValue = utf8Parser(value);
+      return { key, value: decodedValue };
+    }
     default:
       return null;
   }
 };
 
-export const deserialize = (buf: Buffer): Message => {
+export const deserialize: Deserializer = (buf) => {
   const message: Message = {} as Message;
   let cursor = 0;
 

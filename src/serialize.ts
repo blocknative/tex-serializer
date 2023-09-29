@@ -1,6 +1,11 @@
 import { parameterToTag } from "./constants.ts";
-import { Buffer } from "buffer";
-import { CompletedTransaction, MempoolTransaction, Message } from "./types.ts";
+// import { Buffer } from "buffer";
+import {
+  CompletedTransaction,
+  MempoolTransaction,
+  Message,
+  Serializer,
+} from "./types.ts";
 
 const hexEncoder = (hash: string | null) => {
   const withoutPrefix = hash ? hash.slice(2) : "";
@@ -188,12 +193,16 @@ const encode = (key: string, value: unknown): Buffer | null => {
       const encodedLengthAndValue = utf8Encoder(value as string);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "id": {
+      const encodedLengthAndValue = utf8Encoder(value as string);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
     default:
       return null;
   }
 };
 
-export const serialize = (message: Message) => {
+export const serialize: Serializer = (message) => {
   let encoded = Buffer.allocUnsafe(0);
 
   Object.entries(message).forEach(([key, value]) => {

@@ -1,5 +1,5 @@
 import { getTagLengthBytes, tagToParameter } from "./constants.ts";
-import { Deserializer, Error, Message, Transaction, ValueOf } from "../types";
+import { Deserializer, Error, Message, Transaction, ValueOf } from "./types.ts";
 
 export const hexParser = (buf: Buffer) => `0x${buf.toString("hex")}`;
 export const addressParser = (buf: Buffer) => {

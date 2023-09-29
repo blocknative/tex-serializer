@@ -4,6 +4,7 @@
   "module": "index.js",
   "type": "module",
   "devDependencies": {
+    "bun-plugin-dts": "^0.2.1",
     "bun-types": "latest"
   },
   "peerDependencies": {
@@ -11,7 +12,7 @@
   },
   "scripts": {
     "test": "bun test",
-    "build": "bun build ./src/index.ts --outdir ./",
+    "build": "bun ./build.ts",
     "prepare": "npm run build"
   },
   "types": "./types.d.ts",

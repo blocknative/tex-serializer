@@ -181,6 +181,14 @@ const decode = (
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
+    case "private": {
+      const decodedValue = boolParser(value);
+      return { key, value: decodedValue };
+    }
+    case "interactionType": {
+      const decodedValue = utf8Parser(value);
+      return { key, value: decodedValue };
+    }
     default:
       return null;
   }

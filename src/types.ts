@@ -22,6 +22,8 @@ export type CompletedTransaction = {
   to: string | null;
   gasUsed: number;
   status: string;
+  private: boolean;
+  interactionType: string;
 };
 
 export type Transaction = MempoolTransaction | CompletedTransaction;

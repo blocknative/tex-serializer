@@ -196,6 +196,14 @@ const encode = (key: string, value: unknown): Buffer | null => {
       const encodedLengthAndValue = utf8Encoder(value as string);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "private": {
+      const encodedLengthAndValue = boolEncoder(value as boolean);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "interactionType": {
+      const encodedLengthAndValue = utf8Encoder(value as string);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
     default:
       return null;
   }

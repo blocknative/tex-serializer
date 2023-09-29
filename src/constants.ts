@@ -22,6 +22,8 @@ export const parameterToTag: Record<string, number> = {
   gasUsed: 20,
   index: 21,
   id: 22,
+  private: 23,
+  interactionType: 24,
 };
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

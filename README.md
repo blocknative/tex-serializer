@@ -10,13 +10,13 @@ A custom [TLV (Type Length Value)](https://devopedia.org/tlv-format) scheme is u
 - Length that indicates how long the value is which allows for variable length values. Usually 1 byte, but sometimes 2 bytes for larger values. See `getTagLengthBytes` helper in `./constants.ts` which defines the length bytes per tag.
 - Value which is the encoded value.
 
-All data parameters and their corresponding tags are defined in the `parameterToTag` object in the `./constants.ts` file. Since the tag lenght is always 1 byte, we can define up to 255 unique parameters without a breaking change.
+All data parameters and their corresponding tags are defined in the `parameterToTag` object in the `./constants.ts` file. Since the tag length is always 1 byte, we can define up to 255 unique parameters without a breaking change.
 
-To add a new parameter, add it to that object with a unique tag number (just add 1 to the last added). Then add the parameter and how to encode/decode it to `serialize.ts` and `deserialize.ts`. The design is backwards compatible, so any new tags that get added will be ignored by deserializers that have not been updated to recognize the new tag.
+To add a new parameter, add it to the `parameterToTag` object with a unique tag number (just add 1 to the last added). Then add the parameter and how to encode/decode it to the encode and decode functions in `serialize.ts` and `deserialize.ts`. The design is backwards compatible, so any new tags that get added will be ignored by deserializers that have not been updated to recognize the new tag.
 
 There can be nested TLV's to represent nested parameters in a message object as can be seen currently with the `transactions` and `error` parameters.
 
-If adding a new message type, ensure you add to the `types.ts` file as well as adding a test for the message.
+If adding a new message type, ensure you add to the `types.ts` file as well as adding a test for the new message.
 
 To install dependencies:
 

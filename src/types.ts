@@ -51,7 +51,7 @@ export type BlockMessage = MessageBase & {
   gasLimit: number;
 };
 
-export type ErrorMessage = MessageBase & {
+export type ErrorMessage = Partial<MessageBase> & {
   error: Error;
 };
 

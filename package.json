@@ -1,6 +1,6 @@
 {
   "name": "serializer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
@@ -14,5 +14,9 @@
     "build": "bun build ./src/index.ts --outdir ./dist",
     "prepare": "npm run build"
   },
-  "types": "./src/types.d.ts"
+  "types": "./types.d.ts",
+  "files": [
+    "dist",
+    "types.d.ts"
+  ]
 }

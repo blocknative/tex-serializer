@@ -1,11 +1,5 @@
 import { parameterToTag } from "./constants.ts";
-// import { Buffer } from "buffer";
-import {
-  CompletedTransaction,
-  MempoolTransaction,
-  Message,
-  Serializer,
-} from "./types.ts";
+import { CompletedTransaction, MempoolTransaction, Serializer } from "../types";
 
 const hexEncoder = (hash: string | null) => {
   const withoutPrefix = hash ? hash.slice(2) : "";

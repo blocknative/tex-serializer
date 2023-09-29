@@ -15,7 +15,7 @@
     "build": "bun ./build.ts",
     "prepare": "npm run build"
   },
-  "types": "./dist/types.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],

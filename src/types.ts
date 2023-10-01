@@ -66,4 +66,4 @@ export type Message = MempoolMessage | BlockMessage | ErrorMessage | AckMessage;
 export type ValueOf<Obj> = Obj[keyof Obj];
 
 export type Serializer = (message: Message) => Buffer;
-export type Deserializer = (message: Buffer) => Message;
+export type Deserializer = (message: ArrayBuffer) => Message;

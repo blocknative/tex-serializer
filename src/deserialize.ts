@@ -196,7 +196,6 @@ const decode = (
 
 export const deserialize: Deserializer = (data) => {
   const buf = Buffer.from(data);
-
   const message: Message = {} as Message;
   let cursor = 0;
 

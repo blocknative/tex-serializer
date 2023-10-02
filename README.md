@@ -18,6 +18,14 @@ There can be nested TLV's to represent nested parameters in a message object as 
 
 If adding a new message type, ensure you add to the `types.ts` file as well as adding a test for the new message.
 
+## Installing module
+
+```bash
+yarn add https://github.com/blocknative/tex-serializer.git
+```
+
+## Running locally
+
 To install dependencies:
 
 ```bash
@@ -28,4 +36,10 @@ To build:
 
 ```bash
 bun run build
+```
+
+Test:
+
+```bash
+bun run test
 ```

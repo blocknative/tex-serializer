@@ -244,6 +244,8 @@ export const blockMessage = {
       gasUsed: 254228,
       to: "0xdb5889e35e379ef0498aae126fc2cce1fbd23216",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 1,
@@ -252,6 +254,8 @@ export const blockMessage = {
       gasUsed: 121584,
       to: "0x00000000fda4c75bfb5e0f3a75ce3d811b6f6c88",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 2,
@@ -260,6 +264,8 @@ export const blockMessage = {
       gasUsed: 150136,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 3,
@@ -268,6 +274,8 @@ export const blockMessage = {
       gasUsed: 103936,
       to: "0x00000000fda4c75bfb5e0f3a75ce3d811b6f6c88",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 4,
@@ -276,6 +284,8 @@ export const blockMessage = {
       gasUsed: 279010,
       to: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
       status: "failed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 5,
@@ -284,6 +294,8 @@ export const blockMessage = {
       gasUsed: 249878,
       to: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 6,
@@ -292,6 +304,8 @@ export const blockMessage = {
       gasUsed: 1669273,
       to: null,
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 7,
@@ -300,6 +314,8 @@ export const blockMessage = {
       gasUsed: 153457,
       to: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 8,
@@ -308,6 +324,8 @@ export const blockMessage = {
       gasUsed: 241612,
       to: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 9,
@@ -316,6 +334,8 @@ export const blockMessage = {
       gasUsed: 283667,
       to: "0xaf8887864653a612c928256943f073221e9fc1bf",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 10,
@@ -324,6 +344,8 @@ export const blockMessage = {
       gasUsed: 154810,
       to: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 11,
@@ -332,6 +354,8 @@ export const blockMessage = {
       gasUsed: 211013,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 12,
@@ -340,6 +364,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xe84212a3f3b97502520ec7908cc1881250da7f76",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 13,
@@ -348,6 +374,8 @@ export const blockMessage = {
       gasUsed: 150774,
       to: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 14,
@@ -356,6 +384,8 @@ export const blockMessage = {
       gasUsed: 150073,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 15,
@@ -364,6 +394,8 @@ export const blockMessage = {
       gasUsed: 41665,
       to: "0xdc8d8da4285b574afa70356ce47b258297aabc57",
       status: "failed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 16,
@@ -372,6 +404,8 @@ export const blockMessage = {
       gasUsed: 66933,
       to: "0xb4b9dc1c77bdbb135ea907fd5a08094d98883a35",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 17,
@@ -380,6 +414,8 @@ export const blockMessage = {
       gasUsed: 41297,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 18,
@@ -388,6 +424,8 @@ export const blockMessage = {
       gasUsed: 46577,
       to: "0x42d7679e0a371bbdfeb0ca1065ec23b48bd78cdb",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 19,
@@ -396,6 +434,8 @@ export const blockMessage = {
       gasUsed: 180352,
       to: "0x00000000000000adc04c56bf30ac9d3c0aaf14dc",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 20,
@@ -404,6 +444,8 @@ export const blockMessage = {
       gasUsed: 124708,
       to: "0x3472a5a71965499acd81997a54bba8d852c6e53d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 21,
@@ -412,6 +454,8 @@ export const blockMessage = {
       gasUsed: 202252,
       to: "0xad3b67bca8935cb510c8d18bd45f0b94f54a968f",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 22,
@@ -420,6 +464,8 @@ export const blockMessage = {
       gasUsed: 134257,
       to: "0xb2ecfe4e4d61f8790bbb9de2d1259b9e2410cea5",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 23,
@@ -428,6 +474,8 @@ export const blockMessage = {
       gasUsed: 3920158,
       to: "0xff35d339ee07acde54c135fbee39765010620d33",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 24,
@@ -436,6 +484,8 @@ export const blockMessage = {
       gasUsed: 46577,
       to: "0x42d7679e0a371bbdfeb0ca1065ec23b48bd78cdb",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 25,
@@ -444,6 +494,8 @@ export const blockMessage = {
       gasUsed: 118134,
       to: "0x32400084c286cf3e17e7b677ea9583e60a000324",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 26,
@@ -452,6 +504,8 @@ export const blockMessage = {
       gasUsed: 176533,
       to: "0x34b41725cf934866a4b89d65395f15af2cb9ae89",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 27,
@@ -460,6 +514,8 @@ export const blockMessage = {
       gasUsed: 76042,
       to: "0xd56e4eab23cb81f43168f9f45211eb027b9ac7cc",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 28,
@@ -468,6 +524,8 @@ export const blockMessage = {
       gasUsed: 62435,
       to: "0x82194174d56b6df894460e7754a9cc69a0c1707d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 29,
@@ -476,6 +534,8 @@ export const blockMessage = {
       gasUsed: 46577,
       to: "0x42d7679e0a371bbdfeb0ca1065ec23b48bd78cdb",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 30,
@@ -484,6 +544,8 @@ export const blockMessage = {
       gasUsed: 46577,
       to: "0x42d7679e0a371bbdfeb0ca1065ec23b48bd78cdb",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 31,
@@ -492,6 +554,8 @@ export const blockMessage = {
       gasUsed: 47156,
       to: "0xb62e45c3df611dce236a6ddc7a493d79f9dfadef",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 32,
@@ -500,6 +564,8 @@ export const blockMessage = {
       gasUsed: 166717,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 33,
@@ -508,6 +574,8 @@ export const blockMessage = {
       gasUsed: 63197,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 34,
@@ -516,6 +584,8 @@ export const blockMessage = {
       gasUsed: 63197,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 35,
@@ -524,6 +594,8 @@ export const blockMessage = {
       gasUsed: 58863,
       to: "0xdefa4e8a7bcba345f687a2f1456f5edd9ce97202",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 36,
@@ -532,6 +604,8 @@ export const blockMessage = {
       gasUsed: 57080,
       to: "0xb3999f658c0391d94a37f7ff328f3fec942bcadc",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 37,
@@ -540,6 +614,8 @@ export const blockMessage = {
       gasUsed: 51883,
       to: "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 38,
@@ -548,6 +624,8 @@ export const blockMessage = {
       gasUsed: 49806,
       to: "0x339debde3556bb9bb175a2cf5dd0ad3fe68aceb2",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 39,
@@ -556,6 +634,8 @@ export const blockMessage = {
       gasUsed: 115879,
       to: "0xae0ee0a63a2ce6baeeffe56e7714fb4efe48d419",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 40,
@@ -564,6 +644,8 @@ export const blockMessage = {
       gasUsed: 48897,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 41,
@@ -572,6 +654,8 @@ export const blockMessage = {
       gasUsed: 41309,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 42,
@@ -580,6 +664,8 @@ export const blockMessage = {
       gasUsed: 41309,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 43,
@@ -588,6 +674,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xe2c789fd91467f2aea426441715f932ff77c30de",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 44,
@@ -596,6 +684,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xb01cb49fe0d6d6e47edf3a072d15dfe73155331c",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 45,
@@ -604,6 +694,8 @@ export const blockMessage = {
       gasUsed: 60000,
       to: "0xc064f4f215b6a1e4e7f39bd8530c4de0fc43ee9d",
       status: "failed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 46,
@@ -612,6 +704,8 @@ export const blockMessage = {
       gasUsed: 180046,
       to: "0x881d40237659c251811cec9c364ef91dc08d300c",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 47,
@@ -620,6 +714,8 @@ export const blockMessage = {
       gasUsed: 178845,
       to: "0x881d40237659c251811cec9c364ef91dc08d300c",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 48,
@@ -628,6 +724,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x901340d2db1d5054a2c9231a09256dff0d363459",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 49,
@@ -636,6 +734,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xa69cbdcbea7e7dc54399d83caea6399d02a34bf8",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 50,
@@ -644,6 +744,8 @@ export const blockMessage = {
       gasUsed: 200000,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "failed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 51,
@@ -652,6 +754,8 @@ export const blockMessage = {
       gasUsed: 95549,
       to: "0x6719c6ebf80d6499ca9ce170cda72beb3f1d1a54",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 52,
@@ -660,6 +764,8 @@ export const blockMessage = {
       gasUsed: 41321,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 53,
@@ -668,6 +774,8 @@ export const blockMessage = {
       gasUsed: 63197,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 54,
@@ -676,6 +784,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xca781011913bd2409953c100f847fca4d6313e94",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 55,
@@ -684,6 +794,8 @@ export const blockMessage = {
       gasUsed: 53946,
       to: "0x5a56da75c50aa2733f5fa9a2442aaefcbc60b2e6",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 56,
@@ -692,6 +804,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xcac0f1a06d3f02397cfb6d7077321d73b504916e",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 57,
@@ -700,6 +814,8 @@ export const blockMessage = {
       gasUsed: 258640,
       to: "0xa6b71e26c5e0845f74c812102ca7114b6a896ab2",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 58,
@@ -708,6 +824,8 @@ export const blockMessage = {
       gasUsed: 1898056,
       to: "0xff00000000000000000000000000000000000010",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 59,
@@ -716,6 +834,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x729e4dd1469d5655fede81b5c7ad4615876ea506",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 60,
@@ -724,6 +844,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xcbd6832ebc203e49e2b771897067fce3c58575ac",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 61,
@@ -732,6 +854,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xb7306f55e4832b3e687784784cd163519084c0dc",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 62,
@@ -740,6 +864,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x2d4a7857e70a15edfe80093b52d012ba5ebc131c",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 63,
@@ -748,6 +874,8 @@ export const blockMessage = {
       gasUsed: 206188,
       to: "0xb517850510997a34b4ddc8c3797b4f83fad510c4",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 64,
@@ -756,6 +884,8 @@ export const blockMessage = {
       gasUsed: 187009,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 65,
@@ -764,6 +894,8 @@ export const blockMessage = {
       gasUsed: 167244,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 66,
@@ -772,6 +904,8 @@ export const blockMessage = {
       gasUsed: 164715,
       to: "0x00000000000000adc04c56bf30ac9d3c0aaf14dc",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 67,
@@ -780,6 +914,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xa0d3682151eec09321e445be43c11031e722f019",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 68,
@@ -788,6 +924,8 @@ export const blockMessage = {
       gasUsed: 43718,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 69,
@@ -796,6 +934,8 @@ export const blockMessage = {
       gasUsed: 155048,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 70,
@@ -804,6 +944,8 @@ export const blockMessage = {
       gasUsed: 139802,
       to: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 71,
@@ -812,6 +954,8 @@ export const blockMessage = {
       gasUsed: 133601,
       to: "0x3154cf16ccdb4c6d922629664174b904d80f2c35",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 72,
@@ -820,6 +964,8 @@ export const blockMessage = {
       gasUsed: 147112,
       to: "0x1111111254fb6c44bac0bed2854e76f90643097d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 73,
@@ -828,6 +974,8 @@ export const blockMessage = {
       gasUsed: 115843,
       to: "0xae0ee0a63a2ce6baeeffe56e7714fb4efe48d419",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 74,
@@ -836,6 +984,8 @@ export const blockMessage = {
       gasUsed: 107625,
       to: "0x00005ea00ac477b1030ce78506496e8c2de24bf5",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 75,
@@ -844,6 +994,8 @@ export const blockMessage = {
       gasUsed: 106353,
       to: "0xdef1c0ded9bec7f1a1670819833240f027b25eff",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 76,
@@ -852,6 +1004,8 @@ export const blockMessage = {
       gasUsed: 99795,
       to: "0xa6500518ad7b75496757b66d4a2aaaf1d43eae74",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 77,
@@ -860,6 +1014,8 @@ export const blockMessage = {
       gasUsed: 59987,
       to: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 78,
@@ -868,6 +1024,8 @@ export const blockMessage = {
       gasUsed: 59841,
       to: "0x9ce07410673206c693bcec9b07710767637a564c",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 79,
@@ -876,6 +1034,8 @@ export const blockMessage = {
       gasUsed: 58397,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 80,
@@ -884,6 +1044,8 @@ export const blockMessage = {
       gasUsed: 58226,
       to: "0x00000000000000adc04c56bf30ac9d3c0aaf14dc",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 81,
@@ -892,6 +1054,8 @@ export const blockMessage = {
       gasUsed: 56108,
       to: "0xb91d7dc20fdbef286e34bd6b50ba0fa5f8c24018",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 82,
@@ -900,6 +1064,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xa3f09251f84f4556f5998a21571943651ef89436",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 83,
@@ -908,6 +1074,8 @@ export const blockMessage = {
       gasUsed: 54676,
       to: "0xb325b13848f79f205e901fe72702b360bcd4f133",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 84,
@@ -916,6 +1084,8 @@ export const blockMessage = {
       gasUsed: 48837,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 85,
@@ -924,6 +1094,8 @@ export const blockMessage = {
       gasUsed: 48186,
       to: "0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 86,
@@ -932,6 +1104,8 @@ export const blockMessage = {
       gasUsed: 297618,
       to: "0x2796317b0ff8538f253012862c06787adfb8ceb6",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 87,
@@ -940,6 +1114,8 @@ export const blockMessage = {
       gasUsed: 65659,
       to: "0xd19d4b5d358258f05d7b411e21a1460d11b0876f",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 88,
@@ -948,6 +1124,8 @@ export const blockMessage = {
       gasUsed: 46109,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 89,
@@ -956,6 +1134,8 @@ export const blockMessage = {
       gasUsed: 28694,
       to: "0xb584d4be1a5470ca1a8778e9b86c81e165204599",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 90,
@@ -964,6 +1144,8 @@ export const blockMessage = {
       gasUsed: 29892,
       to: "0x4c11249814f11b9346808179cf06e71ac328c1b5",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 91,
@@ -972,6 +1154,8 @@ export const blockMessage = {
       gasUsed: 27938,
       to: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 92,
@@ -980,6 +1164,8 @@ export const blockMessage = {
       gasUsed: 26279,
       to: "0x4d224452801aced8b2f0aebe155379bb5d594381",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 93,
@@ -988,6 +1174,8 @@ export const blockMessage = {
       gasUsed: 55833,
       to: "0xbb126042235e6bd38b17744cb31a8bf4a206c045",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 94,
@@ -996,6 +1184,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x19da30e765447964c614b71223e68ea56783e15d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 95,
@@ -1004,6 +1194,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x905f0b085991db596d9dbd2b50038df7e1fb9adc",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 96,
@@ -1012,6 +1204,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xd4ceef3ee533a7a613b7841ea3a9f675bd9970cf",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 97,
@@ -1020,6 +1214,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x014dfa57a3017d435ec956c25c61e0d0d7519d7b",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 98,
@@ -1028,6 +1224,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x80c67432656d59144ceff962e8faf8926599bcf8",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 99,
@@ -1036,6 +1234,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x654f151af8fd4784f4a13742a33d0b6431c10654",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 100,
@@ -1044,6 +1244,8 @@ export const blockMessage = {
       gasUsed: 125513,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 101,
@@ -1052,6 +1254,8 @@ export const blockMessage = {
       gasUsed: 107621,
       to: "0xa69babef1ca67a37ffaf7a485dfff3382056e78c",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 102,
@@ -1060,6 +1264,8 @@ export const blockMessage = {
       gasUsed: 86838,
       to: "0xa38d0c4e6319f9045f20318ba5f04cde94208608",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 103,
@@ -1068,6 +1274,8 @@ export const blockMessage = {
       gasUsed: 23392,
       to: "0x406b02e7ab35d4e1dbc8be8695f03b1f39fde734",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 104,
@@ -1076,6 +1284,8 @@ export const blockMessage = {
       gasUsed: 69386,
       to: "0x046eee2cc3188071c02bfc1745a6b17c656e3f3d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 105,
@@ -1084,6 +1294,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x7f189f9fcfde9b18e9860c8be7d538fb37005be2",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 106,
@@ -1092,6 +1304,8 @@ export const blockMessage = {
       gasUsed: 45038,
       to: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 107,
@@ -1100,6 +1314,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x7fdec3e0e0280091988a3a3979db20c2767d9149",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 108,
@@ -1108,6 +1324,8 @@ export const blockMessage = {
       gasUsed: 51570,
       to: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 109,
@@ -1116,6 +1334,8 @@ export const blockMessage = {
       gasUsed: 48428,
       to: "0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 110,
@@ -1124,6 +1344,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x6994f06338b0832b7372ccf19c55db8cda93f16f",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 111,
@@ -1132,6 +1354,8 @@ export const blockMessage = {
       gasUsed: 41309,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 112,
@@ -1140,6 +1364,8 @@ export const blockMessage = {
       gasUsed: 139574,
       to: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 113,
@@ -1148,6 +1374,8 @@ export const blockMessage = {
       gasUsed: 363026,
       to: "0x6131b5fae19ea4f9d964eac0408e4408b66337b5",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 114,
@@ -1156,6 +1384,8 @@ export const blockMessage = {
       gasUsed: 61515,
       to: "0xb5b1b659da79a2507c27aad509f15b4874edc0cc",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 115,
@@ -1164,6 +1394,8 @@ export const blockMessage = {
       gasUsed: 45027,
       to: "0x3a23f943181408eac424116af7b7790c94cb97a5",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 116,
@@ -1172,6 +1404,8 @@ export const blockMessage = {
       gasUsed: 89058,
       to: "0x0e3efd5be54cc0f4c64e0d186b0af4b7f2a0e95f",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 117,
@@ -1180,6 +1414,8 @@ export const blockMessage = {
       gasUsed: 41309,
       to: "0xdac17f958d2ee523a2206206994597c13d831ec7",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 118,
@@ -1188,6 +1424,8 @@ export const blockMessage = {
       gasUsed: 60002,
       to: "0xa24787320ede4cc19d800bf87b41ab9539c4da9d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 119,
@@ -1196,6 +1434,8 @@ export const blockMessage = {
       gasUsed: 244214,
       to: "0x3b3ae790df4f312e745d270119c6052904fb6790",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 120,
@@ -1204,6 +1444,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xadcd9de69588cb45be6dc41accbd32859fcc8ed1",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 121,
@@ -1212,6 +1454,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0xb1df11e63498e6b4a444eb6c3d5acb2da31d3d5a",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 122,
@@ -1220,6 +1464,8 @@ export const blockMessage = {
       gasUsed: 147968,
       to: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 123,
@@ -1228,6 +1474,8 @@ export const blockMessage = {
       gasUsed: 216300,
       to: "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 124,
@@ -1236,6 +1484,8 @@ export const blockMessage = {
       gasUsed: 44206,
       to: "0x253553366da8546fc250f225fe3d25d0c782303b",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 125,
@@ -1244,6 +1494,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x588f162f87d2df8fabb6dc0a87039d4d123aac9b",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 126,
@@ -1252,6 +1504,8 @@ export const blockMessage = {
       gasUsed: 46244,
       to: "0x20561172f791f915323241e885b4f7d5187c36e1",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 127,
@@ -1260,6 +1514,8 @@ export const blockMessage = {
       gasUsed: 46517,
       to: "0x630fa62b1587e049274564f800ebf034ac01ae69",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
     {
       index: 128,
@@ -1268,6 +1524,8 @@ export const blockMessage = {
       gasUsed: 21000,
       to: "0x1a7683f591a3692bb42e1458c2cacb869e61e80e",
       status: "confirmed",
+      private: false,
+      interactionType: "eoa",
     },
   ],
 };

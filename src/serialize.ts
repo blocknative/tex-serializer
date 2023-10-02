@@ -220,5 +220,8 @@ export const serialize: Serializer = (message) => {
     }
   });
 
-  return encoded;
+  return encoded.buffer.slice(
+    encoded.byteOffset,
+    encoded.byteOffset + encoded.byteLength
+  ) as ArrayBuffer;
 };

@@ -12,8 +12,7 @@
   },
   "scripts": {
     "test": "bun test",
-    "build": "bun ./build.ts",
-    "prepare": "npm run build"
+    "build": "bun ./build.ts"
   },
   "types": "./dist/index.d.ts",
   "files": [

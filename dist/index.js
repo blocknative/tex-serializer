@@ -221,6 +221,8 @@ var encode = (key, value) => {
 var serialize = (message) => {
   let encoded = Buffer.allocUnsafe(0);
   Object.entries(message).forEach(([key, value]) => {
+    if (typeof value === "undefined")
+      return;
     const encodedKeyValue = encode(key, value);
     if (encodedKeyValue) {
       encoded = Buffer.concat([encoded, encodedKeyValue]);

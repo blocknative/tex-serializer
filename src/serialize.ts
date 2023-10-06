@@ -213,6 +213,9 @@ export const serialize: Serializer = (message) => {
   let encoded = Buffer.allocUnsafe(0);
 
   Object.entries(message).forEach(([key, value]) => {
+    // don't serialize undefined values
+    if (typeof value === "undefined") return;
+
     const encodedKeyValue = encode(key, value);
 
     if (encodedKeyValue) {

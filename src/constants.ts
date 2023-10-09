@@ -25,7 +25,12 @@ export const parameterToTag: Record<string, number> = {
   private: 23,
   interactionType: 24,
   stats: 25,
-  erc20: 26
+  erc20: 26,
+  erc721: 27,
+  erc777: 28,
+  eoa: 29,
+  contract: 30,
+  creation: 31
 };
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

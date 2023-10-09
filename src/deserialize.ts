@@ -226,6 +226,26 @@ const decode = (
       const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
     }
+    case "erc721": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "erc777": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "eoa": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "contract": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "creation": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
     default:
       return null;
   }
@@ -233,7 +253,6 @@ const decode = (
 
 export const deserialize: Deserializer = (data) => {
   const buf = Buffer.from(data);
-  console.log('buf', buf)
   const message: Message = {} as Message;
   let cursor = 0;
 
@@ -243,7 +262,6 @@ export const deserialize: Deserializer = (data) => {
 
     let len: number;
     const tagLengthBytes = getTagLengthBytes(tag);
-    console.log('tagLengthBytes', tagLengthBytes)
 
     if (tagLengthBytes === 4) {
       len = buf.readUint32BE(cursor);
@@ -251,10 +269,6 @@ export const deserialize: Deserializer = (data) => {
     } else if (tagLengthBytes === 2) {
       len = buf.readUInt16BE(cursor);
       cursor += 2;
-    } else if (tagLengthBytes === 25) {
-      len = buf.readUInt8(cursor);
-      console.log('len', len)
-      cursor++
     } else {
       len = buf.readUInt8(cursor);
       cursor++;
@@ -263,8 +277,6 @@ export const deserialize: Deserializer = (data) => {
     const val = buf.subarray(cursor, cursor + len);
     cursor += len;
 
-    console.log('tag', tag)
-    console.log('value', val)
     const decoded = decode(tag, val);
 
     if (decoded) {

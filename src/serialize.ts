@@ -227,6 +227,26 @@ const encode = (key: string, value: unknown): Buffer | null => {
       const encodedLengthAndValue = int8Encoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "erc721": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "erc777": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "eoa": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "contract": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "creation": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
     default:
       return null;
   }
@@ -240,9 +260,6 @@ export const serialize: Serializer = (message) => {
     if (typeof value === "undefined") return;
 
     const encodedKeyValue = encode(key, value);
-    console.log('key', key)
-    console.log('value', value)
-    console.log('encodedValue', encodedKeyValue)
 
     if (encodedKeyValue) {
       encoded = Buffer.concat([encoded, encodedKeyValue]);

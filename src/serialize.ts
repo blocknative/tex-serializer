@@ -75,7 +75,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "transactions": {
-      let allEncodedTransactions = Buffer.from("");
+      let allEncodedTransactions = Buffer.allocUnsafe(0);
 
       for (const transaction of value as (
         | MempoolTransaction
@@ -92,8 +92,8 @@ const encode = (key: string, value: unknown): Buffer | null => {
           }
         });
 
-        const encodedTransactionsLength = Buffer.allocUnsafe(4);
-        encodedTransactionsLength.writeUint32BE(encodedTransaction.byteLength);
+        const encodedTransactionsLength = Buffer.allocUnsafe(2);
+        encodedTransactionsLength.writeUInt16BE(encodedTransaction.byteLength);
 
         allEncodedTransactions = Buffer.concat([
           allEncodedTransactions,
@@ -101,8 +101,8 @@ const encode = (key: string, value: unknown): Buffer | null => {
         ]);
       }
 
-      const txsLength = Buffer.allocUnsafe(2);
-      txsLength.writeUInt16BE(allEncodedTransactions.byteLength);
+      const txsLength = Buffer.allocUnsafe(4);
+      txsLength.writeUInt32BE(allEncodedTransactions.byteLength);
 
       return Buffer.concat([tagBuf, txsLength, allEncodedTransactions]);
     }

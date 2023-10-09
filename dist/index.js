@@ -99,7 +99,7 @@ var encode = (key, value) => {
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "transactions": {
-      let allEncodedTransactions = Buffer.from("");
+      let allEncodedTransactions = Buffer.allocUnsafe(0);
       for (const transaction of value) {
         let encodedTransaction = Buffer.allocUnsafe(0);
         Object.entries(transaction).forEach(([key2, value2]) => {
@@ -110,15 +110,15 @@ var encode = (key, value) => {
             console.warn(`Unrecognized parameter: ${key2}`);
           }
         });
-        const encodedTransactionsLength = Buffer.allocUnsafe(4);
-        encodedTransactionsLength.writeUint32BE(encodedTransaction.byteLength);
+        const encodedTransactionsLength = Buffer.allocUnsafe(2);
+        encodedTransactionsLength.writeUInt16BE(encodedTransaction.byteLength);
         allEncodedTransactions = Buffer.concat([
           allEncodedTransactions,
           Buffer.concat([encodedTransactionsLength, encodedTransaction])
         ]);
       }
-      const txsLength = Buffer.allocUnsafe(2);
-      txsLength.writeUInt16BE(allEncodedTransactions.byteLength);
+      const txsLength = Buffer.allocUnsafe(4);
+      txsLength.writeUInt32BE(allEncodedTransactions.byteLength);
       return Buffer.concat([tagBuf, txsLength, allEncodedTransactions]);
     }
     case "hash": {

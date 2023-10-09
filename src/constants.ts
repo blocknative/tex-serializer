@@ -33,6 +33,7 @@ export const tagToParameter: Record<number, string> = Object.fromEntries(
 export const getTagLengthBytes = (tag: number): number => {
   switch (tag) {
     case 3:
+      return 4;
     case 15:
       return 2;
     default:

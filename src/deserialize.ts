@@ -7,8 +7,8 @@ export const addressParser = (buf: Buffer) => {
   return parsed ? `0x${parsed}` : null;
 };
 export const utf8Parser = (buf: Buffer) => buf.toString("utf8");
-export const int8Parser = (buf: Buffer) => buf.readInt8();
-export const int16Parser = (buf: Buffer) => buf.readInt16BE();
+export const int8Parser = (buf: Buffer) => buf.readUInt8();
+export const int16Parser = (buf: Buffer) => buf.readUInt16BE();
 export const int32Parser = (buf: Buffer) => buf.readInt32BE();
 export const numberParser = (buf: Buffer) => buf.readDoubleBE();
 
@@ -35,7 +35,7 @@ const decode = (
       let cursor = 0;
 
       while (cursor < value.byteLength) {
-        const txLen = value.readInt16BE(cursor);
+        const txLen = value.readUInt16BE(cursor);
         cursor += 2;
         const txVal = value.subarray(cursor, cursor + txLen);
         cursor += txLen;
@@ -45,16 +45,16 @@ const decode = (
         const transaction: Transaction = {} as Transaction;
 
         while (txCursor < txVal.byteLength) {
-          const tag = txVal.readInt8(txCursor);
+          const tag = txVal.readUInt8(txCursor);
           txCursor++;
 
           let len: number;
 
           if (getTagLengthBytes(tag) === 2) {
-            len = txVal.readInt16BE(txCursor);
+            len = txVal.readUInt16BE(txCursor);
             txCursor += 2;
           } else {
-            len = txVal.readInt8(txCursor);
+            len = txVal.readUInt8(txCursor);
             txCursor++;
           }
 
@@ -137,16 +137,16 @@ const decode = (
       let cursor = 0;
 
       while (cursor < value.byteLength) {
-        const tag = value.readInt8(cursor);
+        const tag = value.readUInt8(cursor);
         cursor++;
 
         let len: number;
 
         if (getTagLengthBytes(tag) === 2) {
-          len = value.readInt16BE(cursor);
+          len = value.readUInt16BE(cursor);
           cursor += 2;
         } else {
-          len = value.readInt8(cursor);
+          len = value.readUInt8(cursor);
           cursor++;
         }
 
@@ -200,16 +200,20 @@ export const deserialize: Deserializer = (data) => {
   let cursor = 0;
 
   while (cursor < buf.byteLength) {
-    const tag = buf.readInt8(cursor);
+    const tag = buf.readUInt8(cursor);
     cursor++;
 
     let len: number;
+    const tagLengthBytes = getTagLengthBytes(tag);
 
-    if (getTagLengthBytes(tag) === 2) {
-      len = buf.readInt16BE(cursor);
+    if (tagLengthBytes === 4) {
+      len = buf.readUint32BE(cursor);
+      cursor += 4;
+    } else if (tagLengthBytes === 2) {
+      len = buf.readUInt16BE(cursor);
       cursor += 2;
     } else {
-      len = buf.readInt8(cursor);
+      len = buf.readUInt8(cursor);
       cursor++;
     }
 

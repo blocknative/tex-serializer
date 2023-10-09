@@ -10,30 +10,30 @@ const hexEncoder = (hash: string | null) => {
   const withoutPrefix = hash ? hash.slice(2) : "";
   const buf = Buffer.from(withoutPrefix, "hex");
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
 const utf8Encoder = (str: string) => {
   const buf = Buffer.from(str, "utf8");
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
 const int8Encoder = (int: number) => {
   const buf = Buffer.allocUnsafe(1);
-  buf.writeInt8(int);
+  buf.writeUInt8(int);
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
 const int16Encoder = (int: number) => {
   const buf = Buffer.allocUnsafe(2);
-  buf.writeInt16BE(int);
+  buf.writeUInt16BE(int);
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
@@ -41,7 +41,7 @@ const numberEncoder = (gwei: number) => {
   const buf = Buffer.allocUnsafe(8);
   buf.writeDoubleBE(gwei);
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
@@ -49,21 +49,21 @@ const int32Encoder = (int: number) => {
   const buf = Buffer.allocUnsafe(4);
   buf.writeInt32BE(int);
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
 const boolEncoder = (bool: boolean) => {
   const buf = Buffer.allocUnsafe(1);
-  buf.writeInt8(Number(bool));
+  buf.writeUInt8(Number(bool));
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 
 const encode = (key: string, value: unknown): Buffer | null => {
   const tagBuf = Buffer.allocUnsafe(1);
-  tagBuf.writeInt8(parameterToTag[key]);
+  tagBuf.writeUInt8(parameterToTag[key]);
 
   switch (key) {
     case "chainId": {
@@ -92,17 +92,17 @@ const encode = (key: string, value: unknown): Buffer | null => {
           }
         });
 
-        const encodedTransactionLength = Buffer.allocUnsafe(2);
-        encodedTransactionLength.writeInt16BE(encodedTransaction.byteLength);
+        const encodedTransactionsLength = Buffer.allocUnsafe(4);
+        encodedTransactionsLength.writeUint32BE(encodedTransaction.byteLength);
 
         allEncodedTransactions = Buffer.concat([
           allEncodedTransactions,
-          Buffer.concat([encodedTransactionLength, encodedTransaction]),
+          Buffer.concat([encodedTransactionsLength, encodedTransaction]),
         ]);
       }
 
       const txsLength = Buffer.allocUnsafe(2);
-      txsLength.writeInt16BE(allEncodedTransactions.byteLength);
+      txsLength.writeUInt16BE(allEncodedTransactions.byteLength);
 
       return Buffer.concat([tagBuf, txsLength, allEncodedTransactions]);
     }
@@ -176,7 +176,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
       });
 
       const len = Buffer.allocUnsafe(2);
-      len.writeInt16BE(encodedError.byteLength);
+      len.writeUInt16BE(encodedError.byteLength);
 
       return Buffer.concat([tagBuf, len, encodedError]);
     }

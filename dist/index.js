@@ -29,6 +29,7 @@ var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([par
 var getTagLengthBytes = (tag) => {
   switch (tag) {
     case 3:
+      return 4;
     case 15:
       return 2;
     default:
@@ -41,53 +42,53 @@ var hexEncoder = (hash) => {
   const withoutPrefix = hash ? hash.slice(2) : "";
   const buf = Buffer.from(withoutPrefix, "hex");
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 var utf8Encoder = (str) => {
   const buf = Buffer.from(str, "utf8");
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 var int8Encoder = (int) => {
   const buf = Buffer.allocUnsafe(1);
-  buf.writeInt8(int);
+  buf.writeUInt8(int);
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 var int16Encoder = (int) => {
   const buf = Buffer.allocUnsafe(2);
-  buf.writeInt16BE(int);
+  buf.writeUInt16BE(int);
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 var numberEncoder = (gwei) => {
   const buf = Buffer.allocUnsafe(8);
   buf.writeDoubleBE(gwei);
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 var int32Encoder = (int) => {
   const buf = Buffer.allocUnsafe(4);
   buf.writeInt32BE(int);
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 var boolEncoder = (bool) => {
   const buf = Buffer.allocUnsafe(1);
-  buf.writeInt8(Number(bool));
+  buf.writeUInt8(Number(bool));
   const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeInt8(buf.byteLength);
+  bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
 };
 var encode = (key, value) => {
   const tagBuf = Buffer.allocUnsafe(1);
-  tagBuf.writeInt8(parameterToTag[key]);
+  tagBuf.writeUInt8(parameterToTag[key]);
   switch (key) {
     case "chainId": {
       const encodedLengthAndValue = int16Encoder(parseInt(value, 16));
@@ -109,15 +110,15 @@ var encode = (key, value) => {
             console.warn(`Unrecognized parameter: ${key2}`);
           }
         });
-        const encodedTransactionLength = Buffer.allocUnsafe(2);
-        encodedTransactionLength.writeInt16BE(encodedTransaction.byteLength);
+        const encodedTransactionsLength = Buffer.allocUnsafe(4);
+        encodedTransactionsLength.writeUint32BE(encodedTransaction.byteLength);
         allEncodedTransactions = Buffer.concat([
           allEncodedTransactions,
-          Buffer.concat([encodedTransactionLength, encodedTransaction])
+          Buffer.concat([encodedTransactionsLength, encodedTransaction])
         ]);
       }
       const txsLength = Buffer.allocUnsafe(2);
-      txsLength.writeInt16BE(allEncodedTransactions.byteLength);
+      txsLength.writeUInt16BE(allEncodedTransactions.byteLength);
       return Buffer.concat([tagBuf, txsLength, allEncodedTransactions]);
     }
     case "hash": {
@@ -187,7 +188,7 @@ var encode = (key, value) => {
         }
       });
       const len = Buffer.allocUnsafe(2);
-      len.writeInt16BE(encodedError.byteLength);
+      len.writeUInt16BE(encodedError.byteLength);
       return Buffer.concat([tagBuf, len, encodedError]);
     }
     case "code": {
@@ -237,8 +238,8 @@ var addressParser = (buf) => {
   return parsed ? `0x${parsed}` : null;
 };
 var utf8Parser = (buf) => buf.toString("utf8");
-var int8Parser = (buf) => buf.readInt8();
-var int16Parser = (buf) => buf.readInt16BE();
+var int8Parser = (buf) => buf.readUInt8();
+var int16Parser = (buf) => buf.readUInt16BE();
 var int32Parser = (buf) => buf.readInt32BE();
 var numberParser = (buf) => buf.readDoubleBE();
 var boolParser = (buf) => !!parseInt(`0x${buf.toString("hex")}`);
@@ -257,21 +258,21 @@ var decode = (tag, value) => {
       let transactions = [];
       let cursor = 0;
       while (cursor < value.byteLength) {
-        const txLen = value.readInt16BE(cursor);
+        const txLen = value.readUInt16BE(cursor);
         cursor += 2;
         const txVal = value.subarray(cursor, cursor + txLen);
         cursor += txLen;
         let txCursor = 0;
         const transaction = {};
         while (txCursor < txVal.byteLength) {
-          const tag2 = txVal.readInt8(txCursor);
+          const tag2 = txVal.readUInt8(txCursor);
           txCursor++;
           let len;
           if (getTagLengthBytes(tag2) === 2) {
-            len = txVal.readInt16BE(txCursor);
+            len = txVal.readUInt16BE(txCursor);
             txCursor += 2;
           } else {
-            len = txVal.readInt8(txCursor);
+            len = txVal.readUInt8(txCursor);
             txCursor++;
           }
           const val = txVal.subarray(txCursor, txCursor + len);
@@ -348,14 +349,14 @@ var decode = (tag, value) => {
       const decodedError = {};
       let cursor = 0;
       while (cursor < value.byteLength) {
-        const tag2 = value.readInt8(cursor);
+        const tag2 = value.readUInt8(cursor);
         cursor++;
         let len;
         if (getTagLengthBytes(tag2) === 2) {
-          len = value.readInt16BE(cursor);
+          len = value.readUInt16BE(cursor);
           cursor += 2;
         } else {
-          len = value.readInt8(cursor);
+          len = value.readUInt8(cursor);
           cursor++;
         }
         const val = value.subarray(cursor, len + cursor);
@@ -403,14 +404,18 @@ var deserialize = (data) => {
   const message = {};
   let cursor = 0;
   while (cursor < buf.byteLength) {
-    const tag = buf.readInt8(cursor);
+    const tag = buf.readUInt8(cursor);
     cursor++;
     let len;
-    if (getTagLengthBytes(tag) === 2) {
-      len = buf.readInt16BE(cursor);
+    const tagLengthBytes = getTagLengthBytes(tag);
+    if (tagLengthBytes === 4) {
+      len = buf.readUint32BE(cursor);
+      cursor += 4;
+    } else if (tagLengthBytes === 2) {
+      len = buf.readUInt16BE(cursor);
       cursor += 2;
     } else {
-      len = buf.readInt8(cursor);
+      len = buf.readUInt8(cursor);
       cursor++;
     }
     const val = buf.subarray(cursor, cursor + len);

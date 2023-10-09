@@ -30,6 +30,10 @@ const decode = (
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
+    case "stats": {
+      const decodedValue = utf8Parser(value);
+      return { key, value: decodedValue };
+    }
     case "transactions": {
       let transactions: Transaction[] = [];
       let cursor = 0;

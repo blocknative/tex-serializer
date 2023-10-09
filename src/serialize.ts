@@ -2,6 +2,7 @@ import { parameterToTag } from "./constants.ts";
 
 import {
   CompletedTransaction,
+  InteractionTypes,
   MempoolTransaction,
   Serializer,
   Stats,
@@ -234,6 +235,24 @@ const encode = (key: string, value: unknown): Buffer | null => {
     case "erc777": {
       const encodedLengthAndValue = int8Encoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "interactionTypes": {
+      let encodedInteractionTypes = Buffer.allocUnsafe(0);
+
+      Object.entries(value as InteractionTypes).forEach(([key, value]) => {
+        const encoded = encode(key, value);
+
+        if (encoded) {
+          encodedInteractionTypes = Buffer.concat([encodedInteractionTypes, encoded]);
+        } else {
+          console.warn(`Unknown error parameter: ${key}`);
+        }
+      });
+
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedInteractionTypes.byteLength);
+
+      return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
     }
     case "eoa": {
       const encodedLengthAndValue = int8Encoder(value as number);

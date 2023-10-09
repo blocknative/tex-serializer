@@ -71,6 +71,10 @@ export type Stats = {
   erc20: number
   erc721: number
   erc777: number
+  interactionTypes: InteractionTypes
+}
+
+export type InteractionTypes = {
   eoa: number
   contract: number
   creation: number

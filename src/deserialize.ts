@@ -1,5 +1,5 @@
 import { getTagLengthBytes, tagToParameter } from "./constants.ts";
-import { Deserializer, Error, Message, Stats, Transaction, ValueOf } from "./types.ts";
+import { Deserializer, Error, InteractionTypes, Message, Stats, Transaction, ValueOf } from "./types.ts";
 
 export const hexParser = (buf: Buffer) => `0x${buf.toString("hex")}`;
 export const addressParser = (buf: Buffer) => {
@@ -233,6 +233,39 @@ const decode = (
     case "erc777": {
       const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
+    }
+    case "interactionTypes": {
+      const decodedInteractionTypes: InteractionTypes = {} as InteractionTypes;
+      let cursor = 0;
+
+      while (cursor < value.byteLength) {
+        const tag = value.readUInt8(cursor);
+        cursor++;
+
+        let len: number;
+
+        if (getTagLengthBytes(tag) === 2) {
+          len = value.readUInt16BE(cursor);
+          cursor += 2;
+        } else {
+          len = value.readUInt8(cursor);
+          cursor++;
+        }
+
+        const val = value.subarray(cursor, len + cursor);
+        cursor += len;
+        const decoded = decode(tag, val);
+
+        if (decoded) {
+          const { key, value } = decoded;
+          // @ts-ignore
+          decodedInteractionTypes[key as keyof InteractionTypes] = value as ValueOf<InteractionTypes>;
+        } else {
+          console.warn(`Unknown tag: ${tag}`);
+        }
+      }
+
+      return { key, value: decodedInteractionTypes };
     }
     case "eoa": {
       const decodedValue = int8Parser(value);

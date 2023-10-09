@@ -5,9 +5,7 @@ export const mempoolMessage = {
     erc20: 100,
     erc721: 50,
     erc777: 25,
-    eoa: 10,
-    contract: 5,
-    creation: 1
+    interactionTypes: { eoa: 10, contract: 5, creation: 1 }
   },
   transactions: [
     {

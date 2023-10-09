@@ -38,6 +38,7 @@ export type MessageBase = {
 
 export type MempoolMessage = MessageBase & {
   transactions: MempoolTransaction[];
+  stats: Stats;
 };
 
 export type BlockMessage = MessageBase & {
@@ -65,3 +66,10 @@ export type ValueOf<Obj> = Obj[keyof Obj];
 
 export type Serializer = (message: Message) => ArrayBuffer;
 export type Deserializer = (message: ArrayBuffer) => Message;
+
+export type Stats = {
+  erc20: number
+  erc721: number
+  erc777: number
+  interactionTypes: { eoa: number; contract: number; creation: number }
+}

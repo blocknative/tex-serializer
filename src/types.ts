@@ -69,7 +69,7 @@ export type Deserializer = (message: ArrayBuffer) => Message;
 
 export type Stats = {
   erc20: number
-  erc721: number
-  erc777: number
-  interactionTypes: { eoa: number; contract: number; creation: number }
+  // erc721: number
+  // erc777: number
+  // interactionTypes: { eoa: number; contract: number; creation: number }
 }

@@ -24,6 +24,8 @@ export const parameterToTag: Record<string, number> = {
   id: 22,
   private: 23,
   interactionType: 24,
+  stats: 25,
+  erc20: 26
 };
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(
@@ -35,6 +37,8 @@ export const getTagLengthBytes = (tag: number): number => {
     case 3:
       return 4;
     case 15:
+      return 2;
+    case 25:
       return 2;
     default:
       return 1;

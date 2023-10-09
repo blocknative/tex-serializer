@@ -4,6 +4,7 @@ import {
   CompletedTransaction,
   MempoolTransaction,
   Serializer,
+  Stats,
 } from "./types.ts";
 
 const hexEncoder = (hash: string | null) => {
@@ -204,6 +205,28 @@ const encode = (key: string, value: unknown): Buffer | null => {
       const encodedLengthAndValue = utf8Encoder(value as string);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "stats": {
+      let encodedStats = Buffer.allocUnsafe(0);
+
+      Object.entries(value as Stats).forEach(([key, value]) => {
+        const encoded = encode(key, value);
+
+        if (encoded) {
+          encodedStats = Buffer.concat([encodedStats, encoded]);
+        } else {
+          console.warn(`Unknown error parameter: ${key}`);
+        }
+      });
+
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedStats.byteLength);
+
+      return Buffer.concat([tagBuf, len, encodedStats]);
+    }
+    case "erc20": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
     default:
       return null;
   }
@@ -217,6 +240,9 @@ export const serialize: Serializer = (message) => {
     if (typeof value === "undefined") return;
 
     const encodedKeyValue = encode(key, value);
+    console.log('key', key)
+    console.log('value', value)
+    console.log('encodedValue', encodedKeyValue)
 
     if (encodedKeyValue) {
       encoded = Buffer.concat([encoded, encodedKeyValue]);

@@ -1,5 +1,5 @@
 import { getTagLengthBytes, tagToParameter } from "./constants.ts";
-import { Deserializer, Error, Message, Transaction, ValueOf } from "./types.ts";
+import { Deserializer, Error, Message, Stats, Transaction, ValueOf } from "./types.ts";
 
 export const hexParser = (buf: Buffer) => `0x${buf.toString("hex")}`;
 export const addressParser = (buf: Buffer) => {
@@ -27,10 +27,6 @@ const decode = (
       return { key, value: `0x${decodedValue.toString(16)}` };
     }
     case "feed": {
-      const decodedValue = utf8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "stats": {
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
@@ -193,6 +189,43 @@ const decode = (
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
+    case "stats": {
+      const decodedStats: Stats = {} as Stats;
+      let cursor = 0;
+
+      while (cursor < value.byteLength) {
+        const tag = value.readUInt8(cursor);
+        cursor++;
+
+        let len: number;
+
+        if (getTagLengthBytes(tag) === 2) {
+          len = value.readUInt16BE(cursor);
+          cursor += 2;
+        } else {
+          len = value.readUInt8(cursor);
+          cursor++;
+        }
+
+        const val = value.subarray(cursor, len + cursor);
+        cursor += len;
+        const decoded = decode(tag, val);
+
+        if (decoded) {
+          const { key, value } = decoded;
+          // @ts-ignore
+          decodedStats[key as keyof Stats] = value as ValueOf<Stats>;
+        } else {
+          console.warn(`Unknown tag: ${tag}`);
+        }
+      }
+
+      return { key, value: decodedStats };
+    }
+    case "erc20": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
     default:
       return null;
   }
@@ -200,6 +233,7 @@ const decode = (
 
 export const deserialize: Deserializer = (data) => {
   const buf = Buffer.from(data);
+  console.log('buf', buf)
   const message: Message = {} as Message;
   let cursor = 0;
 
@@ -209,6 +243,7 @@ export const deserialize: Deserializer = (data) => {
 
     let len: number;
     const tagLengthBytes = getTagLengthBytes(tag);
+    console.log('tagLengthBytes', tagLengthBytes)
 
     if (tagLengthBytes === 4) {
       len = buf.readUint32BE(cursor);
@@ -216,6 +251,10 @@ export const deserialize: Deserializer = (data) => {
     } else if (tagLengthBytes === 2) {
       len = buf.readUInt16BE(cursor);
       cursor += 2;
+    } else if (tagLengthBytes === 25) {
+      len = buf.readUInt8(cursor);
+      console.log('len', len)
+      cursor++
     } else {
       len = buf.readUInt8(cursor);
       cursor++;
@@ -224,6 +263,8 @@ export const deserialize: Deserializer = (data) => {
     const val = buf.subarray(cursor, cursor + len);
     cursor += len;
 
+    console.log('tag', tag)
+    console.log('value', val)
     const decoded = decode(tag, val);
 
     if (decoded) {

@@ -33,6 +33,7 @@ export type MessageBase = {
 export type MempoolMessage = MessageBase & {
 	transactions: MempoolTransaction[];
 };
+
 export type BlockMessage = MessageBase & {
 	transactions: CompletedTransaction[];
 	hash: string;

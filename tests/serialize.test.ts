@@ -12,9 +12,6 @@ import {
 test("Successfully serializes and deserializes a mempool message", () => {
   const serialized = serialize(mempoolMessage);
   const deserialized = deserialize(serialized);
-  console.log(
-    'deserialized', deserialized
-  )
 
   expect(deserialized).toStrictEqual(mempoolMessage);
 });

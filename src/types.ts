@@ -38,7 +38,6 @@ export type MessageBase = {
 
 export type MempoolMessage = MessageBase & {
   transactions: MempoolTransaction[];
-  stats: Stats;
 };
 
 export type BlockMessage = MessageBase & {
@@ -60,13 +59,6 @@ export type AckMessage = {
   id: string;
 };
 
-export type Message = MempoolMessage | BlockMessage | ErrorMessage | AckMessage;
-
-export type ValueOf<Obj> = Obj[keyof Obj];
-
-export type Serializer = (message: Message) => ArrayBuffer;
-export type Deserializer = (message: ArrayBuffer) => Message;
-
 export type Stats = {
   erc20: number
   erc721: number
@@ -79,3 +71,14 @@ export type InteractionTypes = {
   contract: number
   creation: number
 }
+
+export type StatsMessage = MessageBase & {
+  stats: Stats;
+};
+
+export type Message = MempoolMessage | BlockMessage | ErrorMessage | AckMessage | StatsMessage;
+
+export type ValueOf<Obj> = Obj[keyof Obj];
+
+export type Serializer = (message: Message) => ArrayBuffer;
+export type Deserializer = (message: ArrayBuffer) => Message;

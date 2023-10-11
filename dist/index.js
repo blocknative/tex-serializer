@@ -23,7 +23,15 @@ var parameterToTag = {
   index: 21,
   id: 22,
   private: 23,
-  interactionType: 24
+  interactionType: 24,
+  stats: 25,
+  erc20: 26,
+  erc721: 27,
+  erc777: 28,
+  interactionTypes: 29,
+  eoa: 30,
+  contract: 31,
+  creation: 32
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -31,6 +39,8 @@ var getTagLengthBytes = (tag) => {
     case 3:
       return 4;
     case 15:
+    case 25:
+    case 29:
       return 2;
     default:
       return 1;
@@ -215,6 +225,58 @@ var encode = (key, value) => {
       const encodedLengthAndValue = utf8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "stats": {
+      let encodedStats = Buffer.allocUnsafe(0);
+      Object.entries(value).forEach(([key2, value2]) => {
+        const encoded = encode(key2, value2);
+        if (encoded) {
+          encodedStats = Buffer.concat([encodedStats, encoded]);
+        } else {
+          console.warn(`Unknown error parameter: ${key2}`);
+        }
+      });
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedStats.byteLength);
+      return Buffer.concat([tagBuf, len, encodedStats]);
+    }
+    case "erc20": {
+      const encodedLengthAndValue = int8Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "erc721": {
+      const encodedLengthAndValue = int8Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "erc777": {
+      const encodedLengthAndValue = int8Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "interactionTypes": {
+      let encodedInteractionTypes = Buffer.allocUnsafe(0);
+      Object.entries(value).forEach(([key2, value2]) => {
+        const encoded = encode(key2, value2);
+        if (encoded) {
+          encodedInteractionTypes = Buffer.concat([encodedInteractionTypes, encoded]);
+        } else {
+          console.warn(`Unknown error parameter: ${key2}`);
+        }
+      });
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedInteractionTypes.byteLength);
+      return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
+    }
+    case "eoa": {
+      const encodedLengthAndValue = int8Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "contract": {
+      const encodedLengthAndValue = int8Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "creation": {
+      const encodedLengthAndValue = int8Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
     default:
       return null;
   }
@@ -393,6 +455,82 @@ var decode = (tag, value) => {
     }
     case "interactionType": {
       const decodedValue = utf8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "stats": {
+      const decodedStats = {};
+      let cursor = 0;
+      while (cursor < value.byteLength) {
+        const tag2 = value.readUInt8(cursor);
+        cursor++;
+        let len;
+        if (getTagLengthBytes(tag2) === 2) {
+          len = value.readUInt16BE(cursor);
+          cursor += 2;
+        } else {
+          len = value.readUInt8(cursor);
+          cursor++;
+        }
+        const val = value.subarray(cursor, len + cursor);
+        cursor += len;
+        const decoded = decode(tag2, val);
+        if (decoded) {
+          const { key: key2, value: value2 } = decoded;
+          decodedStats[key2] = value2;
+        } else {
+          console.warn(`Unknown tag: ${tag2}`);
+        }
+      }
+      return { key, value: decodedStats };
+    }
+    case "erc20": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "erc721": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "erc777": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "interactionTypes": {
+      const decodedInteractionTypes = {};
+      let cursor = 0;
+      while (cursor < value.byteLength) {
+        const tag2 = value.readUInt8(cursor);
+        cursor++;
+        let len;
+        if (getTagLengthBytes(tag2) === 2) {
+          len = value.readUInt16BE(cursor);
+          cursor += 2;
+        } else {
+          len = value.readUInt8(cursor);
+          cursor++;
+        }
+        const val = value.subarray(cursor, len + cursor);
+        cursor += len;
+        const decoded = decode(tag2, val);
+        if (decoded) {
+          const { key: key2, value: value2 } = decoded;
+          decodedInteractionTypes[key2] = value2;
+        } else {
+          console.warn(`Unknown tag: ${tag2}`);
+        }
+      }
+      return { key, value: decodedInteractionTypes };
+    }
+    case "eoa": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "contract": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "creation": {
+      const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
     }
     default:

@@ -1542,3 +1542,14 @@ export const errorMessage = {
 export const ackMessage = {
   id: "shfudwd283nd20",
 };
+
+export const statsMessage = {
+  feed: "stats",
+  chainId: "0x1",
+  stats: { 
+    erc20: 100,
+    erc721: 50,
+    erc777: 25,
+    interactionTypes: { eoa: 10, contract: 5, creation: 1 }
+  }
+};

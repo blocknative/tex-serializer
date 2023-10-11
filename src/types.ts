@@ -59,7 +59,24 @@ export type AckMessage = {
   id: string;
 };
 
-export type Message = MempoolMessage | BlockMessage | ErrorMessage | AckMessage;
+export type Stats = {
+  erc20: number
+  erc721: number
+  erc777: number
+  interactionTypes: InteractionTypes
+}
+
+export type InteractionTypes = {
+  eoa: number
+  contract: number
+  creation: number
+}
+
+export type StatsMessage = MessageBase & {
+  stats: Stats;
+};
+
+export type Message = MempoolMessage | BlockMessage | ErrorMessage | AckMessage | StatsMessage;
 
 export type ValueOf<Obj> = Obj[keyof Obj];
 

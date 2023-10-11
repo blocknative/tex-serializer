@@ -2,8 +2,10 @@ import { parameterToTag } from "./constants.ts";
 
 import {
   CompletedTransaction,
+  InteractionTypes,
   MempoolTransaction,
   Serializer,
+  Stats,
 } from "./types.ts";
 
 const hexEncoder = (hash: string | null) => {
@@ -202,6 +204,66 @@ const encode = (key: string, value: unknown): Buffer | null => {
     }
     case "interactionType": {
       const encodedLengthAndValue = utf8Encoder(value as string);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "stats": {
+      let encodedStats = Buffer.allocUnsafe(0);
+
+      Object.entries(value as Stats).forEach(([key, value]) => {
+        const encoded = encode(key, value);
+
+        if (encoded) {
+          encodedStats = Buffer.concat([encodedStats, encoded]);
+        } else {
+          console.warn(`Unknown error parameter: ${key}`);
+        }
+      });
+
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedStats.byteLength);
+
+      return Buffer.concat([tagBuf, len, encodedStats]);
+    }
+    case "erc20": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "erc721": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "erc777": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "interactionTypes": {
+      let encodedInteractionTypes = Buffer.allocUnsafe(0);
+
+      Object.entries(value as InteractionTypes).forEach(([key, value]) => {
+        const encoded = encode(key, value);
+
+        if (encoded) {
+          encodedInteractionTypes = Buffer.concat([encodedInteractionTypes, encoded]);
+        } else {
+          console.warn(`Unknown error parameter: ${key}`);
+        }
+      });
+
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedInteractionTypes.byteLength);
+
+      return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
+    }
+    case "eoa": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "contract": {
+      const encodedLengthAndValue = int8Encoder(value as number);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "creation": {
+      const encodedLengthAndValue = int8Encoder(value as number);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     default:

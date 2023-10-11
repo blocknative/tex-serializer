@@ -7,6 +7,7 @@ import {
   blockMessage,
   errorMessage,
   mempoolMessage,
+  statsMessage,
 } from "./data.ts";
 
 test("Successfully serializes and deserializes a mempool message", () => {
@@ -35,4 +36,11 @@ test("Successfully serializes and deserializes an ACK message", () => {
   const deserialized = deserialize(serialized);
 
   expect(deserialized).toStrictEqual(ackMessage);
+});
+
+test("Succesfully serializes and deserializes a Mempool Stats message", () => {
+  const serialized = serialize(statsMessage);
+  const deserialized = deserialize(serialized);
+
+  expect(deserialized).toStrictEqual(statsMessage);
 });

@@ -53,7 +53,6 @@ export type Stats = {
 	erc20: number;
 	erc721: number;
 	erc777: number;
-	estimatedMaxFeePerGas: number[];
 	interactionTypes: InteractionTypes;
 };
 export type InteractionTypes = {

@@ -64,8 +64,15 @@ const boolEncoder = (bool: boolean) => {
 }
 
 const encode = (key: string, value: unknown): Buffer | null => {
+  const tag = parameterToTag[key]
+
+  if (!tag) {
+    console.warn(`Unrecognized object parameter: ${key}`)
+    return null
+  }
+
   const tagBuf = Buffer.allocUnsafe(1)
-  tagBuf.writeUInt8(parameterToTag[key])
+  tagBuf.writeUInt8(tag)
 
   switch (key) {
     case 'chainId': {
@@ -136,8 +143,6 @@ const encode = (key: string, value: unknown): Buffer | null => {
           const encoded = encode(key, value)
           if (encoded) {
             encodedTransaction = Buffer.concat([encodedTransaction, encoded])
-          } else {
-            console.warn(`Unrecognized parameter: ${key}`)
           }
         })
 
@@ -163,8 +168,6 @@ const encode = (key: string, value: unknown): Buffer | null => {
 
         if (encoded) {
           encodedError = Buffer.concat([encodedError, encoded])
-        } else {
-          console.warn(`Unknown error parameter: ${key}`)
         }
       })
 
@@ -181,8 +184,6 @@ const encode = (key: string, value: unknown): Buffer | null => {
 
         if (encoded) {
           encodedStats = Buffer.concat([encodedStats, encoded])
-        } else {
-          console.warn(`Unknown error parameter: ${key}`)
         }
       })
 
@@ -202,8 +203,6 @@ const encode = (key: string, value: unknown): Buffer | null => {
             encodedInteractionTypes,
             encoded,
           ])
-        } else {
-          console.warn(`Unknown error parameter: ${key}`)
         }
       })
 
@@ -217,7 +216,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
   }
 }
 
-export const serialize: Serializer = (message) => {
+export const serialize: Serializer = message => {
   let encoded = Buffer.allocUnsafe(0)
 
   Object.entries(message).forEach(([key, value]) => {

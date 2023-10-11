@@ -1547,9 +1547,9 @@ export const statsMessage = {
   feed: "stats",
   chainId: "0x1",
   stats: { 
-    erc20: 100,
-    erc721: 50,
-    erc777: 25,
-    interactionTypes: { eoa: 10, contract: 5, creation: 1 }
+    erc20: 0,
+    erc721: 10,
+    erc777: 100,
+    interactionTypes: { eoa: 1000, contract: 10000, creation: 100000 }
   }
 };

@@ -104,8 +104,55 @@ var encode = (key, value) => {
       const encodedLengthAndValue = int16Encoder(parseInt(value, 16));
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "feed": {
+    case "code": {
+      const encodedLengthAndValue = int8Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "hash": {
+      const encodedLengthAndValue = hexEncoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "txnCount": {
+      const encodedLengthAndValue = int16Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "from":
+    case "to": {
+      const encodedLengthAndValue = hexEncoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "dropped":
+    case "private": {
+      const encodedLengthAndValue = boolEncoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "baseFeePerGas":
+    case "gasPrice":
+    case "maxPriorityFeePerGas": {
+      const encodedLengthAndValue = numberEncoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "feed":
+    case "id":
+    case "interactionType":
+    case "message":
+    case "status":
+    case "timestamp": {
       const encodedLengthAndValue = utf8Encoder(value);
+      return Buffer.concat([tagBuf, encodedLengthAndValue]);
+    }
+    case "creation":
+    case "contract":
+    case "eoa":
+    case "erc20":
+    case "erc721":
+    case "erc777":
+    case "gasLimit":
+    case "gasUsed":
+    case "height":
+    case "index":
+    case "nonce": {
+      const encodedLengthAndValue = int32Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "transactions": {
@@ -131,62 +178,6 @@ var encode = (key, value) => {
       txsLength.writeUInt32BE(allEncodedTransactions.byteLength);
       return Buffer.concat([tagBuf, txsLength, allEncodedTransactions]);
     }
-    case "hash": {
-      const encodedLengthAndValue = hexEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "gasPrice": {
-      const encodedLengthAndValue = numberEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "to": {
-      const encodedLengthAndValue = hexEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "timestamp": {
-      const encodedLengthAndValue = utf8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "from": {
-      const encodedLengthAndValue = hexEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "nonce": {
-      const encodedLengthAndValue = int32Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "dropped": {
-      const encodedLengthAndValue = boolEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "height": {
-      const encodedLengthAndValue = int32Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "txnCount": {
-      const encodedLengthAndValue = int16Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "gasLimit": {
-      const encodedLengthAndValue = int32Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "gasUsed": {
-      const encodedLengthAndValue = int32Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "index": {
-      const encodedLengthAndValue = int32Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "baseFeePerGas": {
-      const encodedLengthAndValue = numberEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "maxPriorityFeePerGas": {
-      const encodedLengthAndValue = numberEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
     case "error": {
       let encodedError = Buffer.allocUnsafe(0);
       Object.entries(value).forEach(([key2, value2]) => {
@@ -200,30 +191,6 @@ var encode = (key, value) => {
       const len = Buffer.allocUnsafe(2);
       len.writeUInt16BE(encodedError.byteLength);
       return Buffer.concat([tagBuf, len, encodedError]);
-    }
-    case "code": {
-      const encodedLengthAndValue = int8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "message": {
-      const encodedLengthAndValue = utf8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "status": {
-      const encodedLengthAndValue = utf8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "id": {
-      const encodedLengthAndValue = utf8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "private": {
-      const encodedLengthAndValue = boolEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "interactionType": {
-      const encodedLengthAndValue = utf8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "stats": {
       let encodedStats = Buffer.allocUnsafe(0);
@@ -239,24 +206,15 @@ var encode = (key, value) => {
       len.writeUInt16BE(encodedStats.byteLength);
       return Buffer.concat([tagBuf, len, encodedStats]);
     }
-    case "erc20": {
-      const encodedLengthAndValue = int8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "erc721": {
-      const encodedLengthAndValue = int8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "erc777": {
-      const encodedLengthAndValue = int8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
     case "interactionTypes": {
       let encodedInteractionTypes = Buffer.allocUnsafe(0);
       Object.entries(value).forEach(([key2, value2]) => {
         const encoded = encode(key2, value2);
         if (encoded) {
-          encodedInteractionTypes = Buffer.concat([encodedInteractionTypes, encoded]);
+          encodedInteractionTypes = Buffer.concat([
+            encodedInteractionTypes,
+            encoded
+          ]);
         } else {
           console.warn(`Unknown error parameter: ${key2}`);
         }
@@ -264,18 +222,6 @@ var encode = (key, value) => {
       const len = Buffer.allocUnsafe(2);
       len.writeUInt16BE(encodedInteractionTypes.byteLength);
       return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
-    }
-    case "eoa": {
-      const encodedLengthAndValue = int8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "contract": {
-      const encodedLengthAndValue = int8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "creation": {
-      const encodedLengthAndValue = int8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     default:
       return null;
@@ -312,8 +258,55 @@ var decode = (tag, value) => {
       const decodedValue = int16Parser(value);
       return { key, value: `0x${decodedValue.toString(16)}` };
     }
-    case "feed": {
+    case "code": {
+      const decodedValue = int8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "hash": {
+      const decodedValue = hexParser(value);
+      return { key, value: decodedValue };
+    }
+    case "txnCount": {
+      const decodedValue = int16Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "from":
+    case "to": {
+      const decodedValue = addressParser(value);
+      return { key, value: decodedValue };
+    }
+    case "dropped":
+    case "private": {
+      const decodedValue = boolParser(value);
+      return { key, value: decodedValue };
+    }
+    case "baseFeePerGas":
+    case "gasPrice":
+    case "maxPriorityFeePerGas": {
+      const decodedValue = numberParser(value);
+      return { key, value: decodedValue };
+    }
+    case "feed":
+    case "id":
+    case "interactionType":
+    case "message":
+    case "status":
+    case "timestamp": {
       const decodedValue = utf8Parser(value);
+      return { key, value: decodedValue };
+    }
+    case "creation":
+    case "contract":
+    case "eoa":
+    case "erc20":
+    case "erc721":
+    case "erc777":
+    case "gasLimit":
+    case "gasUsed":
+    case "height":
+    case "index":
+    case "nonce": {
+      const decodedValue = int32Parser(value);
       return { key, value: decodedValue };
     }
     case "transactions": {
@@ -351,62 +344,6 @@ var decode = (tag, value) => {
       }
       return { key, value: transactions };
     }
-    case "hash": {
-      const decodedValue = hexParser(value);
-      return { key, value: decodedValue };
-    }
-    case "gasPrice": {
-      const decodedValue = numberParser(value);
-      return { key, value: decodedValue };
-    }
-    case "to": {
-      const decodedValue = addressParser(value);
-      return { key, value: decodedValue };
-    }
-    case "timestamp": {
-      const decodedValue = utf8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "from": {
-      const decodedValue = addressParser(value);
-      return { key, value: decodedValue };
-    }
-    case "nonce": {
-      const decodedValue = int32Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "gasUsed": {
-      const decodedValue = int32Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "index": {
-      const decodedValue = int32Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "dropped": {
-      const decodedValue = boolParser(value);
-      return { key, value: decodedValue };
-    }
-    case "height": {
-      const decodedValue = int32Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "txnCount": {
-      const decodedValue = int16Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "baseFeePerGas": {
-      const decodedValue = numberParser(value);
-      return { key, value: decodedValue };
-    }
-    case "maxPriorityFeePerGas": {
-      const decodedValue = numberParser(value);
-      return { key, value: decodedValue };
-    }
-    case "gasLimit": {
-      const decodedValue = int32Parser(value);
-      return { key, value: decodedValue };
-    }
     case "error": {
       const decodedError = {};
       let cursor = 0;
@@ -432,30 +369,6 @@ var decode = (tag, value) => {
         }
       }
       return { key, value: decodedError };
-    }
-    case "code": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "message": {
-      const decodedValue = utf8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "status": {
-      const decodedValue = utf8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "id": {
-      const decodedValue = utf8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "private": {
-      const decodedValue = boolParser(value);
-      return { key, value: decodedValue };
-    }
-    case "interactionType": {
-      const decodedValue = utf8Parser(value);
-      return { key, value: decodedValue };
     }
     case "stats": {
       const decodedStats = {};
@@ -483,18 +396,6 @@ var decode = (tag, value) => {
       }
       return { key, value: decodedStats };
     }
-    case "erc20": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "erc721": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "erc777": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
-    }
     case "interactionTypes": {
       const decodedInteractionTypes = {};
       let cursor = 0;
@@ -520,18 +421,6 @@ var decode = (tag, value) => {
         }
       }
       return { key, value: decodedInteractionTypes };
-    }
-    case "eoa": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "contract": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "creation": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
     }
     default:
       return null;

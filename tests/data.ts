@@ -236,6 +236,7 @@ export const blockMessage = {
   baseFeePerGas: 7892980603,
   gasLimit: 30000000,
   gasUsed: 18825806,
+  mempoolPressure: 231,
   transactions: [
     {
       index: 0,

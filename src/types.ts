@@ -49,6 +49,7 @@ export type BlockMessage = MessageBase & {
   baseFeePerGas: number;
   gasUsed: number;
   gasLimit: number;
+  mempoolPressure: number;
 };
 
 export type ErrorMessage = Partial<MessageBase> & {

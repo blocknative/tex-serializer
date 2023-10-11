@@ -80,6 +80,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
       const encodedLengthAndValue = hexEncoder(value as string)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
+    case "mempoolPressure":
     case 'txnCount': {
       const encodedLengthAndValue = int16Encoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])

@@ -101,7 +101,7 @@ var encode = (key, value) => {
   tagBuf.writeUInt8(parameterToTag[key]);
   switch (key) {
     case "chainId": {
-      const encodedLengthAndValue = int16Encoder(parseInt(value, 16));
+      const encodedLengthAndValue = int32Encoder(parseInt(value, 16));
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "code": {
@@ -255,7 +255,7 @@ var decode = (tag, value) => {
   const key = tagToParameter[tag];
   switch (key) {
     case "chainId": {
-      const decodedValue = int16Parser(value);
+      const decodedValue = int32Parser(value);
       return { key, value: `0x${decodedValue.toString(16)}` };
     }
     case "code": {

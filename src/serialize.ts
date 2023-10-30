@@ -76,7 +76,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
 
   switch (key) {
     case 'chainId': {
-      const encodedLengthAndValue = int16Encoder(parseInt(value as string, 16))
+      const encodedLengthAndValue = int32Encoder(parseInt(value as string, 16))
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
     case 'code': {

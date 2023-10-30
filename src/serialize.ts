@@ -69,7 +69,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
 
   switch (key) {
     case 'chainId': {
-      const encodedLengthAndValue = int16Encoder(parseInt(value as string, 16))
+      const encodedLengthAndValue = int32Encoder(parseInt(value as string, 16))
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
     case 'code': {
@@ -217,7 +217,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
   }
 }
 
-export const serialize: Serializer = (message) => {
+export const serialize: Serializer = message => {
   let encoded = Buffer.allocUnsafe(0)
 
   Object.entries(message).forEach(([key, value]) => {

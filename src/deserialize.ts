@@ -31,7 +31,7 @@ const decode = (
 
   switch (key) {
     case 'chainId': {
-      const decodedValue = int16Parser(value)
+      const decodedValue = int32Parser(value)
       return { key, value: `0x${decodedValue.toString(16)}` }
     }
     case 'code': {
@@ -236,7 +236,7 @@ const decode = (
   }
 }
 
-export const deserialize: Deserializer = (data) => {
+export const deserialize: Deserializer = data => {
   const buf = Buffer.from(data)
   const message: Message = {} as Message
   let cursor = 0

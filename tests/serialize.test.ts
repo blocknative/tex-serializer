@@ -9,6 +9,7 @@ import {
   mempoolMessage,
   statsMessage,
 } from "./data.ts";
+import { BlockMessage } from "../src/types";
 
 test("Successfully serializes and deserializes a mempool message", () => {
   const serialized = serialize(mempoolMessage);
@@ -18,7 +19,7 @@ test("Successfully serializes and deserializes a mempool message", () => {
 });
 
 test("Successfully serializes and deserializes a block message", () => {
-  const serialized = serialize(blockMessage);
+  const serialized = serialize(blockMessage as BlockMessage);
   const deserialized = deserialize(serialized);
 
   expect(deserialized).toStrictEqual(blockMessage);

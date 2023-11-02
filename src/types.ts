@@ -21,7 +21,7 @@ export type CompletedTransaction = {
   gasPrice: number;
   to: string | null;
   gasUsed: number;
-  success: boolean;
+  status: string;
 };
 
 export type Transaction = MempoolTransaction | CompletedTransaction;

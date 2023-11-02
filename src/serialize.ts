@@ -96,7 +96,6 @@ const encode = (key: string, value: unknown): Buffer | null => {
       const encodedLengthAndValue = hexEncoder(value as string)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
-    case 'success':
     case 'dropped':
     case 'private': {
       const encodedLengthAndValue = boolEncoder(value as boolean)

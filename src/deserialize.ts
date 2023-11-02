@@ -51,7 +51,6 @@ const decode = (
       const decodedValue = addressParser(value)
       return { key, value: decodedValue }
     }
-    case 'success':
     case 'dropped':
     case 'private': {
       const decodedValue = boolParser(value)

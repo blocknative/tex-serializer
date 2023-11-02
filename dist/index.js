@@ -31,8 +31,7 @@ var parameterToTag = {
   interactionTypes: 29,
   eoa: 30,
   contract: 31,
-  creation: 32,
-  success: 33
+  creation: 32
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -98,13 +97,8 @@ var boolEncoder = (bool) => {
   return Buffer.concat([bufLen, buf]);
 };
 var encode = (key, value) => {
-  const tag = parameterToTag[key];
-  if (!tag) {
-    console.warn(`Unrecognized object parameter: ${key}`);
-    return null;
-  }
   const tagBuf = Buffer.allocUnsafe(1);
-  tagBuf.writeUInt8(tag);
+  tagBuf.writeUInt8(parameterToTag[key]);
   switch (key) {
     case "chainId": {
       const encodedLengthAndValue = int32Encoder(parseInt(value, 16));
@@ -127,7 +121,6 @@ var encode = (key, value) => {
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "success":
     case "dropped":
     case "private": {
       const encodedLengthAndValue = boolEncoder(value);
@@ -170,6 +163,8 @@ var encode = (key, value) => {
           const encoded = encode(key2, value2);
           if (encoded) {
             encodedTransaction = Buffer.concat([encodedTransaction, encoded]);
+          } else {
+            console.warn(`Unrecognized parameter: ${key2}`);
           }
         });
         const encodedTransactionsLength = Buffer.allocUnsafe(2);
@@ -189,6 +184,8 @@ var encode = (key, value) => {
         const encoded = encode(key2, value2);
         if (encoded) {
           encodedError = Buffer.concat([encodedError, encoded]);
+        } else {
+          console.warn(`Unknown error parameter: ${key2}`);
         }
       });
       const len = Buffer.allocUnsafe(2);
@@ -201,6 +198,8 @@ var encode = (key, value) => {
         const encoded = encode(key2, value2);
         if (encoded) {
           encodedStats = Buffer.concat([encodedStats, encoded]);
+        } else {
+          console.warn(`Unknown error parameter: ${key2}`);
         }
       });
       const len = Buffer.allocUnsafe(2);
@@ -216,6 +215,8 @@ var encode = (key, value) => {
             encodedInteractionTypes,
             encoded
           ]);
+        } else {
+          console.warn(`Unknown error parameter: ${key2}`);
         }
       });
       const len = Buffer.allocUnsafe(2);
@@ -274,7 +275,6 @@ var decode = (tag, value) => {
       const decodedValue = addressParser(value);
       return { key, value: decodedValue };
     }
-    case "success":
     case "dropped":
     case "private": {
       const decodedValue = boolParser(value);

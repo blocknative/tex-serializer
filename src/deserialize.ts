@@ -115,7 +115,17 @@ const decode = (
 
           const val = txVal.subarray(txCursor, txCursor + len)
           txCursor += len
-          const decoded = decode(tag, val)
+
+          let decoded: { key: string; value: unknown } | null = null
+
+          try {
+            decoded = decode(tag, val)
+          } catch (error) {
+            const { message } = error as Error
+            console.error(
+              `Error decoding tag: ${tag}, value: ${val} - ${message}`
+            )
+          }
 
           if (decoded) {
             const { key, value } = decoded

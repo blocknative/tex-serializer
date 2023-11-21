@@ -137,22 +137,27 @@ const encode = (key: string, value: unknown): Buffer | null => {
         | MempoolTransaction
         | CompletedTransaction
       )[]) {
-        let encodedTransaction = Buffer.allocUnsafe(0)
+        try {
+          let encodedTransaction = Buffer.allocUnsafe(0)
 
-        Object.entries(transaction).forEach(([key, value]) => {
-          const encoded = encode(key, value)
-          if (encoded) {
-            encodedTransaction = Buffer.concat([encodedTransaction, encoded])
-          }
-        })
+          Object.entries(transaction).forEach(([key, value]) => {
+            const encoded = encode(key, value)
+            if (encoded) {
+              encodedTransaction = Buffer.concat([encodedTransaction, encoded])
+            }
+          })
 
-        const encodedTransactionsLength = Buffer.allocUnsafe(2)
-        encodedTransactionsLength.writeUInt16BE(encodedTransaction.byteLength)
+          const encodedTransactionsLength = Buffer.allocUnsafe(2)
+          encodedTransactionsLength.writeUInt16BE(encodedTransaction.byteLength)
 
-        allEncodedTransactions = Buffer.concat([
-          allEncodedTransactions,
-          Buffer.concat([encodedTransactionsLength, encodedTransaction]),
-        ])
+          allEncodedTransactions = Buffer.concat([
+            allEncodedTransactions,
+            Buffer.concat([encodedTransactionsLength, encodedTransaction]),
+          ])
+        } catch (error) {
+          const { message } = error as Error
+          console.error(`Error serializing transaction: ${message}`)
+        }
       }
 
       const txsLength = Buffer.allocUnsafe(4)

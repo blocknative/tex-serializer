@@ -42,6 +42,7 @@ export type BlockMessage = MessageBase & {
 	baseFeePerGas: number;
 	gasUsed: number;
 	gasLimit: number;
+	miner: string;
 };
 export type ErrorMessage = Partial<MessageBase> & {
 	error: Error;

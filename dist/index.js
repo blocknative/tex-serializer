@@ -31,7 +31,8 @@ var parameterToTag = {
   interactionTypes: 29,
   eoa: 30,
   contract: 31,
-  creation: 32
+  creation: 32,
+  miner: 33
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -97,8 +98,13 @@ var boolEncoder = (bool) => {
   return Buffer.concat([bufLen, buf]);
 };
 var encode = (key, value) => {
+  const tag = parameterToTag[key];
+  if (!tag) {
+    console.warn(`Unrecognized object parameter: ${key}`);
+    return null;
+  }
   const tagBuf = Buffer.allocUnsafe(1);
-  tagBuf.writeUInt8(parameterToTag[key]);
+  tagBuf.writeUInt8(tag);
   switch (key) {
     case "chainId": {
       const encodedLengthAndValue = int32Encoder(parseInt(value, 16));
@@ -116,6 +122,7 @@ var encode = (key, value) => {
       const encodedLengthAndValue = int16Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "miner":
     case "from":
     case "to": {
       const encodedLengthAndValue = hexEncoder(value);
@@ -158,21 +165,24 @@ var encode = (key, value) => {
     case "transactions": {
       let allEncodedTransactions = Buffer.allocUnsafe(0);
       for (const transaction of value) {
-        let encodedTransaction = Buffer.allocUnsafe(0);
-        Object.entries(transaction).forEach(([key2, value2]) => {
-          const encoded = encode(key2, value2);
-          if (encoded) {
-            encodedTransaction = Buffer.concat([encodedTransaction, encoded]);
-          } else {
-            console.warn(`Unrecognized parameter: ${key2}`);
-          }
-        });
-        const encodedTransactionsLength = Buffer.allocUnsafe(2);
-        encodedTransactionsLength.writeUInt16BE(encodedTransaction.byteLength);
-        allEncodedTransactions = Buffer.concat([
-          allEncodedTransactions,
-          Buffer.concat([encodedTransactionsLength, encodedTransaction])
-        ]);
+        try {
+          let encodedTransaction = Buffer.allocUnsafe(0);
+          Object.entries(transaction).forEach(([key2, value2]) => {
+            const encoded = encode(key2, value2);
+            if (encoded) {
+              encodedTransaction = Buffer.concat([encodedTransaction, encoded]);
+            }
+          });
+          const encodedTransactionsLength = Buffer.allocUnsafe(2);
+          encodedTransactionsLength.writeUInt16BE(encodedTransaction.byteLength);
+          allEncodedTransactions = Buffer.concat([
+            allEncodedTransactions,
+            Buffer.concat([encodedTransactionsLength, encodedTransaction])
+          ]);
+        } catch (error) {
+          const { message } = error;
+          console.error(`Error serializing transaction: ${message}`);
+        }
       }
       const txsLength = Buffer.allocUnsafe(4);
       txsLength.writeUInt32BE(allEncodedTransactions.byteLength);
@@ -184,8 +194,6 @@ var encode = (key, value) => {
         const encoded = encode(key2, value2);
         if (encoded) {
           encodedError = Buffer.concat([encodedError, encoded]);
-        } else {
-          console.warn(`Unknown error parameter: ${key2}`);
         }
       });
       const len = Buffer.allocUnsafe(2);
@@ -198,8 +206,6 @@ var encode = (key, value) => {
         const encoded = encode(key2, value2);
         if (encoded) {
           encodedStats = Buffer.concat([encodedStats, encoded]);
-        } else {
-          console.warn(`Unknown error parameter: ${key2}`);
         }
       });
       const len = Buffer.allocUnsafe(2);
@@ -215,8 +221,6 @@ var encode = (key, value) => {
             encodedInteractionTypes,
             encoded
           ]);
-        } else {
-          console.warn(`Unknown error parameter: ${key2}`);
         }
       });
       const len = Buffer.allocUnsafe(2);
@@ -270,6 +274,7 @@ var decode = (tag, value) => {
       const decodedValue = int16Parser(value);
       return { key, value: decodedValue };
     }
+    case "miner":
     case "from":
     case "to": {
       const decodedValue = addressParser(value);
@@ -332,7 +337,13 @@ var decode = (tag, value) => {
           }
           const val = txVal.subarray(txCursor, txCursor + len);
           txCursor += len;
-          const decoded = decode(tag2, val);
+          let decoded = null;
+          try {
+            decoded = decode(tag2, val);
+          } catch (error) {
+            const { message } = error;
+            console.error(`Error decoding tag: ${tag2}, value: ${val} - ${message}`);
+          }
           if (decoded) {
             const { key: key2, value: value2 } = decoded;
             transaction[key2] = value2;

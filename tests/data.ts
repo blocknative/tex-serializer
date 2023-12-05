@@ -236,6 +236,7 @@ export const blockMessage = {
   baseFeePerGas: 7892980603,
   gasLimit: 30000000,
   gasUsed: 18825806,
+  miner: '0x388c818ca8b9251b393131c08a736a67ccb19297',
   transactions: [
     {
       index: 0,

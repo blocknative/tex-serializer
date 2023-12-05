@@ -31,7 +31,8 @@ export const parameterToTag: Record<string, number> = {
   interactionTypes: 29,
   eoa: 30,
   contract: 31,
-  creation: 32
+  creation: 32,
+  miner: 33
 };
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

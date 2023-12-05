@@ -46,6 +46,7 @@ const decode = (
       const decodedValue = int16Parser(value)
       return { key, value: decodedValue }
     }
+    case 'miner':
     case 'from':
     case 'to': {
       const decodedValue = addressParser(value)

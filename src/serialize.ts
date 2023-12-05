@@ -91,6 +91,7 @@ const encode = (key: string, value: unknown): Buffer | null => {
       const encodedLengthAndValue = int16Encoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
+    case 'miner':
     case 'from':
     case 'to': {
       const encodedLengthAndValue = hexEncoder(value as string)

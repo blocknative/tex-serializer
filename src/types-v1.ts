@@ -1,12 +1,28 @@
-export type PendingTransaction = {
+import { Message } from './types'
+
+export type Type0 = {
+  type: 0 | 1
+  /** hex */
+  gasPrice: string
+}
+
+export type Type2 = {
+  type: 2
+  /** hex */
+  maxFeePerGas: string
+  /** hex */
+  maxPriorityFeePerGas: string
+}
+
+export type PendingTransactionBase = {
   hash: string
-  gasPrice: number
-  to: string
   timestamp: string
   from: string
+  to: string
   nonce: number
-  maxPriorityFeePerGas?: number
 }
+
+export type PendingTransaction = PendingTransactionBase & (Type0 | Type2)
 
 export type DroppedTransaction = {
   hash: string
@@ -15,16 +31,7 @@ export type DroppedTransaction = {
 
 export type MempoolTransaction = PendingTransaction | DroppedTransaction
 
-export type CompletedTransaction = {
-  hash: string
-  index: number
-  gasPrice: number
-  to: string | null
-  gasUsed: number
-  status: string
-}
-
-export type Transaction = MempoolTransaction | CompletedTransaction
+export type Transaction = MempoolTransaction
 
 export type Error = {
   code: number
@@ -41,18 +48,20 @@ export type MempoolMessage = MessageBase & {
 }
 
 export type BlockMessage = MessageBase & {
-  transactions: CompletedTransaction[]
+  /** tx hashes included in block */
+  transactions: string[]
   hash: string
   height: number
   timestamp: string
   txnCount: number
-  baseFeePerGas: number
+  /** hex */
+  baseFeePerGas: string
   gasUsed: number
   gasLimit: number
   miner: string
 }
 
-export type ErrorMessage = Partial<MessageBase> & {
+export type ErrorMessage = MessageBase & {
   error: Error
 }
 
@@ -77,9 +86,26 @@ export type StatsMessage = MessageBase & {
   stats: Stats
 }
 
-export type Message =
+export type MessageV1 =
   | MempoolMessage
   | BlockMessage
   | ErrorMessage
   | AckMessage
   | StatsMessage
+
+export type ValueOf<Obj> = Obj[keyof Obj]
+
+export enum Version {
+  'v0',
+  'v1'
+}
+
+export type Serializer = (
+  message: MessageV1 | Message,
+  version: Version
+) => ArrayBuffer
+
+export type Deserializer = (
+  message: ArrayBuffer,
+  version: Version
+) => MessageV1 | Message

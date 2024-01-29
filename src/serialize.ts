@@ -1,5 +1,5 @@
 import { parameterToTag } from './constants.ts'
-import { Serializer, Version } from './types-v1.ts'
+import { Serializer, SerializerVersion } from './types-v1.ts'
 
 import {
   CompletedTransaction,
@@ -64,15 +64,15 @@ const boolEncoder = (bool: boolean) => {
 }
 
 const encode = (
-  version: Version,
+  version: SerializerVersion,
   key: string,
   value: unknown
 ): Buffer | null => {
   switch (version) {
-    case Version.v0: {
+    case SerializerVersion.v0: {
       return encodeV0(key, value)
     }
-    case Version.v1: {
+    case SerializerVersion.v1: {
       return encodeV1(key, value)
     }
     default: {
@@ -85,7 +85,7 @@ const encode = (
 const encodeV1 = (key: string, value: unknown): Buffer | null => {
   const tag = parameterToTag[key]
 
-  if (!tag) {
+  if (typeof tag === 'undefined') {
     console.warn(`Unrecognized object parameter: ${key}`)
     return null
   }
@@ -99,7 +99,8 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
-    case 'code': {
+    case 'code':
+    case 'serializerVersion': {
       const encodedLengthAndValue = int8Encoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
@@ -253,10 +254,11 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return null
   }
 }
+
 const encodeV0 = (key: string, value: unknown): Buffer | null => {
   const tag = parameterToTag[key]
 
-  if (!tag) {
+  if (typeof tag === 'undefined') {
     console.warn(`Unrecognized object parameter: ${key}`)
     return null
   }
@@ -270,7 +272,8 @@ const encodeV0 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
-    case 'code': {
+    case 'code':
+    case 'serializerVersion': {
       const encodedLengthAndValue = int8Encoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
@@ -427,6 +430,10 @@ const encodeV0 = (key: string, value: unknown): Buffer | null => {
 
 export const serialize: Serializer = (message, version) => {
   let encoded = Buffer.allocUnsafe(0)
+
+  // encode version first
+  const encodedVersion = encode(version, 'serializerVersion', version)
+  encoded = Buffer.concat([encoded, encodedVersion!])
 
   Object.entries(message).forEach(([key, value]) => {
     // don't serialize undefined values

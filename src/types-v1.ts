@@ -95,17 +95,14 @@ export type MessageV1 =
 
 export type ValueOf<Obj> = Obj[keyof Obj]
 
-export enum Version {
+export const enum SerializerVersion {
   'v0',
   'v1'
 }
 
 export type Serializer = (
   message: MessageV1 | Message,
-  version: Version
+  version: SerializerVersion
 ) => ArrayBuffer
 
-export type Deserializer = (
-  message: ArrayBuffer,
-  version: Version
-) => MessageV1 | Message
+export type Deserializer = (message: ArrayBuffer) => MessageV1 | Message

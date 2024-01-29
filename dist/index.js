@@ -1,5 +1,6 @@
 // src/constants.ts
 var parameterToTag = {
+  serializerVersion: 0,
   chainId: 1,
   feed: 2,
   transactions: 3,
@@ -49,11 +50,11 @@ var getTagLengthBytes = (tag) => {
 };
 
 // src/types-v1.ts
-var Version;
-(function(Version2) {
-  Version2[Version2["v0"] = 0] = "v0";
-  Version2[Version2["v1"] = 1] = "v1";
-})(Version || (Version = {}));
+var SerializerVersion;
+(function(SerializerVersion2) {
+  SerializerVersion2[SerializerVersion2["v0"] = 0] = "v0";
+  SerializerVersion2[SerializerVersion2["v1"] = 1] = "v1";
+})(SerializerVersion || (SerializerVersion = {}));
 
 // src/serialize.ts
 var hexEncoder = (hex) => {
@@ -106,10 +107,10 @@ var boolEncoder = (bool) => {
 };
 var encode = (version, key, value) => {
   switch (version) {
-    case Version.v0: {
+    case SerializerVersion.v0: {
       return encodeV0(key, value);
     }
-    case Version.v1: {
+    case SerializerVersion.v1: {
       return encodeV1(key, value);
     }
     default: {
@@ -120,7 +121,7 @@ var encode = (version, key, value) => {
 };
 var encodeV1 = (key, value) => {
   const tag = parameterToTag[key];
-  if (!tag) {
+  if (typeof tag === "undefined") {
     console.warn(`Unrecognized object parameter: ${key}`);
     return null;
   }
@@ -131,7 +132,8 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "code": {
+    case "code":
+    case "serializerVersion": {
       const encodedLengthAndValue = int8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
@@ -255,7 +257,7 @@ var encodeV1 = (key, value) => {
 };
 var encodeV0 = (key, value) => {
   const tag = parameterToTag[key];
-  if (!tag) {
+  if (typeof tag === "undefined") {
     console.warn(`Unrecognized object parameter: ${key}`);
     return null;
   }
@@ -266,7 +268,8 @@ var encodeV0 = (key, value) => {
       const encodedLengthAndValue = int32Encoder(parseInt(value, 16));
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "code": {
+    case "code":
+    case "serializerVersion": {
       const encodedLengthAndValue = int8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
@@ -389,6 +392,8 @@ var encodeV0 = (key, value) => {
 };
 var serialize = (message, version) => {
   let encoded = Buffer.allocUnsafe(0);
+  const encodedVersion = encode(version, "serializerVersion", version);
+  encoded = Buffer.concat([encoded, encodedVersion]);
   Object.entries(message).forEach(([key, value]) => {
     if (typeof value === "undefined")
       return;
@@ -413,10 +418,10 @@ var numberParser = (buf) => buf.readDoubleBE();
 var boolParser = (buf) => !!parseInt(`0x${buf.toString("hex")}`);
 var decode = (version, tag, value) => {
   switch (version) {
-    case Version.v0: {
+    case SerializerVersion.v0: {
       return decodeV0(tag, value);
     }
-    case Version.v1: {
+    case SerializerVersion.v1: {
       return decodeV1(tag, value);
     }
     default: {
@@ -428,7 +433,8 @@ var decode = (version, tag, value) => {
 var decodeV1 = (tag, value) => {
   const key = tagToParameter[tag];
   switch (key) {
-    case "code": {
+    case "code":
+    case "serializerVersion": {
       const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
     }
@@ -612,7 +618,8 @@ var decodeV0 = (tag, value) => {
       const decodedValue = int32Parser(value);
       return { key, value: `0x${decodedValue.toString(16)}` };
     }
-    case "code": {
+    case "code":
+    case "serializerVersion": {
       const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
     }
@@ -787,10 +794,11 @@ var decodeV0 = (tag, value) => {
       return null;
   }
 };
-var deserialize = (data, version) => {
+var deserialize = (data) => {
   const buf = Buffer.from(data);
   const message = {};
   let cursor = 0;
+  let version = SerializerVersion.v0;
   while (cursor < buf.byteLength) {
     const tag = buf.readUInt8(cursor);
     cursor++;
@@ -811,7 +819,11 @@ var deserialize = (data, version) => {
     const decoded = decode(version, tag, val);
     if (decoded) {
       const { key, value } = decoded;
-      message[key] = value;
+      if (key === "serializerVersion") {
+        version = value;
+      } else {
+        message[key] = value;
+      }
     } else {
       console.warn(`Unknown tag: ${tag}`);
     }

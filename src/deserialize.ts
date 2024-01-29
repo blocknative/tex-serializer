@@ -1,5 +1,5 @@
 import { getTagLengthBytes, tagToParameter } from './constants.ts'
-import { Deserializer, ValueOf, Version } from './types-v1'
+import { Deserializer, ValueOf, SerializerVersion } from './types-v1'
 
 import {
   Error,
@@ -25,16 +25,16 @@ export const boolParser = (buf: Buffer) =>
   !!parseInt(`0x${buf.toString('hex')}`)
 
 const decode = (
-  version: Version,
+  version: SerializerVersion,
   tag: number,
   value: Buffer
 ): { key: string; value: unknown } | null => {
   switch (version) {
-    case Version.v0: {
+    case SerializerVersion.v0: {
       return decodeV0(tag, value)
     }
 
-    case Version.v1: {
+    case SerializerVersion.v1: {
       return decodeV1(tag, value)
     }
 
@@ -52,7 +52,8 @@ const decodeV1 = (
   const key = tagToParameter[tag]
 
   switch (key) {
-    case 'code': {
+    case 'code':
+    case 'serializerVersion': {
       const decodedValue = int8Parser(value)
       return { key, value: decodedValue }
     }
@@ -291,7 +292,8 @@ const decodeV0 = (
       return { key, value: `0x${decodedValue.toString(16)}` }
     }
 
-    case 'code': {
+    case 'code':
+    case 'serializerVersion': {
       const decodedValue = int8Parser(value)
       return { key, value: decodedValue }
     }
@@ -516,10 +518,12 @@ const decodeV0 = (
   }
 }
 
-export const deserialize: Deserializer = (data, version) => {
+export const deserialize: Deserializer = data => {
   const buf = Buffer.from(data)
   const message: Message = {} as Message
   let cursor = 0
+
+  let version = SerializerVersion.v0
 
   while (cursor < buf.byteLength) {
     const tag = buf.readUInt8(cursor)
@@ -546,7 +550,11 @@ export const deserialize: Deserializer = (data, version) => {
 
     if (decoded) {
       const { key, value } = decoded
-      message[key as keyof Message] = value as ValueOf<Message>
+      if (key === 'serializerVersion') {
+        version = value as number
+      } else {
+        message[key as keyof Message] = value as ValueOf<Message>
+      }
     } else {
       console.warn(`Unknown tag: ${tag}`)
     }

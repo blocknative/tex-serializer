@@ -135,12 +135,12 @@ export type StatsMessage = MessageBase & {
 	stats: Stats;
 };
 export type MessageV1 = MempoolMessage | BlockMessage | ErrorMessage | AckMessage | StatsMessage;
-declare enum Version {
+export declare const enum SerializerVersion {
 	"v0" = 0,
 	"v1" = 1
 }
-export type Serializer = (message: MessageV1 | Message, version: Version) => ArrayBuffer;
-export type Deserializer = (message: ArrayBuffer, version: Version) => MessageV1 | Message;
+export type Serializer = (message: MessageV1 | Message, version: SerializerVersion) => ArrayBuffer;
+export type Deserializer = (message: ArrayBuffer) => MessageV1 | Message;
 export declare const serialize: Serializer;
 export declare const deserialize: Deserializer;
 

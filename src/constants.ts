@@ -1,5 +1,6 @@
 /** Can have up to 255 tags (1 byte length) */
 export const parameterToTag: Record<string, number> = {
+  serializerVersion: 0,
   chainId: 1,
   feed: 2,
   transactions: 3,
@@ -33,21 +34,21 @@ export const parameterToTag: Record<string, number> = {
   contract: 31,
   creation: 32,
   miner: 33
-};
+}
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(
   Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter])
-);
+)
 
 export const getTagLengthBytes = (tag: number): number => {
   switch (tag) {
     case 3:
-      return 4;
+      return 4
     case 15:
     case 25:
     case 29:
-      return 2;
+      return 2
     default:
-      return 1;
+      return 1
   }
-};
+}

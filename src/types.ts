@@ -26,6 +26,12 @@ export type CompletedTransaction = {
 
 export type Transaction = MempoolTransaction | CompletedTransaction;
 
+export type TransactionSegmentStats = {
+  count: number
+  value: number
+  gasUsed: number
+}
+
 export type Error = {
   code: number;
   message: string;
@@ -35,6 +41,15 @@ export type MessageBase = {
   feed: string;
   chainId: string;
 };
+
+export type HomepagePendingMessage = MessageBase & {
+  marketable: TransactionSegmentStats
+  stables: TransactionSegmentStats
+}
+
+export type HomepageConfirmedMessage = MessageBase & {
+  stables: TransactionSegmentStats
+}
 
 export type MempoolMessage = MessageBase & {
   transactions: MempoolTransaction[];
@@ -77,7 +92,7 @@ export type StatsMessage = MessageBase & {
   stats: Stats;
 };
 
-export type Message = MempoolMessage | BlockMessage | ErrorMessage | AckMessage | StatsMessage;
+export type Message = HomepagePendingMessage | HomepageConfirmedMessage | MempoolMessage | BlockMessage | ErrorMessage | AckMessage | StatsMessage;
 
 export type ValueOf<Obj> = Obj[keyof Obj];
 

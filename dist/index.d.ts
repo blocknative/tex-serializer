@@ -66,12 +66,10 @@ export type StatsMessage = MessageBase & {
 };
 export type Message = MempoolMessage | BlockMessage | ErrorMessage | AckMessage | StatsMessage;
 export type Type0 = {
-	type: 0 | 1;
 	/** hex */
 	gasPrice: string;
 };
 export type Type2 = {
-	type: 2;
 	/** hex */
 	maxFeePerGas: string;
 	/** hex */
@@ -83,6 +81,7 @@ export type PendingTransactionBase = {
 	from: string;
 	to: string;
 	nonce: number;
+	type: number;
 };
 export type PendingTransactionV1 = PendingTransactionBase & (Type0 | Type2);
 export type DroppedTransaction = {

@@ -84,12 +84,12 @@ export type PendingTransactionBase = {
 	to: string;
 	nonce: number;
 };
-export type PendingTransaction = PendingTransactionBase & (Type0 | Type2);
+export type PendingTransactionV1 = PendingTransactionBase & (Type0 | Type2);
 export type DroppedTransaction = {
 	hash: string;
 	dropped: boolean;
 };
-export type MempoolTransaction = PendingTransaction | DroppedTransaction;
+export type MempoolTransactionV1 = PendingTransactionV1 | DroppedTransaction;
 export type Error = {
 	code: number;
 	message: string;
@@ -98,10 +98,10 @@ export type MessageBase = {
 	feed: string;
 	chainId: string;
 };
-export type MempoolMessage = MessageBase & {
-	transactions: MempoolTransaction[];
+export type MempoolMessageV1 = MessageBase & {
+	transactions: MempoolTransactionV1[];
 };
-export type BlockMessage = MessageBase & {
+export type BlockMessageV1 = MessageBase & {
 	/** tx hashes included in block */
 	transactions: string[];
 	hash: string;
@@ -134,7 +134,7 @@ export type InteractionTypes = {
 export type StatsMessage = MessageBase & {
 	stats: Stats;
 };
-export type MessageV1 = MempoolMessage | BlockMessage | ErrorMessage | AckMessage | StatsMessage;
+export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage;
 export declare const enum SerializerVersion {
 	"v0" = 0,
 	"v1" = 1

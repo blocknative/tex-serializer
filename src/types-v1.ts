@@ -22,32 +22,32 @@ export type PendingTransactionBase = {
   nonce: number
 }
 
-export type PendingTransaction = PendingTransactionBase & (Type0 | Type2)
+export type PendingTransactionV1 = PendingTransactionBase & (Type0 | Type2)
 
 export type DroppedTransaction = {
   hash: string
   dropped: boolean
 }
 
-export type MempoolTransaction = PendingTransaction | DroppedTransaction
+export type MempoolTransactionV1 = PendingTransactionV1 | DroppedTransaction
 
-export type Transaction = MempoolTransaction
+export type TransactionV1 = MempoolTransactionV1
 
 export type Error = {
   code: number
   message: string
 }
 
-export type MessageBase = {
+type MessageBase = {
   feed: string
   chainId: string
 }
 
-export type MempoolMessage = MessageBase & {
-  transactions: MempoolTransaction[]
+export type MempoolMessageV1 = MessageBase & {
+  transactions: MempoolTransactionV1[]
 }
 
-export type BlockMessage = MessageBase & {
+export type BlockMessageV1 = MessageBase & {
   /** tx hashes included in block */
   transactions: string[]
   hash: string
@@ -87,8 +87,8 @@ export type StatsMessage = MessageBase & {
 }
 
 export type MessageV1 =
-  | MempoolMessage
-  | BlockMessage
+  | MempoolMessageV1
+  | BlockMessageV1
   | ErrorMessage
   | AckMessage
   | StatsMessage

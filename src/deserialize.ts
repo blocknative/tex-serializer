@@ -9,12 +9,11 @@ import {
   Transaction
 } from './types.ts'
 
-export const addressParser = (buf: Buffer) => {
+export const hexParser = (buf: Buffer) => {
   const parsed = buf.toString('hex')
   return parsed ? `0x${parsed}` : null
 }
 
-export const hexParser = (buf: Buffer) => `0x${buf.toString('hex')}`
 export const utf8Parser = (buf: Buffer) => buf.toString('utf8')
 export const int8Parser = (buf: Buffer) => buf.readUInt8()
 export const int16Parser = (buf: Buffer) => buf.readUInt16BE()
@@ -66,7 +65,7 @@ const decodeV1 = (
     case 'miner':
     case 'from':
     case 'to': {
-      const decodedValue = addressParser(value)
+      const decodedValue = hexParser(value)
       return { key, value: decodedValue }
     }
 
@@ -311,7 +310,7 @@ const decodeV0 = (
     case 'miner':
     case 'from':
     case 'to': {
-      const decodedValue = addressParser(value)
+      const decodedValue = hexParser(value)
       return { key, value: decodedValue }
     }
 

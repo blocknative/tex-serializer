@@ -405,11 +405,10 @@ var serialize = (message, version) => {
   return encoded.buffer.slice(encoded.byteOffset, encoded.byteOffset + encoded.byteLength);
 };
 // src/deserialize.ts
-var addressParser = (buf) => {
+var hexParser = (buf) => {
   const parsed = buf.toString("hex");
   return parsed ? `0x${parsed}` : null;
 };
-var hexParser = (buf) => `0x${buf.toString("hex")}`;
 var utf8Parser = (buf) => buf.toString("utf8");
 var int8Parser = (buf) => buf.readUInt8();
 var int16Parser = (buf) => buf.readUInt16BE();
@@ -445,7 +444,7 @@ var decodeV1 = (tag, value) => {
     case "miner":
     case "from":
     case "to": {
-      const decodedValue = addressParser(value);
+      const decodedValue = hexParser(value);
       return { key, value: decodedValue };
     }
     case "chainId":
@@ -634,7 +633,7 @@ var decodeV0 = (tag, value) => {
     case "miner":
     case "from":
     case "to": {
-      const decodedValue = addressParser(value);
+      const decodedValue = hexParser(value);
       return { key, value: decodedValue };
     }
     case "dropped":

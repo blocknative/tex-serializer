@@ -820,9 +820,8 @@ var deserialize = (data) => {
       const { key, value } = decoded;
       if (key === "serializerVersion") {
         version = value;
-      } else {
-        message[key] = value;
       }
+      message[key] = value;
     } else {
       console.warn(`Unknown tag: ${tag}`);
     }

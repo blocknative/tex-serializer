@@ -1,5 +1,11 @@
 import { getTagLengthBytes, tagToParameter } from './constants.ts'
-import { Deserializer, ValueOf, SerializerVersion } from './types-v1'
+import {
+  Deserializer,
+  ValueOf,
+  SerializerVersion,
+  MessageV1,
+  DeserializedResponse
+} from './types-v1'
 
 import {
   Error,
@@ -519,9 +525,10 @@ const decodeV0 = (
 
 export const deserialize: Deserializer = data => {
   const buf = Buffer.from(data)
-  const message: Message = {} as Message
-  let cursor = 0
 
+  const message: DeserializedResponse = {} as DeserializedResponse
+
+  let cursor = 0
   let version = SerializerVersion.v0
 
   while (cursor < buf.byteLength) {
@@ -551,9 +558,9 @@ export const deserialize: Deserializer = data => {
       const { key, value } = decoded
       if (key === 'serializerVersion') {
         version = value as number
-      } else {
-        message[key as keyof Message] = value as ValueOf<Message>
       }
+
+      message[key as keyof Message] = value as ValueOf<Message>
     } else {
       console.warn(`Unknown tag: ${tag}`)
     }

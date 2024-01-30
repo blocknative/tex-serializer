@@ -99,9 +99,13 @@ export const enum SerializerVersion {
   'v1'
 }
 
+export type DeserializedResponse = (MessageV1 | Message) & {
+  version: SerializerVersion
+}
+
 export type Serializer = (
   message: MessageV1 | Message,
   version: SerializerVersion
 ) => ArrayBuffer
 
-export type Deserializer = (message: ArrayBuffer) => MessageV1 | Message
+export type Deserializer = (message: ArrayBuffer) => DeserializedResponse

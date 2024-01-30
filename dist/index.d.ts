@@ -138,8 +138,11 @@ export declare const enum SerializerVersion {
 	"v0" = 0,
 	"v1" = 1
 }
+export type DeserializedResponse = (MessageV1 | Message) & {
+	version: SerializerVersion;
+};
 export type Serializer = (message: MessageV1 | Message, version: SerializerVersion) => ArrayBuffer;
-export type Deserializer = (message: ArrayBuffer) => MessageV1 | Message;
+export type Deserializer = (message: ArrayBuffer) => DeserializedResponse;
 export declare const serialize: Serializer;
 export declare const deserialize: Deserializer;
 

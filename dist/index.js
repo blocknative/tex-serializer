@@ -58,14 +58,6 @@ var SerializerVersion;
 })(SerializerVersion || (SerializerVersion = {}));
 
 // src/serialize.ts
-var bigIntEncoder = (int) => {
-  const b = BigInt(int);
-  const buf = Buffer.alloc(16);
-  buf.writeBigInt64BE(b);
-  const bufLen = Buffer.allocUnsafe(1);
-  bufLen.writeUInt8(buf.byteLength);
-  return Buffer.concat([bufLen, buf]);
-};
 var hexEncoder = (hex) => {
   const withoutPrefix = hex ? hex.startsWith("0x") ? hex.slice(2) : hex : "";
   const buf = Buffer.from(withoutPrefix, "hex");
@@ -164,7 +156,7 @@ var encodeV1 = (key, value) => {
     case "gasPrice":
     case "maxFeePerGas":
     case "maxPriorityFeePerGas": {
-      const encodedLengthAndValue = bigIntEncoder(value);
+      const encodedLengthAndValue = utf8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "dropped":
@@ -422,10 +414,6 @@ var hexParser = (buf) => {
   console.log(parsed);
   return parsed ? `0x${parsed}` : null;
 };
-var bigIntParser = (buf) => {
-  const bigInt = buf.readBigInt64BE();
-  return bigInt.toString(10);
-};
 var utf8Parser = (buf) => buf.toString("utf8");
 var int8Parser = (buf) => buf.readUInt8();
 var int16Parser = (buf) => buf.readUInt16BE();
@@ -470,7 +458,7 @@ var decodeV1 = (tag, value) => {
     case "gasPrice":
     case "maxFeePerGas":
     case "maxPriorityFeePerGas": {
-      const decodedValue = bigIntParser(value);
+      const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
     case "dropped":

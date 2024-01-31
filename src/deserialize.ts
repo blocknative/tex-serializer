@@ -86,7 +86,7 @@ const decodeV1 = (
     case 'gasPrice':
     case 'maxFeePerGas':
     case 'maxPriorityFeePerGas': {
-      const decodedValue = bigIntParser(value)
+      const decodedValue = utf8Parser(value)
       return { key, value: decodedValue }
     }
 

@@ -14,8 +14,11 @@ import {
   Transaction
 } from './types.ts'
 
-export const hexParser = (buf: Buffer) => {
+export const hexParser = (buf: Buffer, key: string) => {
   const parsed = buf.toString('hex')
+  if (key === 'maxPriorityFeePerGas') {
+    console.log({ parsed })
+  }
   return parsed ? `0x${parsed}` : null
 }
 
@@ -70,7 +73,7 @@ const decodeV1 = (
     case 'miner':
     case 'from':
     case 'to': {
-      const decodedValue = hexParser(value)
+      const decodedValue = hexParser(value, key)
       return { key, value: decodedValue }
     }
 
@@ -80,7 +83,7 @@ const decodeV1 = (
     case 'gasPrice':
     case 'maxFeePerGas':
     case 'maxPriorityFeePerGas': {
-      const decodedValue = hexParser(value)
+      const decodedValue = hexParser(value, key)
       return { key, value: decodedValue }
     }
 
@@ -303,7 +306,7 @@ const decodeV0 = (
     }
 
     case 'hash': {
-      const decodedValue = hexParser(value)
+      const decodedValue = hexParser(value, key)
       return { key, value: decodedValue }
     }
 
@@ -315,7 +318,7 @@ const decodeV0 = (
     case 'miner':
     case 'from':
     case 'to': {
-      const decodedValue = hexParser(value)
+      const decodedValue = hexParser(value, key)
       return { key, value: decodedValue }
     }
 

@@ -13,6 +13,12 @@ const hexEncoder = (hex: string) => {
   const buf = Buffer.from(withoutPrefix, 'hex')
   const bufLen = Buffer.allocUnsafe(1)
   bufLen.writeUInt8(buf.byteLength)
+
+  if (hex === '1' || hex === '2' || hex === '3') {
+    const buffer = Buffer.concat([bufLen, buf])
+    console.log(buffer.toString('hex'), { byteLength: buf.byteLength })
+  }
+
   return Buffer.concat([bufLen, buf])
 }
 

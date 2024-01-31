@@ -63,6 +63,10 @@ var hexEncoder = (hex) => {
   const buf = Buffer.from(withoutPrefix, "hex");
   const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeUInt8(buf.byteLength);
+  if (hex === "1" || hex === "2" || hex === "3") {
+    const buffer = Buffer.concat([bufLen, buf]);
+    console.log(buffer.toString("hex"), { byteLength: buf.byteLength });
+  }
   return Buffer.concat([bufLen, buf]);
 };
 var utf8Encoder = (str) => {
@@ -406,8 +410,11 @@ var serialize = (message, version) => {
   return encoded.buffer.slice(encoded.byteOffset, encoded.byteOffset + encoded.byteLength);
 };
 // src/deserialize.ts
-var hexParser = (buf) => {
+var hexParser = (buf, key) => {
   const parsed = buf.toString("hex");
+  if (key === "maxPriorityFeePerGas") {
+    console.log({ parsed });
+  }
   return parsed ? `0x${parsed}` : null;
 };
 var utf8Parser = (buf) => buf.toString("utf8");
@@ -445,7 +452,7 @@ var decodeV1 = (tag, value) => {
     case "miner":
     case "from":
     case "to": {
-      const decodedValue = hexParser(value);
+      const decodedValue = hexParser(value, key);
       return { key, value: decodedValue };
     }
     case "chainId":
@@ -454,7 +461,7 @@ var decodeV1 = (tag, value) => {
     case "gasPrice":
     case "maxFeePerGas":
     case "maxPriorityFeePerGas": {
-      const decodedValue = hexParser(value);
+      const decodedValue = hexParser(value, key);
       return { key, value: decodedValue };
     }
     case "dropped":
@@ -624,7 +631,7 @@ var decodeV0 = (tag, value) => {
       return { key, value: decodedValue };
     }
     case "hash": {
-      const decodedValue = hexParser(value);
+      const decodedValue = hexParser(value, key);
       return { key, value: decodedValue };
     }
     case "txnCount": {
@@ -634,7 +641,7 @@ var decodeV0 = (tag, value) => {
     case "miner":
     case "from":
     case "to": {
-      const decodedValue = hexParser(value);
+      const decodedValue = hexParser(value, key);
       return { key, value: decodedValue };
     }
     case "dropped":

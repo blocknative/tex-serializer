@@ -99,7 +99,7 @@ export enum SerializerVersion {
 }
 
 export type DeserializedResponse = (MessageV1 | Message) & {
-  version: SerializerVersion
+  serializerVersion: SerializerVersion
 }
 
 export type Serializer = (

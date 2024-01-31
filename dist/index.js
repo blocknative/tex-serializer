@@ -33,7 +33,8 @@ var parameterToTag = {
   eoa: 30,
   contract: 31,
   creation: 32,
-  miner: 33
+  miner: 33,
+  maxFeePerGas: 34
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {

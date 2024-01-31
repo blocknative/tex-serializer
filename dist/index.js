@@ -60,9 +60,6 @@ var SerializerVersion;
 // src/serialize.ts
 var hexEncoder = (hex) => {
   const withoutPrefix = hex ? hex.startsWith("0x") ? hex.slice(2) : hex : "";
-  if (!withoutPrefix) {
-    console.log({ hex });
-  }
   const buf = Buffer.from(withoutPrefix, "hex");
   const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeUInt8(buf.byteLength);
@@ -411,9 +408,6 @@ var serialize = (message, version) => {
 // src/deserialize.ts
 var hexParser = (buf) => {
   const parsed = buf.toString("hex");
-  if (!parsed) {
-    console.log({ parsed });
-  }
   return parsed ? `0x${parsed}` : null;
 };
 var utf8Parser = (buf) => buf.toString("utf8");

@@ -10,11 +10,6 @@ import {
 
 const hexEncoder = (hex: string) => {
   const withoutPrefix = hex ? (hex.startsWith('0x') ? hex.slice(2) : hex) : ''
-
-  if (!withoutPrefix) {
-    console.log({ hex })
-  }
-
   const buf = Buffer.from(withoutPrefix, 'hex')
   const bufLen = Buffer.allocUnsafe(1)
   bufLen.writeUInt8(buf.byteLength)

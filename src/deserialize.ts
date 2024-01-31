@@ -14,10 +14,15 @@ import {
   Transaction
 } from './types.ts'
 
-export const hexParser = (buf: Buffer, key: string) => {
+export const hexParser = (buf: Buffer) => {
   const parsed = buf.toString('hex')
+  console.log(parsed)
+  return parsed ? `0x${parsed}` : null
+}
 
-  return parsed || null
+export const bigIntParser = (buf: Buffer) => {
+  const bigInt = buf.readBigInt64BE()
+  return bigInt.toString(10)
 }
 
 export const utf8Parser = (buf: Buffer) => buf.toString('utf8')
@@ -68,20 +73,20 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
+    case 'chainId':
+    case 'hash':
     case 'miner':
     case 'from':
     case 'to': {
-      const decodedValue = hexParser(value, key)
+      const decodedValue = hexParser(value)
       return { key, value: decodedValue }
     }
 
-    case 'chainId':
-    case 'hash':
     case 'baseFeePerGas':
     case 'gasPrice':
     case 'maxFeePerGas':
     case 'maxPriorityFeePerGas': {
-      const decodedValue = hexParser(value, key)
+      const decodedValue = bigIntParser(value)
       return { key, value: decodedValue }
     }
 
@@ -304,7 +309,7 @@ const decodeV0 = (
     }
 
     case 'hash': {
-      const decodedValue = hexParser(value, key)
+      const decodedValue = hexParser(value)
       return { key, value: decodedValue }
     }
 
@@ -316,7 +321,7 @@ const decodeV0 = (
     case 'miner':
     case 'from':
     case 'to': {
-      const decodedValue = hexParser(value, key)
+      const decodedValue = hexParser(value)
       return { key, value: decodedValue }
     }
 

@@ -59,17 +59,18 @@ var SerializerVersion;
 
 // src/serialize.ts
 var hexEncoder = (hex) => {
-  const withoutPrefix = hex ? hex.startsWith("0x") ? hex.slice(2) : hex : "";
-  const buf = Buffer.from(withoutPrefix, "hex");
+  let formatted = hex ? hex.startsWith("0x") ? hex.slice(2) : hex : "";
+  const buf = Buffer.from(formatted, "hex");
   const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeUInt8(buf.byteLength);
   if (hex === "1" || hex === "2" || hex === "3") {
     const buffer = Buffer.concat([bufLen, buf]);
     console.log(buffer.toString("hex"), {
       byteLength: buf.byteLength,
-      withoutPrefix,
+      formatted,
       buf,
-      toString: buf.toString("hex")
+      toString: buf.toString("hex"),
+      padded: Buffer.from(`0${hex}`).toString("hex")
     });
   }
   return Buffer.concat([bufLen, buf]);

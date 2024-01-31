@@ -9,8 +9,13 @@ import {
 } from './types.ts'
 
 const hexEncoder = (hex: string) => {
-  const withoutPrefix = hex ? (hex.startsWith('0x') ? hex.slice(2) : hex) : ''
-  const buf = Buffer.from(withoutPrefix, 'hex')
+  let formatted = hex ? (hex.startsWith('0x') ? hex.slice(2) : hex) : ''
+
+  // if (formatted.length === 1) {
+  //   formatted = `0${hex}`
+  // }
+
+  const buf = Buffer.from(formatted, 'hex')
   const bufLen = Buffer.allocUnsafe(1)
   bufLen.writeUInt8(buf.byteLength)
 
@@ -18,9 +23,10 @@ const hexEncoder = (hex: string) => {
     const buffer = Buffer.concat([bufLen, buf])
     console.log(buffer.toString('hex'), {
       byteLength: buf.byteLength,
-      withoutPrefix,
+      formatted,
       buf,
-      toString: buf.toString('hex')
+      toString: buf.toString('hex'),
+      padded: Buffer.from(`0${hex}`).toString('hex')
     })
   }
 

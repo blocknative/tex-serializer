@@ -3,7 +3,6 @@ import {
   Deserializer,
   ValueOf,
   SerializerVersion,
-  MessageV1,
   DeserializedResponse
 } from './types-v1'
 
@@ -17,6 +16,11 @@ import {
 
 export const hexParser = (buf: Buffer) => {
   const parsed = buf.toString('hex')
+
+  if (!parsed) {
+    console.log({ parsed })
+  }
+
   return parsed ? `0x${parsed}` : null
 }
 

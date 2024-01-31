@@ -8,16 +8,6 @@ import {
   Stats
 } from './types.ts'
 
-const bigIntEncoder = (int: string) => {
-  const b = BigInt(int)
-  const buf = Buffer.alloc(16)
-  buf.writeBigInt64BE(b)
-  const bufLen = Buffer.allocUnsafe(1)
-  bufLen.writeUInt8(buf.byteLength)
-
-  return Buffer.concat([bufLen, buf])
-}
-
 const hexEncoder = (hex: string) => {
   const withoutPrefix = hex ? (hex.startsWith('0x') ? hex.slice(2) : hex) : ''
   const buf = Buffer.from(withoutPrefix, 'hex')

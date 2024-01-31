@@ -19,11 +19,6 @@ export const hexParser = (buf: Buffer) => {
   return parsed ? `0x${parsed}` : null
 }
 
-export const bigIntParser = (buf: Buffer) => {
-  const bigInt = buf.readBigInt64BE()
-  return bigInt.toString(10)
-}
-
 export const utf8Parser = (buf: Buffer) => buf.toString('utf8')
 export const int8Parser = (buf: Buffer) => buf.readUInt8()
 export const int16Parser = (buf: Buffer) => buf.readUInt16BE()

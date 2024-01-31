@@ -81,7 +81,6 @@ export type PendingTransactionBase = {
 	from: string;
 	to: string;
 	nonce: number;
-	type: number;
 };
 export type PendingTransactionV1 = PendingTransactionBase & (Type0 | Type2);
 export type DroppedTransaction = {

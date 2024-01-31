@@ -411,7 +411,6 @@ var serialize = (message, version) => {
 // src/deserialize.ts
 var hexParser = (buf) => {
   const parsed = buf.toString("hex");
-  console.log(parsed);
   return parsed ? `0x${parsed}` : null;
 };
 var utf8Parser = (buf) => buf.toString("utf8");

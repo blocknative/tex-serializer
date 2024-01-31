@@ -16,7 +16,6 @@ import {
 
 export const hexParser = (buf: Buffer) => {
   const parsed = buf.toString('hex')
-  console.log(parsed)
   return parsed ? `0x${parsed}` : null
 }
 

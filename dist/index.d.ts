@@ -140,7 +140,7 @@ export declare enum SerializerVersion {
 	"v1" = 1
 }
 export type DeserializedResponse = (MessageV1 | Message) & {
-	version: SerializerVersion;
+	serializerVersion: SerializerVersion;
 };
 export type Serializer = (message: MessageV1 | Message, version: SerializerVersion) => ArrayBuffer;
 export type Deserializer = (message: ArrayBuffer) => DeserializedResponse;

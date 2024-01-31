@@ -59,20 +59,10 @@ var SerializerVersion;
 
 // src/serialize.ts
 var hexEncoder = (hex) => {
-  let formatted = hex ? hex.startsWith("0x") ? hex.slice(2) : hex : "";
+  let formatted = hex ? hex.startsWith("0x") ? hex : `0x${hex}` : "";
   const buf = Buffer.from(formatted, "hex");
   const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeUInt8(buf.byteLength);
-  if (hex === "1" || hex === "2" || hex === "3") {
-    const buffer = Buffer.concat([bufLen, buf]);
-    console.log(buffer.toString("hex"), {
-      byteLength: buf.byteLength,
-      formatted,
-      buf,
-      toString: buf.toString("hex"),
-      padded: Buffer.from(`0${hex}`).toString("hex")
-    });
-  }
   return Buffer.concat([bufLen, buf]);
 };
 var utf8Encoder = (str) => {
@@ -418,10 +408,7 @@ var serialize = (message, version) => {
 // src/deserialize.ts
 var hexParser = (buf, key) => {
   const parsed = buf.toString("hex");
-  if (key === "maxPriorityFeePerGas") {
-    console.log({ parsed });
-  }
-  return parsed ? `0x${parsed}` : null;
+  return parsed || null;
 };
 var utf8Parser = (buf) => buf.toString("utf8");
 var int8Parser = (buf) => buf.readUInt8();

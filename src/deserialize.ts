@@ -16,10 +16,8 @@ import {
 
 export const hexParser = (buf: Buffer, key: string) => {
   const parsed = buf.toString('hex')
-  if (key === 'maxPriorityFeePerGas') {
-    console.log({ parsed })
-  }
-  return parsed ? `0x${parsed}` : null
+
+  return parsed || null
 }
 
 export const utf8Parser = (buf: Buffer) => buf.toString('utf8')

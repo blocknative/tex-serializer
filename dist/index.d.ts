@@ -135,7 +135,7 @@ export type StatsMessage = MessageBase & {
 	stats: Stats;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage;
-declare enum SerializerVersion {
+export declare enum SerializerVersion {
 	"v0" = 0,
 	"v1" = 1
 }

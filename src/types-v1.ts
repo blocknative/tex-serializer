@@ -47,7 +47,7 @@ export type MempoolMessageV1 = MessageBase & {
 
 export type BlockMessageV1 = MessageBase & {
   /** tx hashes included in block */
-  transactions: string[]
+  transactions: { hash: string }[]
   hash: string
   height: number
   timestamp: string

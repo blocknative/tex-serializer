@@ -16,7 +16,11 @@ const hexEncoder = (hex: string) => {
 
   if (hex === '1' || hex === '2' || hex === '3') {
     const buffer = Buffer.concat([bufLen, buf])
-    console.log(buffer.toString('hex'), { byteLength: buf.byteLength })
+    console.log(buffer.toString('hex'), {
+      byteLength: buf.byteLength,
+      withoutPrefix,
+      buf
+    })
   }
 
   return Buffer.concat([bufLen, buf])

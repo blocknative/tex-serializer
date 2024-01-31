@@ -93,7 +93,7 @@ export type MessageV1 =
 
 export type ValueOf<Obj> = Obj[keyof Obj]
 
-export const enum SerializerVersion {
+export enum SerializerVersion {
   'v0',
   'v1'
 }

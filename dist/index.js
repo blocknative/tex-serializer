@@ -834,5 +834,6 @@ var deserialize = (data) => {
 };
 export {
   serialize,
-  deserialize
+  deserialize,
+  SerializerVersion
 };

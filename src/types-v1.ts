@@ -103,12 +103,29 @@ export type StatsMessage = MessageBase & {
   stats: Stats
 }
 
+export type TransactionSegmentStats = {
+  count: number
+  value: number
+  gasUsed: number
+}
+
+export type HomepagePendingMessage = MessageBase & {
+  marketable: TransactionSegmentStats
+  stables: TransactionSegmentStats
+}
+
+export type HomepageConfirmedMessage = MessageBase & {
+  stables: TransactionSegmentStats
+}
+
 export type MessageV1 =
   | MempoolMessageV1
   | BlockMessageV1
   | ErrorMessage
   | AckMessage
   | StatsMessage
+  | HomepagePendingMessage
+  | HomepageConfirmedMessage
 
 export type ValueOf<Obj> = Obj[keyof Obj]
 

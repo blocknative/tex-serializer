@@ -1,6 +1,7 @@
 import { parameterToTag } from './constants.ts'
-
 import {
+  HomepagePendingMessage,
+  TransactionSegmentStats,
   Serializer,
   SerializerVersion,
   type MempoolTransactionV1,
@@ -261,6 +262,28 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
       return Buffer.concat([tagBuf, len, encodedInteractionTypes])
     }
+    case 'stables':
+    case 'marketable': {
+      let encodedHomepagePending = Buffer.allocUnsafe(0)
+
+      Object.entries(value as TransactionSegmentStats).forEach(
+        ([key, value]) => {
+          const encoded = encodeV1(key, value)
+
+          if (encoded) {
+            encodedHomepagePending = Buffer.concat([
+              encodedHomepagePending,
+              encoded
+            ])
+          }
+        }
+      )
+
+      const len = Buffer.allocUnsafe(2)
+      len.writeUInt16BE(encodedHomepagePending.byteLength)
+
+      return Buffer.concat([tagBuf, len, encodedHomepagePending])
+    }
     default:
       return null
   }
@@ -278,6 +301,8 @@ export const serialize: Serializer = (message, version) => {
     if (typeof value === 'undefined') return
 
     const encodedKeyValue = encode(version, key, value)
+
+    console.log('serializing key: ', key, '  ', encodedKeyValue)
 
     if (encodedKeyValue) {
       encoded = Buffer.concat([encoded, encodedKeyValue])

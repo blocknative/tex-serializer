@@ -4,11 +4,12 @@ import {
   Deserializer,
   ValueOf,
   SerializerVersion,
-  DeserializedResponse,
   type TransactionV1,
   type Stats,
   type InteractionTypes,
-  type MessageV1
+  type MessageV1,
+  DeserializedResponse,
+  TransactionSegmentStats
 } from './types-v1'
 
 export const hexParser = (buf: Buffer) => {
@@ -280,6 +281,42 @@ const decodeV1 = (
       return { key, value: decodedInteractionTypes }
     }
 
+    case 'stables':
+    case 'marketable': {
+      const decodedStats: TransactionSegmentStats =
+        {} as TransactionSegmentStats
+      let cursor = 0
+
+      while (cursor < value.byteLength) {
+        const tag = value.readUInt8(cursor)
+        cursor++
+
+        let len: number
+
+        if (getTagLengthBytes(tag) === 2) {
+          len = value.readUInt16BE(cursor)
+          cursor += 2
+        } else {
+          len = value.readUInt8(cursor)
+          cursor++
+        }
+
+        const val = value.subarray(cursor, len + cursor)
+        cursor += len
+        const decoded = decodeV1(tag, val)
+
+        if (decoded) {
+          const { key, value } = decoded
+          // @ts-ignore
+          decodedStats[key as keyof TransactionSegmentStats] =
+            value as ValueOf<TransactionSegmentStats>
+        } else {
+          console.warn(`Unknown tag: ${tag}  ${val}`)
+        }
+      }
+
+      return { key, value: decodedStats }
+    }
     default:
       return null
   }

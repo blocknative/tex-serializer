@@ -34,7 +34,11 @@ export const parameterToTag: Record<string, number> = {
   contract: 31,
   creation: 32,
   miner: 33,
-  maxFeePerGas: 34
+  maxFeePerGas: 34,
+  count: 35,
+  value: 36,
+  marketable: 37,
+  stables: 38,
 }
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(
@@ -48,6 +52,12 @@ export const getTagLengthBytes = (tag: number): number => {
     case 15:
     case 25:
     case 29:
+      return 2
+    case 35:
+    case 36:
+      return 2
+    case 37:
+    case 38:
       return 2
     default:
       return 1

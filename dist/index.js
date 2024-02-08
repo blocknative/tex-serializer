@@ -34,7 +34,11 @@ var parameterToTag = {
   contract: 31,
   creation: 32,
   miner: 33,
-  maxFeePerGas: 34
+  maxFeePerGas: 34,
+  count: 35,
+  value: 36,
+  marketable: 37,
+  stables: 38
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -44,6 +48,12 @@ var getTagLengthBytes = (tag) => {
     case 15:
     case 25:
     case 29:
+      return 2;
+    case 35:
+    case 36:
+      return 2;
+    case 37:
+    case 38:
       return 2;
     default:
       return 1;
@@ -254,6 +264,19 @@ var encodeV1 = (key, value) => {
       len.writeUInt16BE(encodedInteractionTypes.byteLength);
       return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
     }
+    case "stables":
+    case "marketable": {
+      let encodedHomepagePending = Buffer.allocUnsafe(0);
+      Object.entries(value).forEach(([key2, value2]) => {
+        const encoded = encodeV1(key2, value2);
+        if (encoded) {
+          encodedHomepagePending = Buffer.concat([encodedHomepagePending, encoded]);
+        }
+      });
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedHomepagePending.byteLength);
+      return Buffer.concat([tagBuf, len, encodedHomepagePending]);
+    }
     default:
       return null;
   }
@@ -266,6 +289,7 @@ var serialize = (message, version) => {
     if (typeof value === "undefined")
       return;
     const encodedKeyValue = encode(version, key, value);
+    console.log("serializing key: ", key, "  ", encodedKeyValue);
     if (encodedKeyValue) {
       encoded = Buffer.concat([encoded, encodedKeyValue]);
     }
@@ -473,6 +497,33 @@ var decodeV1 = (tag, value) => {
         }
       }
       return { key, value: decodedInteractionTypes };
+    }
+    case "stables":
+    case "marketable": {
+      const decodedStats = {};
+      let cursor = 0;
+      while (cursor < value.byteLength) {
+        const tag2 = value.readUInt8(cursor);
+        cursor++;
+        let len;
+        if (getTagLengthBytes(tag2) === 2) {
+          len = value.readUInt16BE(cursor);
+          cursor += 2;
+        } else {
+          len = value.readUInt8(cursor);
+          cursor++;
+        }
+        const val = value.subarray(cursor, len + cursor);
+        cursor += len;
+        const decoded = decodeV1(tag2, val);
+        if (decoded) {
+          const { key: key2, value: value2 } = decoded;
+          decodedStats[key2] = value2;
+        } else {
+          console.warn(`Unknown tag: ${tag2}  ${val}`);
+        }
+      }
+      return { key, value: decodedStats };
     }
     default:
       return null;

@@ -110,6 +110,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
+    case 'privateTxnCount':
     case 'txnCount': {
       const encodedLengthAndValue = int16Encoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
@@ -122,6 +123,8 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
+    case 'baseFee':
+    case 'totalStaked':
     case 'baseFeePerGas':
     case 'gasPrice':
     case 'maxFeePerGas':
@@ -141,6 +144,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
     case 'interactionType':
     case 'message':
     case 'status':
+    case 'baseFeeTrend':
     case 'timestamp': {
       const encodedLengthAndValue = utf8Encoder(value as string)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
@@ -255,6 +259,8 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, len, encodedInteractionTypes])
     }
     case 'stables':
+    case 'optimisticL2':
+    case 'defiSwap':
     case 'marketable': {
       let encodedHomepagePending = Buffer.allocUnsafe(0)
 

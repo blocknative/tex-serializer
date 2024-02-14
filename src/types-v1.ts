@@ -85,18 +85,25 @@ export type StatsMessage = MessageBase & {
 }
 
 export type TransactionSegmentStats = {
-  count: number
+  txnCount: number
   value: number
-  gasUsed: number
 }
 
 export type HomepagePendingMessage = MessageBase & {
   marketable: TransactionSegmentStats
   stables: TransactionSegmentStats
+  optimisticL2: TransactionSegmentStats
+  defiSwap: TransactionSegmentStats
 }
 
 export type HomepageConfirmedMessage = MessageBase & {
   stables: TransactionSegmentStats
+  ethBurned: number
+  height: number
+  txnCount: number
+  privateTxCount: number
+  baseFee: number
+  baseFeeTrend: string
 }
 
 export type MessageV1 =

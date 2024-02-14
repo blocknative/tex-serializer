@@ -56,7 +56,7 @@ test('Successfully serializes and deserializes an ACK message', () => {
   }).toStrictEqual({ serializerVersion: SerializerVersion.v0, ...ackMessage })
 })
 
-test('Succesfully serializes and deserializes a Mempool Stats message', () => {
+test('Successfully serializes and deserializes a Mempool Stats message', () => {
   const serialized = serialize(statsMessage, SerializerVersion.v0)
   const deserialized = deserialize(serialized)
 
@@ -66,22 +66,22 @@ test('Succesfully serializes and deserializes a Mempool Stats message', () => {
   }).toStrictEqual({ serializerVersion: SerializerVersion.v0, ...statsMessage })
 })
 
-test('Succesfully serializes and deserializes a Homepage Confirmed message', () => {
+test('Successfully serializes and deserializes a Homepage Confirmed message', () => {
   const serialized = serialize(homepageConfirmedMessage, SerializerVersion.v1)
   const deserialized = deserialize(serialized)
 
   expect({
-    serializerVersion: SerializerVersion.v0,
+    serializerVersion: SerializerVersion.v1,
     ...deserialized
-  }).toStrictEqual({ serializerVersion: SerializerVersion.v0, ...homepageConfirmedMessage })
+  }).toStrictEqual({ serializerVersion: SerializerVersion.v1, ...homepageConfirmedMessage })
 })
 
-test('Succesfully serializes and deserializes a Homepage Pending message', () => {
+test('Successfully serializes and deserializes a Homepage Pending message', () => {
   const serialized = serialize(homepagePendingMessage, SerializerVersion.v1)
   const deserialized = deserialize(serialized)
 
   expect({
-    serializerVersion: SerializerVersion.v0,
+    serializerVersion: SerializerVersion.v1,
     ...deserialized
-  }).toStrictEqual({ serializerVersion: SerializerVersion.v0, ...homepagePendingMessage })
+  }).toStrictEqual({ serializerVersion: SerializerVersion.v1, ...homepagePendingMessage })
 })

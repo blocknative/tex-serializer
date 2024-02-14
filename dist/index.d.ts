@@ -146,7 +146,8 @@ export type HomepagePendingMessage = MessageBase & {
 };
 export type HomepageConfirmedMessage = MessageBase & {
 	stables: TransactionSegmentStats;
-	ethBurned: number;
+	ethBurned?: number;
+	totalStaked?: number;
 	height: number;
 	txnCount: number;
 	privateTxnCount: number;

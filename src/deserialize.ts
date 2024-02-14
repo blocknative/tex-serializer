@@ -3,7 +3,8 @@ import {
   Deserializer,
   ValueOf,
   SerializerVersion,
-  DeserializedResponse, TransactionSegmentStats
+  DeserializedResponse,
+  TransactionSegmentStats
 } from './types-v1'
 
 import {
@@ -62,6 +63,7 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
+    case 'privateTxnCount':
     case 'txnCount': {
       const decodedValue = int16Parser(value)
       return { key, value: decodedValue }
@@ -90,6 +92,8 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
+    case 'baseFee':
+    case 'baseFeeTrend':
     case 'feed':
     case 'id':
     case 'interactionType':
@@ -281,7 +285,8 @@ const decodeV1 = (
 
     case 'stables':
     case 'marketable': {
-      const decodedStats: TransactionSegmentStats = {} as TransactionSegmentStats
+      const decodedStats: TransactionSegmentStats =
+        {} as TransactionSegmentStats
       let cursor = 0
 
       while (cursor < value.byteLength) {
@@ -305,7 +310,8 @@ const decodeV1 = (
         if (decoded) {
           const { key, value } = decoded
           // @ts-ignore
-          decodedStats[key as keyof TransactionSegmentStats] = value as ValueOf<TransactionSegmentStats>
+          decodedStats[key as keyof TransactionSegmentStats] =
+            value as ValueOf<TransactionSegmentStats>
         } else {
           console.warn(`Unknown tag: ${tag}  ${val}`)
         }
@@ -366,6 +372,8 @@ const decodeV0 = (
       return { key, value: decodedValue }
     }
 
+    case 'baseFee':
+    case 'baseFeeTrend':
     case 'feed':
     case 'id':
     case 'interactionType':
@@ -549,6 +557,44 @@ const decodeV0 = (
       }
 
       return { key, value: decodedInteractionTypes }
+    }
+    case 'stables':
+    case 'optimisticL2':
+    case 'defiSwap':
+    case 'marketable': {
+      const decodedTransactionSegmentStats: TransactionSegmentStats =
+        {} as TransactionSegmentStats
+      let cursor = 0
+
+      while (cursor < value.byteLength) {
+        const tag = value.readUInt8(cursor)
+        cursor++
+
+        let len: number
+
+        if (getTagLengthBytes(tag) === 2) {
+          len = value.readUInt16BE(cursor)
+          cursor += 2
+        } else {
+          len = value.readUInt8(cursor)
+          cursor++
+        }
+
+        const val = value.subarray(cursor, len + cursor)
+        cursor += len
+        const decoded = decodeV0(tag, val)
+
+        if (decoded) {
+          const { key, value } = decoded
+          // @ts-ignore
+          decodedTransactionSegmentStats[key as keyof TransactionSegmentStats] =
+            value as ValueOf<TransactionSegmentStats>
+        } else {
+          console.warn(`Unknown tag: ${tag}`)
+        }
+      }
+
+      return { key, value: decodedTransactionSegmentStats }
     }
 
     default:

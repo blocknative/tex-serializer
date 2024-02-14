@@ -76,8 +76,11 @@ export type TransactionSegmentStats = {
 export type HomepagePendingMessage = MessageBase & {
 	marketable: TransactionSegmentStats;
 	stables: TransactionSegmentStats;
-	optimisticL2: TransactionSegmentStats;
-	defiSwap: TransactionSegmentStats;
+	defiSwap?: TransactionSegmentStats;
+	optimisticL2?: {
+		txnCount: number;
+		batchesCount: number;
+	};
 };
 export type HomepageConfirmedMessage = MessageBase & {
 	stables: TransactionSegmentStats;
@@ -87,7 +90,7 @@ export type HomepageConfirmedMessage = MessageBase & {
 	txnCount: number;
 	privateTxnCount: number;
 	baseFee: string;
-	baseFeeTrend: string;
+	baseFeeTrend?: string;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | HomepagePendingMessage | HomepageConfirmedMessage;
 export declare enum SerializerVersion {

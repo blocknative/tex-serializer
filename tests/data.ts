@@ -1050,31 +1050,31 @@ export const statsMessage = {
 }
 
 export const homepagePendingMessage = {
-  feed: 'stats',
+  feed: 'homepage_pending',
   chainId: '0x1',
   marketable: {
-    txCount: 38,
+    txnCount: 38,
     value: 12345
   },
   stables: {
-    txCount: 12,
+    txnCount: 12,
     value: 125
   },
   optimisticL2: {
-    txCount: 12,
+    txnCount: 12,
     batchesCount: 125
   },
   defiSwap: {
-    txCount: 12,
+    txnCount: 12,
     value: 125
   }
 }
 
 export const homepageConfirmedMessage = {
-  feed: 'stats',
+  feed: 'homepage_confirmed',
   chainId: '0x1',
   stables: {
-    txCount: 99,
+    txnCount: 99,
     value: 500000
   },
   ethBurned: 3000,
@@ -1082,6 +1082,6 @@ export const homepageConfirmedMessage = {
   height: 19215389,
   txnCount: 99,
   privateTxnCount: 12,
-  baseFee: 12,
+  baseFee: '12',
   baseFeeTrend: 'flat'
 }

@@ -64,6 +64,7 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
+    case 'privateTxnCount':
     case 'txnCount': {
       const decodedValue = int16Parser(value)
       return { key, value: decodedValue }
@@ -92,6 +93,8 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
+    case 'baseFee':
+    case 'baseFeeTrend':
     case 'feed':
     case 'id':
     case 'interactionType':

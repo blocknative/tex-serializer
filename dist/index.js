@@ -162,7 +162,6 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "baseFee":
     case "totalStaked":
     case "baseFeePerGas":
     case "gasPrice":
@@ -176,12 +175,13 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = boolEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "baseFee":
+    case "baseFeeTrend":
     case "feed":
     case "id":
     case "interactionType":
     case "message":
     case "status":
-    case "baseFeeTrend":
     case "timestamp": {
       const encodedLengthAndValue = utf8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -276,7 +276,10 @@ var encodeV1 = (key, value) => {
       Object.entries(value).forEach(([key2, value2]) => {
         const encoded = encodeV1(key2, value2);
         if (encoded) {
-          encodedHomepagePending = Buffer.concat([encodedHomepagePending, encoded]);
+          encodedHomepagePending = Buffer.concat([
+            encodedHomepagePending,
+            encoded
+          ]);
         }
       });
       const len = Buffer.allocUnsafe(2);
@@ -335,6 +338,7 @@ var decodeV1 = (tag, value) => {
       const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
     }
+    case "privateTxnCount":
     case "txnCount": {
       const decodedValue = int16Parser(value);
       return { key, value: decodedValue };
@@ -359,6 +363,8 @@ var decodeV1 = (tag, value) => {
       const decodedValue = boolParser(value);
       return { key, value: decodedValue };
     }
+    case "baseFee":
+    case "baseFeeTrend":
     case "feed":
     case "id":
     case "interactionType":

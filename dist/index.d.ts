@@ -149,8 +149,8 @@ export type HomepageConfirmedMessage = MessageBase & {
 	ethBurned: number;
 	height: number;
 	txnCount: number;
-	privateTxCount: number;
-	baseFee: number;
+	privateTxnCount: number;
+	baseFee: string;
 	baseFeeTrend: string;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | HomepagePendingMessage | HomepageConfirmedMessage;

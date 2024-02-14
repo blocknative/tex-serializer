@@ -101,8 +101,8 @@ export type HomepageConfirmedMessage = MessageBase & {
   ethBurned: number
   height: number
   txnCount: number
-  privateTxCount: number
-  baseFee: number
+  privateTxnCount: number
+  baseFee: string
   baseFeeTrend: string
 }
 

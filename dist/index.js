@@ -35,10 +35,12 @@ var parameterToTag = {
   creation: 32,
   miner: 33,
   maxFeePerGas: 34,
-  count: 35,
+  baseFee: 35,
   value: 36,
   marketable: 37,
-  stables: 38
+  stables: 38,
+  privateTxnCount: 39,
+  baseFeeTrend: 40
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {

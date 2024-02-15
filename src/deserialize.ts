@@ -559,6 +559,7 @@ const decodeV0 = (
       return { key, value: decodedInteractionTypes }
     }
     case 'stables':
+    case 'ethTransfers':
     case 'optimisticL2':
     case 'defiSwap':
     case 'marketable': {

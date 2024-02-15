@@ -106,6 +106,7 @@ const decodeV1 = (
     }
 
     case 'gasLimit':
+    case 'ethBurned':
     case 'gasUsed': {
       const decodedValue = numberParser(value)
       return { key, value: decodedValue }

@@ -41,7 +41,8 @@ var parameterToTag = {
   stables: 38,
   ethTransfers: 39,
   privateTxnCount: 40,
-  baseFeeTrend: 41
+  baseFeeTrend: 41,
+  ethBurned: 42
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -189,6 +190,7 @@ var encodeV1 = (key, value) => {
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "gasLimit":
+    case "ethBurned":
     case "gasUsed": {
       const encodedLengthAndValue = numberEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -379,6 +381,7 @@ var decodeV1 = (tag, value) => {
       return { key, value: decodedValue };
     }
     case "gasLimit":
+    case "ethBurned":
     case "gasUsed": {
       const decodedValue = numberParser(value);
       return { key, value: decodedValue };

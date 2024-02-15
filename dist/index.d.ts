@@ -85,7 +85,7 @@ export type MempoolSummaryMessage = MessageBase & {
 };
 export type LatestBlockSummaryMessage = MessageBase & {
 	stables: TransactionSegmentStats;
-	ethBurned?: number;
+	ethBurned: number;
 	totalStaked?: number;
 	height: number;
 	txnCount: number;

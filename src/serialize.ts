@@ -264,6 +264,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, len, encodedInteractionTypes])
     }
     case 'stables':
+    case 'ethTransfers':
     case 'optimisticL2':
     case 'defiSwap':
     case 'marketable': {

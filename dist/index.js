@@ -39,8 +39,9 @@ var parameterToTag = {
   value: 36,
   marketable: 37,
   stables: 38,
-  privateTxnCount: 39,
-  baseFeeTrend: 40
+  ethTransfers: 39,
+  privateTxnCount: 40,
+  baseFeeTrend: 41
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -271,6 +272,7 @@ var encodeV1 = (key, value) => {
       return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
     }
     case "stables":
+    case "ethTransfers":
     case "optimisticL2":
     case "defiSwap":
     case "marketable": {
@@ -860,6 +862,7 @@ var decodeV0 = (tag, value) => {
       return { key, value: decodedInteractionTypes };
     }
     case "stables":
+    case "ethTransfers":
     case "optimisticL2":
     case "defiSwap":
     case "marketable": {

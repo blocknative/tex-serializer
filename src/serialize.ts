@@ -1,6 +1,6 @@
 import { parameterToTag } from './constants.ts'
 import {
-  HomepagePendingMessage,
+  MempoolSummaryMessage,
   Serializer,
   SerializerVersion,
   TransactionSegmentStats

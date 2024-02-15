@@ -156,8 +156,6 @@ var encodeV1 = (key, value) => {
     }
     case "privateTxnCount":
     case "txnCount": {
-      console.log("txnCount: ", value);
-      console.log("privateTxnCount: ", value);
       const encodedLengthAndValue = int16Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }

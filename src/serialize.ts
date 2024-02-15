@@ -138,7 +138,8 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
     case 'baseFeePerGas':
     case 'gasPrice':
     case 'maxFeePerGas':
-    case 'maxPriorityFeePerGas': {
+    case 'maxPriorityFeePerGas':
+    case 'value': {
       const encodedLengthAndValue = utf8Encoder(value as string)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }

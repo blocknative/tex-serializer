@@ -51,7 +51,6 @@ var getTagLengthBytes = (tag) => {
     case 25:
     case 29:
       return 2;
-    case 35:
     case 36:
       return 2;
     case 37:

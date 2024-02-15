@@ -52,10 +52,9 @@ var getTagLengthBytes = (tag) => {
     case 25:
     case 29:
       return 2;
-    case 36:
-      return 2;
     case 37:
     case 38:
+    case 39:
       return 2;
     default:
       return 1;
@@ -170,7 +169,8 @@ var encodeV1 = (key, value) => {
     case "baseFeePerGas":
     case "gasPrice":
     case "maxFeePerGas":
-    case "maxPriorityFeePerGas": {
+    case "maxPriorityFeePerGas":
+    case "value": {
       const encodedLengthAndValue = utf8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
@@ -494,7 +494,8 @@ var decodeV1 = (tag, value) => {
     case "baseFeePerGas":
     case "gasPrice":
     case "maxFeePerGas":
-    case "maxPriorityFeePerGas": {
+    case "maxPriorityFeePerGas":
+    case "value": {
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }

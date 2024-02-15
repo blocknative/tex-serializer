@@ -111,6 +111,7 @@ export type TransactionSegmentStats = {
 export type MempoolSummaryMessage = MessageBase & {
   marketable: TransactionSegmentStats
   stables: TransactionSegmentStats
+  ethTransfers: TransactionSegmentStats
   defiSwap?: TransactionSegmentStats
   optimisticL2?: {
     txnCount: number

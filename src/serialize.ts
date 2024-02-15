@@ -132,6 +132,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
+    case 'baseFee':
     case 'totalStaked':
     case 'baseFeePerGas':
     case 'gasPrice':
@@ -147,7 +148,6 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
-    case 'baseFee':
     case 'baseFeeTrend':
     case 'feed':
     case 'id':

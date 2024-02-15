@@ -135,18 +135,29 @@ export type StatsMessage = MessageBase & {
 	stats: Stats;
 };
 export type TransactionSegmentStats = {
-	count: number;
+	txnCount: number;
 	value: number;
-	gasUsed: number;
 };
-export type HomepagePendingMessage = MessageBase & {
+export type MempoolSummaryMessage = MessageBase & {
 	marketable: TransactionSegmentStats;
 	stables: TransactionSegmentStats;
+	defiSwap?: TransactionSegmentStats;
+	optimisticL2?: {
+		txnCount: number;
+		batchesCount: number;
+	};
 };
-export type HomepageConfirmedMessage = MessageBase & {
+export type LatestBlockSummaryMessage = MessageBase & {
 	stables: TransactionSegmentStats;
+	ethBurned?: number;
+	totalStaked?: number;
+	height: number;
+	txnCount: number;
+	privateTxnCount: number;
+	baseFee: string;
+	baseFeeTrend?: string;
 };
-export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | HomepagePendingMessage | HomepageConfirmedMessage;
+export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | MempoolSummaryMessage | LatestBlockSummaryMessage;
 export declare enum SerializerVersion {
 	"v0" = 0,
 	"v1" = 1

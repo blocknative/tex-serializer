@@ -78,6 +78,7 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
+    case 'baseFee':
     case 'baseFeePerGas':
     case 'gasPrice':
     case 'maxFeePerGas':
@@ -92,7 +93,6 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
-    case 'baseFee':
     case 'baseFeeTrend':
     case 'feed':
     case 'id':

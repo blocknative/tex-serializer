@@ -156,8 +156,6 @@ var encodeV1 = (key, value) => {
     }
     case "privateTxnCount":
     case "txnCount": {
-      console.log("txnCount: ", value);
-      console.log("privateTxnCount: ", value);
       const encodedLengthAndValue = int16Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
@@ -167,6 +165,7 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "baseFee":
     case "totalStaked":
     case "baseFeePerGas":
     case "gasPrice":
@@ -180,7 +179,6 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = boolEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "baseFee":
     case "baseFeeTrend":
     case "feed":
     case "id":
@@ -491,6 +489,7 @@ var decodeV1 = (tag, value) => {
       const decodedValue = hexParser(value);
       return { key, value: decodedValue };
     }
+    case "baseFee":
     case "baseFeePerGas":
     case "gasPrice":
     case "maxFeePerGas":
@@ -503,7 +502,6 @@ var decodeV1 = (tag, value) => {
       const decodedValue = boolParser(value);
       return { key, value: decodedValue };
     }
-    case "baseFee":
     case "baseFeeTrend":
     case "feed":
     case "id":

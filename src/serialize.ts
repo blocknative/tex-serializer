@@ -3,6 +3,7 @@ import { parameterToTag } from './constants.ts'
 import {
   HomepagePendingMessage,
   TransactionSegmentStats,
+  MempoolSummaryMessage,
   Serializer,
   SerializerVersion,
   type MempoolTransactionV1,

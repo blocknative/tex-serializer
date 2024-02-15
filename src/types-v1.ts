@@ -108,7 +108,7 @@ export type TransactionSegmentStats = {
   value: number
 }
 
-export type HomepagePendingMessage = MessageBase & {
+export type MempoolSummaryMessage = MessageBase & {
   marketable: TransactionSegmentStats
   stables: TransactionSegmentStats
   defiSwap?: TransactionSegmentStats
@@ -118,7 +118,7 @@ export type HomepagePendingMessage = MessageBase & {
   }
 }
 
-export type HomepageConfirmedMessage = MessageBase & {
+export type LatestBlockSummaryMessage = MessageBase & {
   stables: TransactionSegmentStats
   ethBurned?: number
   totalStaked?: number
@@ -135,8 +135,8 @@ export type MessageV1 =
   | ErrorMessage
   | AckMessage
   | StatsMessage
-  | HomepagePendingMessage
-  | HomepageConfirmedMessage
+  | MempoolSummaryMessage
+  | LatestBlockSummaryMessage
 
 export type ValueOf<Obj> = Obj[keyof Obj]
 

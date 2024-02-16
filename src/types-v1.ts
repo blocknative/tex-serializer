@@ -122,13 +122,13 @@ export type MempoolSummaryMessage = MessageBase & {
 export type LatestBlockSummaryMessage = MessageBase & {
   height: number
   timestamp: string
-  stables: TransactionSegmentStats
-  ethBurned: number
-  totalStaked?: number
   txnCount: number
-  privateTxnCount: number
   baseFee: string
   baseFeeTrend?: string
+  ethBurned: number
+  totalStaked?: number
+  stables: TransactionSegmentStats
+  privateTxnCount: number
 }
 
 export type MessageV1 =

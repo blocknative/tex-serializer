@@ -43,7 +43,8 @@ var parameterToTag = {
   privateTxnCount: 40,
   baseFeeTrend: 41,
   ethBurned: 42,
-  batchesCount: 43
+  batchesCount: 43,
+  optimisticL2: 44
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -57,6 +58,7 @@ var getTagLengthBytes = (tag) => {
     case 37:
     case 38:
     case 39:
+    case 44:
       return 2;
     default:
       return 1;
@@ -277,8 +279,22 @@ var encodeV1 = (key, value) => {
     case "marketable":
     case "stables":
     case "ethTransfers":
-    case "optimisticL2":
     case "defiSwap": {
+      let encodedHomepagePending = Buffer.allocUnsafe(0);
+      Object.entries(value).forEach(([key2, value2]) => {
+        const encoded = encodeV1(key2, value2);
+        if (encoded) {
+          encodedHomepagePending = Buffer.concat([
+            encodedHomepagePending,
+            encoded
+          ]);
+        }
+      });
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedHomepagePending.byteLength);
+      return Buffer.concat([tagBuf, len, encodedHomepagePending]);
+    }
+    case "optimisticL2": {
       let encodedHomepagePending = Buffer.allocUnsafe(0);
       Object.entries(value).forEach(([key2, value2]) => {
         const encoded = encodeV1(key2, value2);
@@ -522,7 +538,6 @@ var decodeV1 = (tag, value) => {
     case "marketable":
     case "stables":
     case "ethTransfers":
-    case "optimisticL2":
     case "defiSwap": {
       const decodedTransactionSegmentStats = {};
       let cursor = 0;
@@ -549,118 +564,8 @@ var decodeV1 = (tag, value) => {
       }
       return { key, value: decodedTransactionSegmentStats };
     }
-    default:
-      return null;
-  }
-};
-<<<<<<< HEAD
-=======
-var decodeV0 = (tag, value) => {
-  const key = tagToParameter[tag];
-  switch (key) {
-    case "chainId": {
-      const decodedValue = int32Parser(value);
-      return { key, value: `0x${decodedValue.toString(16)}` };
-    }
-    case "code":
-    case "serializerVersion": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "hash": {
-      const decodedValue = hexParser(value);
-      return { key, value: decodedValue };
-    }
-    case "txnCount": {
-      const decodedValue = int16Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "miner":
-    case "from":
-    case "to": {
-      const decodedValue = hexParser(value);
-      return { key, value: decodedValue };
-    }
-    case "dropped":
-    case "private": {
-      const decodedValue = boolParser(value);
-      return { key, value: decodedValue };
-    }
-    case "baseFeePerGas":
-    case "gasPrice":
-    case "maxPriorityFeePerGas":
-    case "value": {
-      const decodedValue = numberParser(value);
-      return { key, value: decodedValue };
-    }
-    case "baseFee":
-    case "baseFeeTrend":
-    case "feed":
-    case "id":
-    case "interactionType":
-    case "message":
-    case "status":
-    case "timestamp": {
-      const decodedValue = utf8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "creation":
-    case "contract":
-    case "eoa":
-    case "erc20":
-    case "erc721":
-    case "erc777":
-    case "gasLimit":
-    case "gasUsed":
-    case "height":
-    case "index":
-    case "nonce": {
-      const decodedValue = int32Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "transactions": {
-      let transactions = [];
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const txLen = value.readUInt16BE(cursor);
-        cursor += 2;
-        const txVal = value.subarray(cursor, cursor + txLen);
-        cursor += txLen;
-        let txCursor = 0;
-        const transaction = {};
-        while (txCursor < txVal.byteLength) {
-          const tag2 = txVal.readUInt8(txCursor);
-          txCursor++;
-          let len;
-          if (getTagLengthBytes(tag2) === 2) {
-            len = txVal.readUInt16BE(txCursor);
-            txCursor += 2;
-          } else {
-            len = txVal.readUInt8(txCursor);
-            txCursor++;
-          }
-          const val = txVal.subarray(txCursor, txCursor + len);
-          txCursor += len;
-          let decoded = null;
-          try {
-            decoded = decodeV0(tag2, val);
-          } catch (error) {
-            const { message } = error;
-            console.error(`Error decoding tag: ${tag2}, value: ${val} - ${message}`);
-          }
-          if (decoded) {
-            const { key: key2, value: value2 } = decoded;
-            transaction[key2] = value2;
-          } else {
-            console.warn(`Unknown tag: ${tag2}`);
-          }
-        }
-        transactions.push(transaction);
-      }
-      return { key, value: transactions };
-    }
-    case "error": {
-      const decodedError = {};
+    case "optimisticL2": {
+      const decodedL2SegmentStats = {};
       let cursor = 0;
       while (cursor < value.byteLength) {
         const tag2 = value.readUInt8(cursor);
@@ -675,73 +580,20 @@ var decodeV0 = (tag, value) => {
         }
         const val = value.subarray(cursor, len + cursor);
         cursor += len;
-        const decoded = decodeV0(tag2, val);
+        const decoded = decodeV1(tag2, val);
         if (decoded) {
           const { key: key2, value: value2 } = decoded;
-          decodedError[key2] = value2;
+          decodedL2SegmentStats[key2] = value2;
         } else {
-          console.warn(`Unknown tag: ${tag2}`);
+          console.warn(`Unknown tag: ${tag2}  ${val}`);
         }
       }
-      return { key, value: decodedError };
-    }
-    case "stats": {
-      const decodedStats = {};
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const tag2 = value.readUInt8(cursor);
-        cursor++;
-        let len;
-        if (getTagLengthBytes(tag2) === 2) {
-          len = value.readUInt16BE(cursor);
-          cursor += 2;
-        } else {
-          len = value.readUInt8(cursor);
-          cursor++;
-        }
-        const val = value.subarray(cursor, len + cursor);
-        cursor += len;
-        const decoded = decodeV0(tag2, val);
-        if (decoded) {
-          const { key: key2, value: value2 } = decoded;
-          decodedStats[key2] = value2;
-        } else {
-          console.warn(`Unknown tag: ${tag2}`);
-        }
-      }
-      return { key, value: decodedStats };
-    }
-    case "interactionTypes": {
-      const decodedInteractionTypes = {};
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const tag2 = value.readUInt8(cursor);
-        cursor++;
-        let len;
-        if (getTagLengthBytes(tag2) === 2) {
-          len = value.readUInt16BE(cursor);
-          cursor += 2;
-        } else {
-          len = value.readUInt8(cursor);
-          cursor++;
-        }
-        const val = value.subarray(cursor, len + cursor);
-        cursor += len;
-        const decoded = decodeV0(tag2, val);
-        if (decoded) {
-          const { key: key2, value: value2 } = decoded;
-          decodedInteractionTypes[key2] = value2;
-        } else {
-          console.warn(`Unknown tag: ${tag2}`);
-        }
-      }
-      return { key, value: decodedInteractionTypes };
+      return { key, value: decodedL2SegmentStats };
     }
     default:
       return null;
   }
 };
->>>>>>> 8f4e6db (Add ethTranfers to MempoolSummary.)
 var deserialize = (data) => {
   const buf = Buffer.from(data);
   const message = {};

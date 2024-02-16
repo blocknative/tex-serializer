@@ -73,15 +73,16 @@ export type TransactionSegmentStats = {
 	txnCount: number;
 	value: number;
 };
+export type L2SegmentStats = {
+	txnCount: number;
+	batchesCount: number;
+};
 export type MempoolSummaryMessage = MessageBase & {
 	marketable: TransactionSegmentStats;
 	stables: TransactionSegmentStats;
 	ethTransfers: TransactionSegmentStats;
 	defiSwap?: TransactionSegmentStats;
-	optimisticL2?: {
-		txnCount: number;
-		batchesCount: number;
-	};
+	optimisticL2?: L2SegmentStats;
 };
 export type LatestBlockSummaryMessage = MessageBase & {
 	height: number;

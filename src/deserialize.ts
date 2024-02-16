@@ -9,7 +9,8 @@ import {
   type InteractionTypes,
   type MessageV1,
   DeserializedResponse,
-  TransactionSegmentStats
+  TransactionSegmentStats,
+  L2SegmentStats
 } from './types-v1'
 
 export const hexParser = (buf: Buffer) => {
@@ -290,7 +291,6 @@ const decodeV1 = (
     case 'marketable':
     case 'stables':
     case 'ethTransfers':
-    case 'optimisticL2':
     case 'defiSwap': {
       const decodedTransactionSegmentStats: TransactionSegmentStats =
         {} as TransactionSegmentStats
@@ -325,6 +325,42 @@ const decodeV1 = (
       }
 
       return { key, value: decodedTransactionSegmentStats }
+    }
+
+    case 'optimisticL2': {
+      const decodedL2SegmentStats: L2SegmentStats =
+        {} as L2SegmentStats
+      let cursor = 0
+
+      while (cursor < value.byteLength) {
+        const tag = value.readUInt8(cursor)
+        cursor++
+
+        let len: number
+
+        if (getTagLengthBytes(tag) === 2) {
+          len = value.readUInt16BE(cursor)
+          cursor += 2
+        } else {
+          len = value.readUInt8(cursor)
+          cursor++
+        }
+
+        const val = value.subarray(cursor, len + cursor)
+        cursor += len
+        const decoded = decodeV1(tag, val)
+
+        if (decoded) {
+          const { key, value } = decoded
+          // @ts-ignore
+          decodedL2SegmentStats[key as keyof L2SegmentStats] =
+            value as ValueOf<L2SegmentStats>
+        } else {
+          console.warn(`Unknown tag: ${tag}  ${val}`)
+        }
+      }
+
+      return { key, value: decodedL2SegmentStats }
     }
     default:
       return null

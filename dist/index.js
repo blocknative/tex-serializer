@@ -42,7 +42,8 @@ var parameterToTag = {
   ethTransfers: 39,
   privateTxnCount: 40,
   baseFeeTrend: 41,
-  ethBurned: 42
+  ethBurned: 42,
+  batchesCount: 43
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -154,6 +155,7 @@ var encodeV1 = (key, value) => {
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
     case "privateTxnCount":
+    case "batchesCount":
     case "txnCount": {
       const encodedLengthAndValue = int16Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -343,6 +345,7 @@ var decodeV1 = (tag, value) => {
       return { key, value: decodedValue };
     }
     case "privateTxnCount":
+    case "batchesCount":
     case "txnCount": {
       const decodedValue = int16Parser(value);
       return { key, value: decodedValue };

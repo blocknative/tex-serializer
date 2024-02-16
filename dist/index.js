@@ -169,8 +169,7 @@ var encodeV1 = (key, value) => {
     case "baseFeePerGas":
     case "gasPrice":
     case "maxFeePerGas":
-    case "maxPriorityFeePerGas":
-    case "value": {
+    case "maxPriorityFeePerGas": {
       const encodedLengthAndValue = utf8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
@@ -191,7 +190,8 @@ var encodeV1 = (key, value) => {
     }
     case "gasLimit":
     case "ethBurned":
-    case "gasUsed": {
+    case "gasUsed":
+    case "value": {
       const encodedLengthAndValue = numberEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
@@ -272,11 +272,11 @@ var encodeV1 = (key, value) => {
       len.writeUInt16BE(encodedInteractionTypes.byteLength);
       return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
     }
+    case "marketable":
     case "stables":
     case "ethTransfers":
     case "optimisticL2":
-    case "defiSwap":
-    case "marketable": {
+    case "defiSwap": {
       let encodedHomepagePending = Buffer.allocUnsafe(0);
       Object.entries(value).forEach(([key2, value2]) => {
         const encoded = encodeV1(key2, value2);
@@ -303,7 +303,6 @@ var serialize = (message, version) => {
     if (typeof value === "undefined")
       return;
     const encodedKeyValue = encode(version, key, value);
-    console.log("serializing key: ", key, "  ", encodedKeyValue);
     if (encodedKeyValue) {
       encoded = Buffer.concat([encoded, encodedKeyValue]);
     }
@@ -360,8 +359,7 @@ var decodeV1 = (tag, value) => {
     case "baseFeePerGas":
     case "gasPrice":
     case "maxFeePerGas":
-    case "maxPriorityFeePerGas":
-    case "value": {
+    case "maxPriorityFeePerGas": {
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
@@ -382,7 +380,8 @@ var decodeV1 = (tag, value) => {
     }
     case "gasLimit":
     case "ethBurned":
-    case "gasUsed": {
+    case "gasUsed":
+    case "value": {
       const decodedValue = numberParser(value);
       return { key, value: decodedValue };
     }
@@ -517,9 +516,12 @@ var decodeV1 = (tag, value) => {
       }
       return { key, value: decodedInteractionTypes };
     }
+    case "marketable":
     case "stables":
-    case "marketable": {
-      const decodedStats = {};
+    case "ethTransfers":
+    case "optimisticL2":
+    case "defiSwap": {
+      const decodedTransactionSegmentStats = {};
       let cursor = 0;
       while (cursor < value.byteLength) {
         const tag2 = value.readUInt8(cursor);
@@ -537,12 +539,12 @@ var decodeV1 = (tag, value) => {
         const decoded = decodeV1(tag2, val);
         if (decoded) {
           const { key: key2, value: value2 } = decoded;
-          decodedStats[key2] = value2;
+          decodedTransactionSegmentStats[key2] = value2;
         } else {
           console.warn(`Unknown tag: ${tag2}  ${val}`);
         }
       }
-      return { key, value: decodedStats };
+      return { key, value: decodedTransactionSegmentStats };
     }
     default:
       return null;
@@ -583,7 +585,8 @@ var decodeV0 = (tag, value) => {
     }
     case "baseFeePerGas":
     case "gasPrice":
-    case "maxPriorityFeePerGas": {
+    case "maxPriorityFeePerGas":
+    case "value": {
       const decodedValue = numberParser(value);
       return { key, value: decodedValue };
     }
@@ -730,36 +733,6 @@ var decodeV0 = (tag, value) => {
         }
       }
       return { key, value: decodedInteractionTypes };
-    }
-    case "stables":
-    case "ethTransfers":
-    case "optimisticL2":
-    case "defiSwap":
-    case "marketable": {
-      const decodedTransactionSegmentStats = {};
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const tag2 = value.readUInt8(cursor);
-        cursor++;
-        let len;
-        if (getTagLengthBytes(tag2) === 2) {
-          len = value.readUInt16BE(cursor);
-          cursor += 2;
-        } else {
-          len = value.readUInt8(cursor);
-          cursor++;
-        }
-        const val = value.subarray(cursor, len + cursor);
-        cursor += len;
-        const decoded = decodeV0(tag2, val);
-        if (decoded) {
-          const { key: key2, value: value2 } = decoded;
-          decodedTransactionSegmentStats[key2] = value2;
-        } else {
-          console.warn(`Unknown tag: ${tag2}`);
-        }
-      }
-      return { key, value: decodedTransactionSegmentStats };
     }
     default:
       return null;

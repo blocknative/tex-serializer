@@ -83,8 +83,7 @@ const decodeV1 = (
     case 'baseFeePerGas':
     case 'gasPrice':
     case 'maxFeePerGas':
-    case 'maxPriorityFeePerGas':
-    case 'value': {
+    case 'maxPriorityFeePerGas': {
       const decodedValue = utf8Parser(value)
       return { key, value: decodedValue }
     }
@@ -108,7 +107,8 @@ const decodeV1 = (
 
     case 'gasLimit':
     case 'ethBurned':
-    case 'gasUsed': {
+    case 'gasUsed':
+    case 'value': {
       const decodedValue = numberParser(value)
       return { key, value: decodedValue }
     }
@@ -286,9 +286,12 @@ const decodeV1 = (
       return { key, value: decodedInteractionTypes }
     }
 
+    case 'marketable':
     case 'stables':
-    case 'marketable': {
-      const decodedStats: TransactionSegmentStats =
+    case 'ethTransfers':
+    case 'optimisticL2':
+    case 'defiSwap': {
+      const decodedTransactionSegmentStats: TransactionSegmentStats =
         {} as TransactionSegmentStats
       let cursor = 0
 
@@ -313,14 +316,14 @@ const decodeV1 = (
         if (decoded) {
           const { key, value } = decoded
           // @ts-ignore
-          decodedStats[key as keyof TransactionSegmentStats] =
+          decodedTransactionSegmentStats[key as keyof TransactionSegmentStats] =
             value as ValueOf<TransactionSegmentStats>
         } else {
           console.warn(`Unknown tag: ${tag}  ${val}`)
         }
       }
 
-      return { key, value: decodedStats }
+      return { key, value: decodedTransactionSegmentStats }
     }
     default:
       return null

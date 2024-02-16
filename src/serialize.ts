@@ -138,8 +138,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
     case 'baseFeePerGas':
     case 'gasPrice':
     case 'maxFeePerGas':
-    case 'maxPriorityFeePerGas':
-    case 'value': {
+    case 'maxPriorityFeePerGas': {
       const encodedLengthAndValue = utf8Encoder(value as string)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
@@ -163,7 +162,8 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
     case 'gasLimit':
     case 'ethBurned':
-    case 'gasUsed': {
+    case 'gasUsed':
+    case 'value': {
       const encodedLengthAndValue = numberEncoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
@@ -270,11 +270,12 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
       return Buffer.concat([tagBuf, len, encodedInteractionTypes])
     }
+
+    case 'marketable':
     case 'stables':
     case 'ethTransfers':
     case 'optimisticL2':
-    case 'defiSwap':
-    case 'marketable': {
+    case 'defiSwap': {
       let encodedHomepagePending = Buffer.allocUnsafe(0)
 
       Object.entries(value as TransactionSegmentStats).forEach(
@@ -312,8 +313,6 @@ export const serialize: Serializer = (message, version) => {
     if (typeof value === 'undefined') return
 
     const encodedKeyValue = encode(version, key, value)
-
-    console.log('serializing key: ', key, '  ', encodedKeyValue)
 
     if (encodedKeyValue) {
       encoded = Buffer.concat([encoded, encodedKeyValue])

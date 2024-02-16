@@ -149,10 +149,11 @@ export type MempoolSummaryMessage = MessageBase & {
 	};
 };
 export type LatestBlockSummaryMessage = MessageBase & {
+	height: number;
+	timestamp: number;
 	stables: TransactionSegmentStats;
 	ethBurned: number;
 	totalStaked?: number;
-	height: number;
 	txnCount: number;
 	privateTxnCount: number;
 	baseFee: string;

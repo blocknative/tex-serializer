@@ -121,6 +121,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
     }
 
     case 'privateTxnCount':
+    case 'batchesCount':
     case 'txnCount': {
       const encodedLengthAndValue = int16Encoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])

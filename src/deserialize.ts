@@ -65,6 +65,7 @@ const decodeV1 = (
     }
 
     case 'privateTxnCount':
+    case 'batchesCount':
     case 'txnCount': {
       const decodedValue = int16Parser(value)
       return { key, value: decodedValue }

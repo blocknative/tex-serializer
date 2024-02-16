@@ -42,7 +42,8 @@ export const parameterToTag: Record<string, number> = {
   ethTransfers: 39,
   privateTxnCount: 40,
   baseFeeTrend: 41,
-  ethBurned: 42
+  ethBurned: 42,
+  batchesCount: 43
 }
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

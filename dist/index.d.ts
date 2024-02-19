@@ -92,7 +92,6 @@ export type LatestBlockSummaryMessage = MessageBase & {
 	baseFeeTrend?: string;
 	ethBurned: number;
 	totalStaked?: number;
-	stables: TransactionSegmentStats;
 	privateTxnCount: number;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | MempoolSummaryMessage | LatestBlockSummaryMessage;

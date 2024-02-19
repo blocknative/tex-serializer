@@ -129,7 +129,6 @@ export type LatestBlockSummaryMessage = MessageBase & {
   baseFeeTrend?: string
   ethBurned: number
   totalStaked?: number
-  stables: TransactionSegmentStats
   privateTxnCount: number
 }
 

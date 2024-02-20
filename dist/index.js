@@ -44,7 +44,8 @@ var parameterToTag = {
   baseFeeTrend: 41,
   ethBurned: 42,
   batchesCount: 43,
-  optimisticL2: 44
+  optimisticL2: 44,
+  defiSwap: 45
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -59,6 +60,7 @@ var getTagLengthBytes = (tag) => {
     case 38:
     case 39:
     case 44:
+    case 45:
       return 2;
     default:
       return 1;

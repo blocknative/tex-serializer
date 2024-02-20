@@ -45,6 +45,7 @@ export const parameterToTag: Record<string, number> = {
   ethBurned: 42,
   batchesCount: 43,
   optimisticL2: 44,
+  defiSwap: 45,
 }
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(
@@ -63,6 +64,7 @@ export const getTagLengthBytes = (tag: number): number => {
     case 38:
     case 39:
     case 44:
+    case 45:
       return 2
     default:
       return 1

@@ -145,6 +145,7 @@ var encodeV1 = (key, value) => {
   tagBuf.writeUInt8(tag);
   switch (key) {
     case "chainId": {
+      console.log(key, value);
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
@@ -372,7 +373,9 @@ var decodeV1 = (tag, value) => {
     case "miner":
     case "from":
     case "to": {
+      console.log(key, value);
       const decodedValue = hexParser(value);
+      console.log(2, key, decodedValue);
       return { key, value: decodedValue };
     }
     case "baseFee":

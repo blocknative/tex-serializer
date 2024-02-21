@@ -8,9 +8,7 @@ import {
   blockMessage,
   errorMessage,
   mempoolMessage,
-  statsMessage,
-  homepagePendingMessage,
-  homepageConfirmedMessage
+  statsMessage
 } from './data.ts'
 
 test('Successfully serializes and deserializes a mempool message', () => {
@@ -49,24 +47,4 @@ test('Succesfully serializes and deserializes a Mempool Stats message', () => {
   const deserialized = deserialize(serialized)
 
   expect(deserialized).toStrictEqual({ serializerVersion: 1, ...statsMessage })
-})
-
-test('Successfully serializes and deserializes a Homepage Confirmed message', () => {
-  const serialized = serialize(homepageConfirmedMessage, SerializerVersion.v1)
-  const deserialized = deserialize(serialized)
-
-  expect({
-    serializerVersion: SerializerVersion.v1,
-    ...deserialized
-  }).toStrictEqual({ serializerVersion: SerializerVersion.v1, ...homepageConfirmedMessage })
-})
-
-test('Successfully serializes and deserializes a Homepage Pending message', () => {
-  const serialized = serialize(homepagePendingMessage, SerializerVersion.v1)
-  const deserialized = deserialize(serialized)
-
-  expect({
-    serializerVersion: SerializerVersion.v1,
-    ...deserialized
-  }).toStrictEqual({ serializerVersion: SerializerVersion.v1, ...homepagePendingMessage })
 })

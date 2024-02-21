@@ -104,7 +104,6 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
   switch (key) {
     case 'chainId': {
-      console.log(key, value)
       const encodedLengthAndValue = hexEncoder(value as string)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }

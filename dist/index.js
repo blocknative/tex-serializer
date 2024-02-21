@@ -170,6 +170,7 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "totalStaked":
     case "baseFee":
     case "totalStaked":
     case "baseFeePerGas":
@@ -194,7 +195,6 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = utf8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "totalStaked":
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
@@ -377,6 +377,7 @@ var decodeV1 = (tag, value) => {
       const decodedValue = hexParser(value);
       return { key, value: decodedValue };
     }
+    case "totalStaked":
     case "baseFee":
     case "baseFeePerGas":
     case "gasPrice":
@@ -400,7 +401,6 @@ var decodeV1 = (tag, value) => {
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
-    case "totalStaked":
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":

@@ -29,7 +29,7 @@ export type Error = {
 };
 export type MessageBase = {
 	feed: string;
-	chainId: string;
+	chainId?: string;
 };
 export type MempoolMessageV1 = MessageBase & {
 	transactions: MempoolTransactionV1[];
@@ -91,7 +91,7 @@ export type LatestBlockSummaryMessage = MessageBase & {
 	baseFee: string;
 	baseFeeTrend: string;
 	ethBurned: number;
-	totalStaked?: number;
+	totalStaked?: string;
 	privateTxnCount: number;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | MempoolSummaryMessage | LatestBlockSummaryMessage;

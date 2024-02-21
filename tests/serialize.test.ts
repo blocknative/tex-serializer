@@ -8,7 +8,9 @@ import {
   blockMessage,
   errorMessage,
   mempoolMessage,
-  statsMessage
+  statsMessage,
+  homepagePendingMessage,
+  homepageConfirmedMessage
 } from './data.ts'
 
 test('Successfully serializes and deserializes a mempool message', () => {

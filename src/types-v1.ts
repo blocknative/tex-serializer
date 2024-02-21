@@ -57,7 +57,7 @@ export type Error = {
 
 type MessageBase = {
   feed: string
-  chainId: string
+  chainId?: string
 }
 
 export type MempoolMessageV1 = MessageBase & {
@@ -128,7 +128,7 @@ export type LatestBlockSummaryMessage = MessageBase & {
   baseFee: string
   baseFeeTrend: string
   ethBurned: number
-  totalStaked?: number
+  totalStaked?: string
   privateTxnCount: number
 }
 

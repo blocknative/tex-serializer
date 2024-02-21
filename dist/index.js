@@ -45,7 +45,8 @@ var parameterToTag = {
   ethBurned: 42,
   batchesCount: 43,
   optimisticL2: 44,
-  defiSwap: 45
+  defiSwap: 45,
+  totalStaked: 46
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -145,7 +146,6 @@ var encodeV1 = (key, value) => {
   tagBuf.writeUInt8(tag);
   switch (key) {
     case "chainId": {
-      console.log(key, value);
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
@@ -194,6 +194,7 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = utf8Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "totalStaked":
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
@@ -399,6 +400,7 @@ var decodeV1 = (tag, value) => {
       const decodedValue = utf8Parser(value);
       return { key, value: decodedValue };
     }
+    case "totalStaked":
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":

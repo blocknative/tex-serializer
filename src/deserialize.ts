@@ -107,6 +107,7 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
+    case 'totalStaked':
     case 'gasLimit':
     case 'ethBurned':
     case 'gasUsed':

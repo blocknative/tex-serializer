@@ -160,6 +160,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
+    case 'totalStaked':
     case 'gasLimit':
     case 'ethBurned':
     case 'gasUsed':
@@ -296,21 +297,19 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, len, encodedHomepagePending])
     }
 
-    case 'optimisticL2':{
+    case 'optimisticL2': {
       let encodedHomepagePending = Buffer.allocUnsafe(0)
 
-      Object.entries(value as L2SegmentStats).forEach(
-        ([key, value]) => {
-          const encoded = encodeV1(key, value)
+      Object.entries(value as L2SegmentStats).forEach(([key, value]) => {
+        const encoded = encodeV1(key, value)
 
-          if (encoded) {
-            encodedHomepagePending = Buffer.concat([
-              encodedHomepagePending,
-              encoded
-            ])
-          }
+        if (encoded) {
+          encodedHomepagePending = Buffer.concat([
+            encodedHomepagePending,
+            encoded
+          ])
         }
-      )
+      })
 
       const len = Buffer.allocUnsafe(2)
       len.writeUInt16BE(encodedHomepagePending.byteLength)

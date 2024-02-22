@@ -1048,3 +1048,45 @@ export const statsMessage = {
     interactionTypes: { eoa: 1000, contract: 10000, creation: 100000 }
   }
 }
+
+export const homepagePendingMessage = {
+  feed: 'homepage_pending',
+  chainId: '0x1',
+  marketable: {
+    txnCount: 38,
+    value: 12345
+  },
+  stables: {
+    txnCount: 12,
+    value: 125
+  },
+  optimisticL2: {
+    txnCount: 12,
+    batchesCount: 125
+  },
+  defiSwap: {
+    txnCount: 12,
+    value: 125
+  },
+  ethTransfers: {
+    txnCount: 12,
+    value: 125
+  }
+}
+
+export const homepageConfirmedMessage = {
+  feed: 'homepage_confirmed',
+  timestamp: '2023-09-21T02:56:40.107Z',
+  chainId: '0x1',
+  stables: {
+    txnCount: 99,
+    value: 500000
+  },
+  ethBurned: 3000,
+  totalStaked: '30662767000000000',
+  height: 19215389,
+  txnCount: 99,
+  privateTxnCount: 12,
+  baseFee: '12',
+  baseFeeTrend: 'flat'
+}

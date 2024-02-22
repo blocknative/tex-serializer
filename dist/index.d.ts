@@ -29,7 +29,7 @@ export type Error = {
 };
 export type MessageBase = {
 	feed: string;
-	chainId?: string;
+	chainId: string;
 };
 export type MempoolMessageV1 = MessageBase & {
 	transactions: MempoolTransactionV1[];

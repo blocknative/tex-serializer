@@ -44,9 +44,23 @@ test('Successfully serializes and deserializes an ACK message', () => {
   expect(deserialized).toStrictEqual({ serializerVersion: 1, ...ackMessage })
 })
 
-test('Succesfully serializes and deserializes a Mempool Stats message', () => {
+test('Successfully serializes and deserializes a Mempool Stats message', () => {
   const serialized = serialize(statsMessage, SerializerVersion.v1)
   const deserialized = deserialize(serialized)
 
   expect(deserialized).toStrictEqual({ serializerVersion: 1, ...statsMessage })
+})
+
+test('Successfully serializes and deserializes a Homepage Pending message', () => {
+  const serialized = serialize(homepagePendingMessage, SerializerVersion.v1)
+  const deserialized = deserialize(serialized)
+
+  expect(deserialized).toStrictEqual({ serializerVersion: 1, ...homepagePendingMessage })
+})
+
+test('Successfully serializes and deserializes a Homepage Confirmed message', () => {
+  const serialized = serialize(homepageConfirmedMessage, SerializerVersion.v1)
+  const deserialized = deserialize(serialized)
+
+  expect(deserialized).toStrictEqual({ serializerVersion: 1, ...homepageConfirmedMessage })
 })

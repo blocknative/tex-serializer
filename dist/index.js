@@ -59,8 +59,10 @@ var SerializerVersion;
 
 // src/serialize.ts
 var hexEncoder = (hex) => {
+  const number = parseInt(hex, 16);
   const withoutPrefix = hex ? hex.startsWith("0x") ? hex.slice(2) : hex : "";
-  const buf = Buffer.from(withoutPrefix, "hex");
+  const padded = number < 10 ? `0${withoutPrefix}` : withoutPrefix;
+  const buf = Buffer.from(padded, "hex");
   const bufLen = Buffer.allocUnsafe(1);
   bufLen.writeUInt8(buf.byteLength);
   return Buffer.concat([bufLen, buf]);
@@ -108,9 +110,6 @@ var boolEncoder = (bool) => {
 };
 var encode = (version, key, value) => {
   switch (version) {
-    case SerializerVersion.v0: {
-      return encodeV0(key, value);
-    }
     case SerializerVersion.v1: {
       return encodeV1(key, value);
     }
@@ -259,141 +258,6 @@ var encodeV1 = (key, value) => {
       return null;
   }
 };
-var encodeV0 = (key, value) => {
-  const tag = parameterToTag[key];
-  if (typeof tag === "undefined") {
-    console.warn(`Unrecognized object parameter: ${key}`);
-    return null;
-  }
-  const tagBuf = Buffer.allocUnsafe(1);
-  tagBuf.writeUInt8(tag);
-  switch (key) {
-    case "chainId": {
-      const encodedLengthAndValue = int32Encoder(parseInt(value, 16));
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "code":
-    case "serializerVersion": {
-      const encodedLengthAndValue = int8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "hash": {
-      const encodedLengthAndValue = hexEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "txnCount": {
-      const encodedLengthAndValue = int16Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "miner":
-    case "from":
-    case "to": {
-      const encodedLengthAndValue = hexEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "dropped":
-    case "private": {
-      const encodedLengthAndValue = boolEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "baseFeePerGas":
-    case "gasPrice":
-    case "maxPriorityFeePerGas": {
-      const encodedLengthAndValue = numberEncoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "feed":
-    case "id":
-    case "interactionType":
-    case "message":
-    case "status":
-    case "timestamp": {
-      const encodedLengthAndValue = utf8Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "creation":
-    case "contract":
-    case "eoa":
-    case "erc20":
-    case "erc721":
-    case "erc777":
-    case "gasLimit":
-    case "gasUsed":
-    case "height":
-    case "index":
-    case "nonce": {
-      const encodedLengthAndValue = int32Encoder(value);
-      return Buffer.concat([tagBuf, encodedLengthAndValue]);
-    }
-    case "transactions": {
-      let allEncodedTransactions = Buffer.allocUnsafe(0);
-      for (const transaction of value) {
-        try {
-          let encodedTransaction = Buffer.allocUnsafe(0);
-          Object.entries(transaction).forEach(([key2, value2]) => {
-            const encoded = encodeV0(key2, value2);
-            if (encoded) {
-              encodedTransaction = Buffer.concat([encodedTransaction, encoded]);
-            }
-          });
-          const encodedTransactionsLength = Buffer.allocUnsafe(2);
-          encodedTransactionsLength.writeUInt16BE(encodedTransaction.byteLength);
-          allEncodedTransactions = Buffer.concat([
-            allEncodedTransactions,
-            Buffer.concat([encodedTransactionsLength, encodedTransaction])
-          ]);
-        } catch (error) {
-          const { message } = error;
-          console.error(`Error serializing transaction: ${message}`);
-        }
-      }
-      const txsLength = Buffer.allocUnsafe(4);
-      txsLength.writeUInt32BE(allEncodedTransactions.byteLength);
-      return Buffer.concat([tagBuf, txsLength, allEncodedTransactions]);
-    }
-    case "error": {
-      let encodedError = Buffer.allocUnsafe(0);
-      Object.entries(value).forEach(([key2, value2]) => {
-        const encoded = encodeV0(key2, value2);
-        if (encoded) {
-          encodedError = Buffer.concat([encodedError, encoded]);
-        }
-      });
-      const len = Buffer.allocUnsafe(2);
-      len.writeUInt16BE(encodedError.byteLength);
-      return Buffer.concat([tagBuf, len, encodedError]);
-    }
-    case "stats": {
-      let encodedStats = Buffer.allocUnsafe(0);
-      Object.entries(value).forEach(([key2, value2]) => {
-        const encoded = encodeV0(key2, value2);
-        if (encoded) {
-          encodedStats = Buffer.concat([encodedStats, encoded]);
-        }
-      });
-      const len = Buffer.allocUnsafe(2);
-      len.writeUInt16BE(encodedStats.byteLength);
-      return Buffer.concat([tagBuf, len, encodedStats]);
-    }
-    case "interactionTypes": {
-      let encodedInteractionTypes = Buffer.allocUnsafe(0);
-      Object.entries(value).forEach(([key2, value2]) => {
-        const encoded = encodeV0(key2, value2);
-        if (encoded) {
-          encodedInteractionTypes = Buffer.concat([
-            encodedInteractionTypes,
-            encoded
-          ]);
-        }
-      });
-      const len = Buffer.allocUnsafe(2);
-      len.writeUInt16BE(encodedInteractionTypes.byteLength);
-      return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
-    }
-    default:
-      return null;
-  }
-};
 var serialize = (message, version) => {
   let encoded = Buffer.allocUnsafe(0);
   const encodedVersion = encode(version, "serializerVersion", version);
@@ -411,7 +275,10 @@ var serialize = (message, version) => {
 // src/deserialize.ts
 var hexParser = (buf) => {
   const parsed = buf.toString("hex");
-  return parsed ? `0x${parsed}` : null;
+  const num = parsed && parseInt(parsed, 16);
+  const leadingZeroRemoved = parsed.startsWith("0") ? parsed.slice(1) : parsed;
+  const hex = typeof num === "number" && num < 10 ? leadingZeroRemoved : parsed;
+  return hex ? `0x${hex}` : null;
 };
 var utf8Parser = (buf) => buf.toString("utf8");
 var int8Parser = (buf) => buf.readUInt8();
@@ -421,9 +288,6 @@ var numberParser = (buf) => buf.readDoubleBE();
 var boolParser = (buf) => !!parseInt(`0x${buf.toString("hex")}`);
 var decode = (version, tag, value) => {
   switch (version) {
-    case SerializerVersion.v0: {
-      return decodeV0(tag, value);
-    }
     case SerializerVersion.v1: {
       return decodeV1(tag, value);
     }
@@ -614,194 +478,11 @@ var decodeV1 = (tag, value) => {
       return null;
   }
 };
-var decodeV0 = (tag, value) => {
-  const key = tagToParameter[tag];
-  switch (key) {
-    case "chainId": {
-      const decodedValue = int32Parser(value);
-      return { key, value: `0x${decodedValue.toString(16)}` };
-    }
-    case "code":
-    case "serializerVersion": {
-      const decodedValue = int8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "hash": {
-      const decodedValue = hexParser(value);
-      return { key, value: decodedValue };
-    }
-    case "txnCount": {
-      const decodedValue = int16Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "miner":
-    case "from":
-    case "to": {
-      const decodedValue = hexParser(value);
-      return { key, value: decodedValue };
-    }
-    case "dropped":
-    case "private": {
-      const decodedValue = boolParser(value);
-      return { key, value: decodedValue };
-    }
-    case "baseFeePerGas":
-    case "gasPrice":
-    case "maxPriorityFeePerGas": {
-      const decodedValue = numberParser(value);
-      return { key, value: decodedValue };
-    }
-    case "feed":
-    case "id":
-    case "interactionType":
-    case "message":
-    case "status":
-    case "timestamp": {
-      const decodedValue = utf8Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "creation":
-    case "contract":
-    case "eoa":
-    case "erc20":
-    case "erc721":
-    case "erc777":
-    case "gasLimit":
-    case "gasUsed":
-    case "height":
-    case "index":
-    case "nonce": {
-      const decodedValue = int32Parser(value);
-      return { key, value: decodedValue };
-    }
-    case "transactions": {
-      let transactions = [];
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const txLen = value.readUInt16BE(cursor);
-        cursor += 2;
-        const txVal = value.subarray(cursor, cursor + txLen);
-        cursor += txLen;
-        let txCursor = 0;
-        const transaction = {};
-        while (txCursor < txVal.byteLength) {
-          const tag2 = txVal.readUInt8(txCursor);
-          txCursor++;
-          let len;
-          if (getTagLengthBytes(tag2) === 2) {
-            len = txVal.readUInt16BE(txCursor);
-            txCursor += 2;
-          } else {
-            len = txVal.readUInt8(txCursor);
-            txCursor++;
-          }
-          const val = txVal.subarray(txCursor, txCursor + len);
-          txCursor += len;
-          let decoded = null;
-          try {
-            decoded = decodeV0(tag2, val);
-          } catch (error) {
-            const { message } = error;
-            console.error(`Error decoding tag: ${tag2}, value: ${val} - ${message}`);
-          }
-          if (decoded) {
-            const { key: key2, value: value2 } = decoded;
-            transaction[key2] = value2;
-          } else {
-            console.warn(`Unknown tag: ${tag2}`);
-          }
-        }
-        transactions.push(transaction);
-      }
-      return { key, value: transactions };
-    }
-    case "error": {
-      const decodedError = {};
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const tag2 = value.readUInt8(cursor);
-        cursor++;
-        let len;
-        if (getTagLengthBytes(tag2) === 2) {
-          len = value.readUInt16BE(cursor);
-          cursor += 2;
-        } else {
-          len = value.readUInt8(cursor);
-          cursor++;
-        }
-        const val = value.subarray(cursor, len + cursor);
-        cursor += len;
-        const decoded = decodeV0(tag2, val);
-        if (decoded) {
-          const { key: key2, value: value2 } = decoded;
-          decodedError[key2] = value2;
-        } else {
-          console.warn(`Unknown tag: ${tag2}`);
-        }
-      }
-      return { key, value: decodedError };
-    }
-    case "stats": {
-      const decodedStats = {};
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const tag2 = value.readUInt8(cursor);
-        cursor++;
-        let len;
-        if (getTagLengthBytes(tag2) === 2) {
-          len = value.readUInt16BE(cursor);
-          cursor += 2;
-        } else {
-          len = value.readUInt8(cursor);
-          cursor++;
-        }
-        const val = value.subarray(cursor, len + cursor);
-        cursor += len;
-        const decoded = decodeV0(tag2, val);
-        if (decoded) {
-          const { key: key2, value: value2 } = decoded;
-          decodedStats[key2] = value2;
-        } else {
-          console.warn(`Unknown tag: ${tag2}`);
-        }
-      }
-      return { key, value: decodedStats };
-    }
-    case "interactionTypes": {
-      const decodedInteractionTypes = {};
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const tag2 = value.readUInt8(cursor);
-        cursor++;
-        let len;
-        if (getTagLengthBytes(tag2) === 2) {
-          len = value.readUInt16BE(cursor);
-          cursor += 2;
-        } else {
-          len = value.readUInt8(cursor);
-          cursor++;
-        }
-        const val = value.subarray(cursor, len + cursor);
-        cursor += len;
-        const decoded = decodeV0(tag2, val);
-        if (decoded) {
-          const { key: key2, value: value2 } = decoded;
-          decodedInteractionTypes[key2] = value2;
-        } else {
-          console.warn(`Unknown tag: ${tag2}`);
-        }
-      }
-      return { key, value: decodedInteractionTypes };
-    }
-    default:
-      return null;
-  }
-};
 var deserialize = (data) => {
   const buf = Buffer.from(data);
   const message = {};
   let cursor = 0;
-  let version = SerializerVersion.v0;
+  let version = SerializerVersion.v1;
   while (cursor < buf.byteLength) {
     const tag = buf.readUInt8(cursor);
     cursor++;

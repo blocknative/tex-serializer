@@ -12,54 +12,39 @@ import {
 } from './data.ts'
 
 test('Successfully serializes and deserializes a mempool message', () => {
-  const serialized = serialize(mempoolMessage, SerializerVersion.v0)
+  const serialized = serialize(mempoolMessage, SerializerVersion.v1)
   const deserialized = deserialize(serialized)
 
-  expect({
-    serializerVersion: SerializerVersion.v0,
-    ...deserialized
-  }).toStrictEqual({
-    serializerVersion: SerializerVersion.v0,
+  expect(deserialized).toStrictEqual({
+    serializerVersion: 1,
     ...mempoolMessage
   })
 })
 
 test('Successfully serializes and deserializes a block message', () => {
-  const serialized = serialize(blockMessage, SerializerVersion.v0)
+  const serialized = serialize(blockMessage, SerializerVersion.v1)
   const deserialized = deserialize(serialized)
 
-  expect({
-    serializerVersion: SerializerVersion.v0,
-    ...deserialized
-  }).toStrictEqual({ serializerVersion: SerializerVersion.v0, ...blockMessage })
+  expect(deserialized).toStrictEqual({ serializerVersion: 1, ...blockMessage })
 })
 
 test('Successfully serializes and deserializes a error message', () => {
-  const serialized = serialize(errorMessage, SerializerVersion.v0)
+  const serialized = serialize(errorMessage, SerializerVersion.v1)
   const deserialized = deserialize(serialized)
 
-  expect({
-    serializerVersion: SerializerVersion.v0,
-    ...deserialized
-  }).toStrictEqual({ serializerVersion: SerializerVersion.v0, ...errorMessage })
+  expect(deserialized).toStrictEqual({ serializerVersion: 1, ...errorMessage })
 })
 
 test('Successfully serializes and deserializes an ACK message', () => {
-  const serialized = serialize(ackMessage, SerializerVersion.v0)
+  const serialized = serialize(ackMessage, SerializerVersion.v1)
   const deserialized = deserialize(serialized)
 
-  expect({
-    serializerVersion: SerializerVersion.v0,
-    ...deserialized
-  }).toStrictEqual({ serializerVersion: SerializerVersion.v0, ...ackMessage })
+  expect(deserialized).toStrictEqual({ serializerVersion: 1, ...ackMessage })
 })
 
 test('Succesfully serializes and deserializes a Mempool Stats message', () => {
-  const serialized = serialize(statsMessage, SerializerVersion.v0)
+  const serialized = serialize(statsMessage, SerializerVersion.v1)
   const deserialized = deserialize(serialized)
 
-  expect({
-    serializerVersion: SerializerVersion.v0,
-    ...deserialized
-  }).toStrictEqual({ serializerVersion: SerializerVersion.v0, ...statsMessage })
+  expect(deserialized).toStrictEqual({ serializerVersion: 1, ...statsMessage })
 })

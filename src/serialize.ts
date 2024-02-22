@@ -1,18 +1,28 @@
 import { parameterToTag } from './constants.ts'
-import { Serializer, SerializerVersion } from './types-v1.ts'
 
 import {
-  CompletedTransaction,
-  InteractionTypes,
-  MempoolTransaction,
-  Stats
-} from './types.ts'
+  Serializer,
+  SerializerVersion,
+  type MempoolTransactionV1,
+  type CompletedTransaction,
+  type Stats,
+  type InteractionTypes
+} from './types-v1.ts'
 
 const hexEncoder = (hex: string) => {
+  const number = parseInt(hex, 16)
   const withoutPrefix = hex ? (hex.startsWith('0x') ? hex.slice(2) : hex) : ''
-  const buf = Buffer.from(withoutPrefix, 'hex')
+
+  /** Hex values 0x9 and below do not get represented as a buffer correctly
+   * so need to be padded with a leading zero to prevent becoming an empty string.
+   * Deserializer will strip the leading zero if the resulting num < 10
+   */
+  const padded = number < 10 ? `0${withoutPrefix}` : withoutPrefix
+  const buf = Buffer.from(padded, 'hex')
+
   const bufLen = Buffer.allocUnsafe(1)
   bufLen.writeUInt8(buf.byteLength)
+
   return Buffer.concat([bufLen, buf])
 }
 
@@ -69,9 +79,6 @@ const encode = (
   value: unknown
 ): Buffer | null => {
   switch (version) {
-    case SerializerVersion.v0: {
-      return encodeV0(key, value)
-    }
     case SerializerVersion.v1: {
       return encodeV1(key, value)
     }
@@ -169,7 +176,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       let allEncodedTransactions = Buffer.allocUnsafe(0)
 
       for (const transaction of value as (
-        | MempoolTransaction
+        | MempoolTransactionV1
         | CompletedTransaction
       )[]) {
         try {
@@ -254,179 +261,6 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
       return Buffer.concat([tagBuf, len, encodedInteractionTypes])
     }
-    default:
-      return null
-  }
-}
-
-const encodeV0 = (key: string, value: unknown): Buffer | null => {
-  const tag = parameterToTag[key]
-
-  if (typeof tag === 'undefined') {
-    console.warn(`Unrecognized object parameter: ${key}`)
-    return null
-  }
-
-  const tagBuf = Buffer.allocUnsafe(1)
-  tagBuf.writeUInt8(tag)
-
-  switch (key) {
-    case 'chainId': {
-      const encodedLengthAndValue = int32Encoder(parseInt(value as string, 16))
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'code':
-    case 'serializerVersion': {
-      const encodedLengthAndValue = int8Encoder(value as number)
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'hash': {
-      const encodedLengthAndValue = hexEncoder(value as string)
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'txnCount': {
-      const encodedLengthAndValue = int16Encoder(value as number)
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'miner':
-    case 'from':
-    case 'to': {
-      const encodedLengthAndValue = hexEncoder(value as string)
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'dropped':
-    case 'private': {
-      const encodedLengthAndValue = boolEncoder(value as boolean)
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'baseFeePerGas':
-    case 'gasPrice':
-    case 'maxPriorityFeePerGas': {
-      const encodedLengthAndValue = numberEncoder(value as number)
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'feed':
-    case 'id':
-    case 'interactionType':
-    case 'message':
-    case 'status':
-    case 'timestamp': {
-      const encodedLengthAndValue = utf8Encoder(value as string)
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'creation':
-    case 'contract':
-    case 'eoa':
-    case 'erc20':
-    case 'erc721':
-    case 'erc777':
-    case 'gasLimit':
-    case 'gasUsed':
-    case 'height':
-    case 'index':
-    case 'nonce': {
-      const encodedLengthAndValue = int32Encoder(value as number)
-      return Buffer.concat([tagBuf, encodedLengthAndValue])
-    }
-
-    case 'transactions': {
-      let allEncodedTransactions = Buffer.allocUnsafe(0)
-
-      for (const transaction of value as (
-        | MempoolTransaction
-        | CompletedTransaction
-      )[]) {
-        try {
-          let encodedTransaction = Buffer.allocUnsafe(0)
-
-          Object.entries(transaction).forEach(([key, value]) => {
-            const encoded = encodeV0(key, value)
-            if (encoded) {
-              encodedTransaction = Buffer.concat([encodedTransaction, encoded])
-            }
-          })
-
-          const encodedTransactionsLength = Buffer.allocUnsafe(2)
-          encodedTransactionsLength.writeUInt16BE(encodedTransaction.byteLength)
-
-          allEncodedTransactions = Buffer.concat([
-            allEncodedTransactions,
-            Buffer.concat([encodedTransactionsLength, encodedTransaction])
-          ])
-        } catch (error) {
-          const { message } = error as Error
-          console.error(`Error serializing transaction: ${message}`)
-        }
-      }
-
-      const txsLength = Buffer.allocUnsafe(4)
-      txsLength.writeUInt32BE(allEncodedTransactions.byteLength)
-
-      return Buffer.concat([tagBuf, txsLength, allEncodedTransactions])
-    }
-
-    case 'error': {
-      let encodedError = Buffer.allocUnsafe(0)
-
-      Object.entries(value as Error).forEach(([key, value]) => {
-        const encoded = encodeV0(key, value)
-
-        if (encoded) {
-          encodedError = Buffer.concat([encodedError, encoded])
-        }
-      })
-
-      const len = Buffer.allocUnsafe(2)
-      len.writeUInt16BE(encodedError.byteLength)
-
-      return Buffer.concat([tagBuf, len, encodedError])
-    }
-
-    case 'stats': {
-      let encodedStats = Buffer.allocUnsafe(0)
-
-      Object.entries(value as Stats).forEach(([key, value]) => {
-        const encoded = encodeV0(key, value)
-
-        if (encoded) {
-          encodedStats = Buffer.concat([encodedStats, encoded])
-        }
-      })
-
-      const len = Buffer.allocUnsafe(2)
-      len.writeUInt16BE(encodedStats.byteLength)
-
-      return Buffer.concat([tagBuf, len, encodedStats])
-    }
-
-    case 'interactionTypes': {
-      let encodedInteractionTypes = Buffer.allocUnsafe(0)
-
-      Object.entries(value as InteractionTypes).forEach(([key, value]) => {
-        const encoded = encodeV0(key, value)
-
-        if (encoded) {
-          encodedInteractionTypes = Buffer.concat([
-            encodedInteractionTypes,
-            encoded
-          ])
-        }
-      })
-
-      const len = Buffer.allocUnsafe(2)
-      len.writeUInt16BE(encodedInteractionTypes.byteLength)
-
-      return Buffer.concat([tagBuf, len, encodedInteractionTypes])
-    }
-
     default:
       return null
   }

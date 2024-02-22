@@ -1,5 +1,3 @@
-import { Message } from './types'
-
 export type Type0 = {
   /** hex */
   gasPrice: string
@@ -30,6 +28,27 @@ export type DroppedTransaction = {
 export type MempoolTransactionV1 = PendingTransactionV1 | DroppedTransaction
 
 export type TransactionV1 = MempoolTransactionV1
+
+export type CompletedTransaction = {
+  hash: string
+  index: number
+  gasPrice: number
+  to: string | null
+  gasUsed: number
+  status: string
+}
+
+export type BlockMessage = MessageBase & {
+  transactions: CompletedTransaction[]
+  hash: string
+  height: number
+  timestamp: string
+  txnCount: number
+  baseFeePerGas: number
+  gasUsed: number
+  gasLimit: number
+  miner: string
+}
 
 export type Error = {
   code: number
@@ -98,12 +117,12 @@ export enum SerializerVersion {
   'v1'
 }
 
-export type DeserializedResponse = (MessageV1 | Message) & {
+export type DeserializedResponse = MessageV1 & {
   serializerVersion: SerializerVersion
 }
 
 export type Serializer = (
-  message: MessageV1 | Message,
+  message: MessageV1,
   version: SerializerVersion
 ) => ArrayBuffer
 

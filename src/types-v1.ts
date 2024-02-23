@@ -103,12 +103,43 @@ export type StatsMessage = MessageBase & {
   stats: Stats
 }
 
+export type TransactionSegmentStats = {
+  txnCount: number
+  value: number
+}
+
+export type L2SegmentStats = {
+  txnCount: number
+  batchesCount: number
+}
+
+export type MempoolSummaryMessage = MessageBase & {
+  marketable: TransactionSegmentStats
+  stables: TransactionSegmentStats
+  ethTransfers: TransactionSegmentStats
+  defiSwap: TransactionSegmentStats
+  optimisticL2: L2SegmentStats
+}
+
+export type LatestBlockSummaryMessage = MessageBase & {
+  height: number
+  timestamp: string
+  txnCount: number
+  baseFee: string
+  baseFeeTrend: string
+  ethBurned: number
+  totalStaked: string
+  privateTxnCount: number
+}
+
 export type MessageV1 =
   | MempoolMessageV1
   | BlockMessageV1
   | ErrorMessage
   | AckMessage
   | StatsMessage
+  | MempoolSummaryMessage
+  | LatestBlockSummaryMessage
 
 export type ValueOf<Obj> = Obj[keyof Obj]
 

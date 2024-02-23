@@ -1050,7 +1050,7 @@ export const statsMessage = {
 }
 
 export const homepagePendingMessage = {
-  feed: 'homepage_pending',
+  feed: 'mempool_summary',
   chainId: '0x1',
   marketable: {
     txnCount: 38,
@@ -1075,7 +1075,7 @@ export const homepagePendingMessage = {
 }
 
 export const homepageConfirmedMessage = {
-  feed: 'homepage_confirmed',
+  feed: 'block_summary',
   timestamp: '2023-09-21T02:56:40.107Z',
   chainId: '0x1',
   stables: {

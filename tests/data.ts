@@ -1088,5 +1088,5 @@ export const homepageConfirmedMessage = {
   txnCount: 99,
   privateTxnCount: 12,
   baseFee: '12',
-  baseFeeTrend: 'flat'
+  lastBaseFee: '10'
 }

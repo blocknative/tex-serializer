@@ -93,6 +93,7 @@ export type LatestBlockSummaryMessage = MessageBase & {
 	ethBurned: number;
 	totalStaked: string;
 	privateTxnCount: number;
+	mempoolSummary: MempoolSummaryMessage;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | MempoolSummaryMessage | LatestBlockSummaryMessage;
 export declare enum SerializerVersion {

@@ -130,6 +130,7 @@ export type LatestBlockSummaryMessage = MessageBase & {
   ethBurned: number
   totalStaked: string
   privateTxnCount: number
+  gasUsed: number
 }
 
 export type MessageV1 =

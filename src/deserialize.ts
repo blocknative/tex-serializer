@@ -10,7 +10,8 @@ import {
   type MessageV1,
   DeserializedResponse,
   TransactionSegmentStats,
-  L2SegmentStats
+  L2SegmentStats,
+  MarketableSegmentStats
 } from './types-v1'
 
 export const hexParser = (buf: Buffer) => {
@@ -66,6 +67,8 @@ const decodeV1 = (
     }
 
     case 'privateTxnCount':
+    case 'privateBlobCount':
+    case 'blobCount':
     case 'batchesCount':
     case 'txnCount': {
       const decodedValue = int16Parser(value)
@@ -83,6 +86,7 @@ const decodeV1 = (
 
     case 'totalStaked':
     case 'baseFee':
+    case 'blobBaseFee':
     case 'baseFeePerGas':
     case 'gasPrice':
     case 'maxFeePerGas':
@@ -289,7 +293,6 @@ const decodeV1 = (
       return { key, value: decodedInteractionTypes }
     }
 
-    case 'marketable':
     case 'stables':
     case 'ethTransfers':
     case 'defiSwap': {
@@ -329,8 +332,7 @@ const decodeV1 = (
     }
 
     case 'optimisticL2': {
-      const decodedL2SegmentStats: L2SegmentStats =
-        {} as L2SegmentStats
+      const decodedL2SegmentStats: L2SegmentStats = {} as L2SegmentStats
       let cursor = 0
 
       while (cursor < value.byteLength) {
@@ -362,6 +364,41 @@ const decodeV1 = (
       }
 
       return { key, value: decodedL2SegmentStats }
+    }
+    case 'marketable': {
+      const decodedMarketableSegmentStats: MarketableSegmentStats =
+        {} as MarketableSegmentStats
+      let cursor = 0
+
+      while (cursor < value.byteLength) {
+        const tag = value.readUInt8(cursor)
+        cursor++
+
+        let len: number
+
+        if (getTagLengthBytes(tag) === 2) {
+          len = value.readUInt16BE(cursor)
+          cursor += 2
+        } else {
+          len = value.readUInt8(cursor)
+          cursor++
+        }
+
+        const val = value.subarray(cursor, len + cursor)
+        cursor += len
+        const decoded = decodeV1(tag, val)
+
+        if (decoded) {
+          const { key, value } = decoded
+          // @ts-ignore
+          decodedMarketableSegmentStats[key as keyof MarketableSegmentStats] =
+            value as ValueOf<MarketableSegmentStats>
+        } else {
+          console.warn(`Unknown tag: ${tag}  ${val}`)
+        }
+      }
+
+      return { key, value: decodedMarketableSegmentStats }
     }
     default:
       return null

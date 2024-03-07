@@ -108,13 +108,19 @@ export type TransactionSegmentStats = {
   value: number
 }
 
+export type MarketableSegmentStats = {
+  txnCount: number
+  value: number
+  blobCount: number
+}
+
 export type L2SegmentStats = {
   txnCount: number
   batchesCount: number
 }
 
 export type MempoolSummaryMessage = MessageBase & {
-  marketable: TransactionSegmentStats
+  marketable: MarketableSegmentStats
   stables: TransactionSegmentStats
   ethTransfers: TransactionSegmentStats
   defiSwap: TransactionSegmentStats
@@ -125,11 +131,14 @@ export type LatestBlockSummaryMessage = MessageBase & {
   height: number
   timestamp: string
   txnCount: number
+  blobCount: number
   baseFee: string
+  blobBaseFee: string
   baseFeeTrend: string
   ethBurned: number
   totalStaked: string
   privateTxnCount: number
+  privateBlobCount: number
   gasUsed: number
 }
 

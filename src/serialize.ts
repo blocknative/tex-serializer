@@ -8,7 +8,8 @@ import {
   type MempoolTransactionV1,
   type CompletedTransaction,
   type Stats,
-  type InteractionTypes
+  type InteractionTypes,
+  MarketableSegmentStats
 } from './types-v1.ts'
 
 const hexEncoder = (hex: string) => {
@@ -120,6 +121,8 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
     }
 
     case 'privateTxnCount':
+    case 'privateBlobCount':
+    case 'blobCount':
     case 'batchesCount':
     case 'txnCount': {
       const encodedLengthAndValue = int16Encoder(value as number)
@@ -135,6 +138,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
     case 'totalStaked':
     case 'baseFee':
+    case 'blobBaseFee':
     case 'totalStaked':
     case 'baseFeePerGas':
     case 'gasPrice':
@@ -272,7 +276,6 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, len, encodedInteractionTypes])
     }
 
-    case 'marketable':
     case 'stables':
     case 'ethTransfers':
     case 'defiSwap': {
@@ -310,6 +313,27 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
           ])
         }
       })
+
+      const len = Buffer.allocUnsafe(2)
+      len.writeUInt16BE(encodedHomepagePending.byteLength)
+
+      return Buffer.concat([tagBuf, len, encodedHomepagePending])
+    }
+    case 'marketable': {
+      let encodedHomepagePending = Buffer.allocUnsafe(0)
+
+      Object.entries(value as MarketableSegmentStats).forEach(
+        ([key, value]) => {
+          const encoded = encodeV1(key, value)
+
+          if (encoded) {
+            encodedHomepagePending = Buffer.concat([
+              encodedHomepagePending,
+              encoded
+            ])
+          }
+        }
+      )
 
       const len = Buffer.allocUnsafe(2)
       len.writeUInt16BE(encodedHomepagePending.byteLength)

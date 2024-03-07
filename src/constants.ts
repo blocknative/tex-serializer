@@ -46,7 +46,10 @@ export const parameterToTag: Record<string, number> = {
   batchesCount: 43,
   optimisticL2: 44,
   defiSwap: 45,
-  totalStaked: 46
+  totalStaked: 46,
+  blobCount: 47,
+  privateBlobCount: 48,
+  blobBaseFee: 49
 }
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

@@ -1054,7 +1054,8 @@ export const homepagePendingMessage = {
   chainId: '0x1',
   marketable: {
     txnCount: 38,
-    value: 12345
+    value: 12345,
+    blobCount: 12
   },
   stables: {
     txnCount: 12,
@@ -1086,7 +1087,13 @@ export const homepageConfirmedMessage = {
   totalStaked: '30662767000000000',
   height: 19215389,
   txnCount: 99,
+  blobCount: 18,
   privateTxnCount: 12,
-  baseFee: '12',
-  baseFeeTrend: 'flat'
+  privateBlobCount: 9,
+  baseFee: '80',
+  blobBaseFee: '12',
+  baseFeeTrend: 'flat',
+  gasUsed: 30000000,  
+  minBlobPriorityFee: 2800000,
+  blobsOlderThanOneBlock: 2,
 }

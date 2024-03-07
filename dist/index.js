@@ -46,7 +46,12 @@ var parameterToTag = {
   batchesCount: 43,
   optimisticL2: 44,
   defiSwap: 45,
-  totalStaked: 46
+  totalStaked: 46,
+  blobCount: 47,
+  privateBlobCount: 48,
+  blobBaseFee: 49,
+  minBlobPriorityFee: 50,
+  blobsOlderThanOneBlock: 51
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -158,7 +163,10 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "blobsOlderThanOneBlock":
     case "privateTxnCount":
+    case "privateBlobCount":
+    case "blobCount":
     case "batchesCount":
     case "txnCount": {
       const encodedLengthAndValue = int16Encoder(value);
@@ -172,6 +180,7 @@ var encodeV1 = (key, value) => {
     }
     case "totalStaked":
     case "baseFee":
+    case "blobBaseFee":
     case "totalStaked":
     case "baseFeePerGas":
     case "gasPrice":
@@ -198,6 +207,7 @@ var encodeV1 = (key, value) => {
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
+    case "minBlobPriorityFee":
     case "value": {
       const encodedLengthAndValue = numberEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -279,7 +289,6 @@ var encodeV1 = (key, value) => {
       len.writeUInt16BE(encodedInteractionTypes.byteLength);
       return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
     }
-    case "marketable":
     case "stables":
     case "ethTransfers":
     case "defiSwap": {
@@ -298,6 +307,21 @@ var encodeV1 = (key, value) => {
       return Buffer.concat([tagBuf, len, encodedHomepagePending]);
     }
     case "optimisticL2": {
+      let encodedHomepagePending = Buffer.allocUnsafe(0);
+      Object.entries(value).forEach(([key2, value2]) => {
+        const encoded = encodeV1(key2, value2);
+        if (encoded) {
+          encodedHomepagePending = Buffer.concat([
+            encodedHomepagePending,
+            encoded
+          ]);
+        }
+      });
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedHomepagePending.byteLength);
+      return Buffer.concat([tagBuf, len, encodedHomepagePending]);
+    }
+    case "marketable": {
       let encodedHomepagePending = Buffer.allocUnsafe(0);
       Object.entries(value).forEach(([key2, value2]) => {
         const encoded = encodeV1(key2, value2);
@@ -363,7 +387,10 @@ var decodeV1 = (tag, value) => {
       const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
     }
+    case "blobsOlderThanOneBlock":
     case "privateTxnCount":
+    case "privateBlobCount":
+    case "blobCount":
     case "batchesCount":
     case "txnCount": {
       const decodedValue = int16Parser(value);
@@ -379,6 +406,7 @@ var decodeV1 = (tag, value) => {
     }
     case "totalStaked":
     case "baseFee":
+    case "blobBaseFee":
     case "baseFeePerGas":
     case "gasPrice":
     case "maxFeePerGas":
@@ -404,6 +432,7 @@ var decodeV1 = (tag, value) => {
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
+    case "minBlobPriorityFee":
     case "value": {
       const decodedValue = numberParser(value);
       return { key, value: decodedValue };
@@ -539,7 +568,6 @@ var decodeV1 = (tag, value) => {
       }
       return { key, value: decodedInteractionTypes };
     }
-    case "marketable":
     case "stables":
     case "ethTransfers":
     case "defiSwap": {
@@ -593,6 +621,32 @@ var decodeV1 = (tag, value) => {
         }
       }
       return { key, value: decodedL2SegmentStats };
+    }
+    case "marketable": {
+      const decodedMarketableSegmentStats = {};
+      let cursor = 0;
+      while (cursor < value.byteLength) {
+        const tag2 = value.readUInt8(cursor);
+        cursor++;
+        let len;
+        if (getTagLengthBytes(tag2) === 2) {
+          len = value.readUInt16BE(cursor);
+          cursor += 2;
+        } else {
+          len = value.readUInt8(cursor);
+          cursor++;
+        }
+        const val = value.subarray(cursor, len + cursor);
+        cursor += len;
+        const decoded = decodeV1(tag2, val);
+        if (decoded) {
+          const { key: key2, value: value2 } = decoded;
+          decodedMarketableSegmentStats[key2] = value2;
+        } else {
+          console.warn(`Unknown tag: ${tag2}  ${val}`);
+        }
+      }
+      return { key, value: decodedMarketableSegmentStats };
     }
     default:
       return null;

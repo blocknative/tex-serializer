@@ -103,6 +103,7 @@ export type LatestBlockSummaryMessage = MessageBase & {
 	privateBlobCount: number;
 	gasUsed: number;
 	minBlobPriorityFee: number;
+	blobsOlderThanOneBlock: number;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | MempoolSummaryMessage | LatestBlockSummaryMessage;
 export declare enum SerializerVersion {

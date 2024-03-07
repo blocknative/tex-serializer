@@ -50,7 +50,8 @@ var parameterToTag = {
   blobCount: 47,
   privateBlobCount: 48,
   blobBaseFee: 49,
-  minBlobPriorityFee: 50
+  minBlobPriorityFee: 50,
+  blobsOlderThanOneBlock: 51
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -162,6 +163,7 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = hexEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
+    case "blobsOlderThanOneBlock":
     case "privateTxnCount":
     case "privateBlobCount":
     case "blobCount":
@@ -385,6 +387,7 @@ var decodeV1 = (tag, value) => {
       const decodedValue = int8Parser(value);
       return { key, value: decodedValue };
     }
+    case "blobsOlderThanOneBlock":
     case "privateTxnCount":
     case "privateBlobCount":
     case "blobCount":

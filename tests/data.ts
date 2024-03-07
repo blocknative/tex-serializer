@@ -1095,4 +1095,5 @@ export const homepageConfirmedMessage = {
   baseFeeTrend: 'flat',
   gasUsed: 30000000,  
   minBlobPriorityFee: 2800000,
+  blobsOlderThanOneBlock: 2,
 }

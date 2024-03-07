@@ -50,7 +50,8 @@ export const parameterToTag: Record<string, number> = {
   blobCount: 47,
   privateBlobCount: 48,
   blobBaseFee: 49,
-  minBlobPriorityFee: 50
+  minBlobPriorityFee: 50,
+  blobsOlderThanOneBlock: 51
 }
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

@@ -66,6 +66,7 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
+    case 'blobsOlderThanOneBlock':
     case 'privateTxnCount':
     case 'privateBlobCount':
     case 'blobCount':

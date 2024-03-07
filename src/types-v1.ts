@@ -141,6 +141,7 @@ export type LatestBlockSummaryMessage = MessageBase & {
   privateBlobCount: number
   gasUsed: number
   minBlobPriorityFee: number
+  blobsOlderThanOneBlock: number
 }
 
 export type MessageV1 =

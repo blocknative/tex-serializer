@@ -120,6 +120,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
+    case 'blobsOlderThanOneBlock':
     case 'privateTxnCount':
     case 'privateBlobCount':
     case 'blobCount':

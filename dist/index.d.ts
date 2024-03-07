@@ -102,6 +102,7 @@ export type LatestBlockSummaryMessage = MessageBase & {
 	privateTxnCount: number;
 	privateBlobCount: number;
 	gasUsed: number;
+	blobGasUsed: number;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | MempoolSummaryMessage | LatestBlockSummaryMessage;
 export declare enum SerializerVersion {

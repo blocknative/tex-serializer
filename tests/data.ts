@@ -1093,5 +1093,6 @@ export const homepageConfirmedMessage = {
   baseFee: '80',
   blobBaseFee: '12',
   baseFeeTrend: 'flat',
-  gasUsed: 30000000
+  gasUsed: 30000000,  
+  blobGasUsed: 2800000,
 }

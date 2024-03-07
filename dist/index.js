@@ -49,7 +49,8 @@ var parameterToTag = {
   totalStaked: 46,
   blobCount: 47,
   privateBlobCount: 48,
-  blobBaseFee: 49
+  blobBaseFee: 49,
+  blobGasUsed: 50
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -204,6 +205,7 @@ var encodeV1 = (key, value) => {
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
+    case "blobGasUsed":
     case "value": {
       const encodedLengthAndValue = numberEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -427,6 +429,7 @@ var decodeV1 = (tag, value) => {
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
+    case "blobGasUsed":
     case "value": {
       const decodedValue = numberParser(value);
       return { key, value: decodedValue };

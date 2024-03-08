@@ -91,7 +91,9 @@ const decodeV1 = (
     case 'baseFeePerGas':
     case 'gasPrice':
     case 'maxFeePerGas':
-    case 'maxPriorityFeePerGas': {
+    case 'maxPriorityFeePerGas':
+    case 'blobGasUsed':
+    case 'excessBlobGas': {
       const decodedValue = utf8Parser(value)
       return { key, value: decodedValue }
     }

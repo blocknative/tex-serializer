@@ -48,6 +48,8 @@ export type BlockMessageV1 = MessageBase & {
 	gasUsed: number;
 	gasLimit: number;
 	miner: string;
+	blobGasUsed: string | null;
+	excessBlobGas: string | null;
 };
 export type ErrorMessage = MessageBase & {
 	error: Error;

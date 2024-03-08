@@ -142,6 +142,7 @@ export type LatestBlockSummaryMessage = MessageBase & {
   privateTxnCount: number
   privateBlobCount: number
   gasUsed: number
+  gasLimit: number
   minBlobPriorityFee: number
   blobsOlderThanOneBlock: number
 }

@@ -171,7 +171,6 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
     case 'gasLimit':
     case 'ethBurned':
     case 'gasUsed':
-    case 'minBlobPriorityFee':
     case 'value': {
       const encodedLengthAndValue = numberEncoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])

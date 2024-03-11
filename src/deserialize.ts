@@ -118,7 +118,6 @@ const decodeV1 = (
     case 'gasLimit':
     case 'ethBurned':
     case 'gasUsed':
-    case 'minBlobPriorityFee':
     case 'value': {
       const decodedValue = numberParser(value)
       return { key, value: decodedValue }

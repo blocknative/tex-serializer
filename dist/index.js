@@ -50,10 +50,9 @@ var parameterToTag = {
   blobCount: 47,
   privateBlobCount: 48,
   blobBaseFee: 49,
-  minBlobPriorityFee: 50,
-  blobsOlderThanOneBlock: 51,
-  blobGasUsed: 52,
-  excessBlobGas: 53
+  blobsOlderThanOneBlock: 50,
+  blobGasUsed: 51,
+  excessBlobGas: 52
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -211,7 +210,6 @@ var encodeV1 = (key, value) => {
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
-    case "minBlobPriorityFee":
     case "value": {
       const encodedLengthAndValue = numberEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -438,7 +436,6 @@ var decodeV1 = (tag, value) => {
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
-    case "minBlobPriorityFee":
     case "value": {
       const decodedValue = numberParser(value);
       return { key, value: decodedValue };

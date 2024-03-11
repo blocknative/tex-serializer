@@ -41,7 +41,7 @@ var parameterToTag = {
   stables: 38,
   ethTransfers: 39,
   privateTxnCount: 40,
-  baseFeeTrend: 41,
+  excessBlobGas: 41,
   ethBurned: 42,
   batchesCount: 43,
   optimisticL2: 44,
@@ -50,10 +50,8 @@ var parameterToTag = {
   blobCount: 47,
   privateBlobCount: 48,
   blobBaseFee: 49,
-  minBlobPriorityFee: 50,
-  blobsOlderThanOneBlock: 51,
-  blobGasUsed: 52,
-  excessBlobGas: 53
+  blobsOlderThanOneBlock: 50,
+  blobGasUsed: 51
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -198,7 +196,6 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = boolEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "baseFeeTrend":
     case "feed":
     case "id":
     case "interactionType":
@@ -211,7 +208,6 @@ var encodeV1 = (key, value) => {
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
-    case "minBlobPriorityFee":
     case "value": {
       const encodedLengthAndValue = numberEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -425,7 +421,6 @@ var decodeV1 = (tag, value) => {
       const decodedValue = boolParser(value);
       return { key, value: decodedValue };
     }
-    case "baseFeeTrend":
     case "feed":
     case "id":
     case "interactionType":
@@ -438,7 +433,6 @@ var decodeV1 = (tag, value) => {
     case "gasLimit":
     case "ethBurned":
     case "gasUsed":
-    case "minBlobPriorityFee":
     case "value": {
       const decodedValue = numberParser(value);
       return { key, value: decodedValue };

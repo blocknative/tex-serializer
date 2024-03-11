@@ -104,7 +104,6 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
-    case 'baseFeeTrend':
     case 'feed':
     case 'id':
     case 'interactionType':
@@ -118,7 +117,6 @@ const decodeV1 = (
     case 'gasLimit':
     case 'ethBurned':
     case 'gasUsed':
-    case 'minBlobPriorityFee':
     case 'value': {
       const decodedValue = numberParser(value)
       return { key, value: decodedValue }

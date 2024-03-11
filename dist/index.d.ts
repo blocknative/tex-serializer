@@ -98,14 +98,12 @@ export type LatestBlockSummaryMessage = MessageBase & {
 	blobCount: number;
 	baseFee: string;
 	blobBaseFee: string;
-	baseFeeTrend: string;
 	ethBurned: number;
 	totalStaked: string;
 	privateTxnCount: number;
 	privateBlobCount: number;
 	gasUsed: number;
 	gasLimit: number;
-	minBlobPriorityFee: number;
 	blobsOlderThanOneBlock: number;
 };
 export type MessageV1 = MempoolMessageV1 | BlockMessageV1 | ErrorMessage | AckMessage | StatsMessage | MempoolSummaryMessage | LatestBlockSummaryMessage;

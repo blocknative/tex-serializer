@@ -1092,9 +1092,7 @@ export const homepageConfirmedMessage = {
   privateBlobCount: 9,
   baseFee: '80',
   blobBaseFee: '12',
-  baseFeeTrend: 'flat',
   gasUsed: 30000000,
   gasLimit: 90000000,
-  minBlobPriorityFee: 2800000,
   blobsOlderThanOneBlock: 2,
 }

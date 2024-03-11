@@ -41,6 +41,7 @@ var parameterToTag = {
   stables: 38,
   ethTransfers: 39,
   privateTxnCount: 40,
+  excessBlobGas: 41,
   ethBurned: 42,
   batchesCount: 43,
   optimisticL2: 44,
@@ -50,8 +51,7 @@ var parameterToTag = {
   privateBlobCount: 48,
   blobBaseFee: 49,
   blobsOlderThanOneBlock: 50,
-  blobGasUsed: 51,
-  excessBlobGas: 52
+  blobGasUsed: 51
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {

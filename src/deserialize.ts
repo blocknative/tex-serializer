@@ -104,7 +104,6 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
-    case 'baseFeeTrend':
     case 'feed':
     case 'id':
     case 'interactionType':

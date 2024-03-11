@@ -41,7 +41,6 @@ var parameterToTag = {
   stables: 38,
   ethTransfers: 39,
   privateTxnCount: 40,
-  baseFeeTrend: 41,
   ethBurned: 42,
   batchesCount: 43,
   optimisticL2: 44,
@@ -197,7 +196,6 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = boolEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "baseFeeTrend":
     case "feed":
     case "id":
     case "interactionType":
@@ -423,7 +421,6 @@ var decodeV1 = (tag, value) => {
       const decodedValue = boolParser(value);
       return { key, value: decodedValue };
     }
-    case "baseFeeTrend":
     case "feed":
     case "id":
     case "interactionType":

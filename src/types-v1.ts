@@ -135,7 +135,8 @@ export type LatestBlockSummaryMessage = MessageBase & {
   txnCount: number
   blobCount: number
   baseFee: string
-  blobBaseFee: string
+  blobBaseFee?: string
+  blobBaseFeeWei: string
   ethBurned: number
   totalStaked: string
   privateTxnCount: number

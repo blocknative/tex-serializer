@@ -1091,7 +1091,7 @@ export const homepageConfirmedMessage = {
   privateTxnCount: 12,
   privateBlobCount: 9,
   baseFee: '80',
-  blobBaseFee: '12',
+  blobBaseFeeWei: '12',
   gasUsed: 30000000,
   gasLimit: 90000000,
   blobsOlderThanOneBlock: 2,

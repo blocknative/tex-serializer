@@ -87,6 +87,7 @@ const decodeV1 = (
 
     case 'totalStaked':
     case 'baseFee':
+    case 'blobBaseFeeWei':
     case 'blobBaseFee':
     case 'baseFeePerGas':
     case 'gasPrice':

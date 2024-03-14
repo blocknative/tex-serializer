@@ -139,6 +139,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
     case 'totalStaked':
     case 'baseFee':
+    case 'blobBaseFeeWei':
     case 'blobBaseFee':
     case 'totalStaked':
     case 'baseFeePerGas':

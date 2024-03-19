@@ -52,7 +52,8 @@ var parameterToTag = {
   blobBaseFee: 49,
   blobsOlderThanOneBlock: 50,
   blobGasUsed: 51,
-  blobBaseFeeWei: 52
+  blobBaseFeeWei: 52,
+  blobDiscount: 53
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -182,6 +183,7 @@ var encodeV1 = (key, value) => {
     case "totalStaked":
     case "baseFee":
     case "blobBaseFeeWei":
+    case "blobDiscount":
     case "blobBaseFee":
     case "totalStaked":
     case "baseFeePerGas":
@@ -409,6 +411,7 @@ var decodeV1 = (tag, value) => {
     case "totalStaked":
     case "baseFee":
     case "blobBaseFeeWei":
+    case "blobDiscount":
     case "blobBaseFee":
     case "baseFeePerGas":
     case "gasPrice":

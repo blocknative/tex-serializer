@@ -1095,4 +1095,5 @@ export const homepageConfirmedMessage = {
   gasUsed: 30000000,
   gasLimit: 90000000,
   blobsOlderThanOneBlock: 2,
+  blobDiscount: '-0.9982',
 }

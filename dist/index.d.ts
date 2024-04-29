@@ -43,6 +43,7 @@ export type BlockMessageV1 = MessageBase & {
 	height: number;
 	timestamp: string;
 	txnCount: number;
+	blobCount: number;
 	/** hex */
 	baseFeePerGas: string;
 	gasUsed: number;

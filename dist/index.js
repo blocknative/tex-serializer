@@ -53,7 +53,10 @@ var parameterToTag = {
   blobsOlderThanOneBlock: 50,
   blobGasUsed: 51,
   blobBaseFeeWei: 52,
-  blobDiscount: 53
+  blobDiscount: 53,
+  marketableCount: 54,
+  underpricedCount: 55,
+  blockedCount: 56
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -224,6 +227,9 @@ var encodeV1 = (key, value) => {
     case "erc777":
     case "height":
     case "index":
+    case "marketableCount":
+    case "underpricedCount":
+    case "blockedCount":
     case "nonce": {
       const encodedLengthAndValue = int32Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -451,6 +457,9 @@ var decodeV1 = (tag, value) => {
     case "erc777":
     case "height":
     case "index":
+    case "marketableCount":
+    case "underpricedCount":
+    case "blockedCount":
     case "nonce": {
       const decodedValue = int32Parser(value);
       return { key, value: decodedValue };

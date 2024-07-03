@@ -59,10 +59,13 @@ export type AckMessage = {
 	id: string;
 };
 export type Stats = {
-	erc20: number;
-	erc721: number;
-	erc777: number;
-	interactionTypes: InteractionTypes;
+	marketableCount?: number;
+	underpricedCount?: number;
+	blockedCount?: number;
+	erc20?: number;
+	erc721?: number;
+	erc777?: number;
+	interactionTypes?: InteractionTypes;
 };
 export type InteractionTypes = {
 	eoa: number;

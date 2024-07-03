@@ -1022,7 +1022,10 @@ export const blockMessage = {
   baseFeePerGas: '36302912911',
   gasLimit: 30000000,
   gasUsed: 26662315,
-  miner: '0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97'
+  miner: '0x4838b106fce9647bdf1e7877bf73ce8b0bad5f97',
+  blobCount: 18,
+  blobGasUsed: '26662',
+  excessBlobGas: '42'
 }
 
 export const errorMessage = {
@@ -1045,7 +1048,10 @@ export const statsMessage = {
     erc20: 0,
     erc721: 10,
     erc777: 100,
-    interactionTypes: { eoa: 1000, contract: 10000, creation: 100000 }
+    interactionTypes: { eoa: 1000, contract: 10000, creation: 100000 },
+    blockedCount: 40,
+    marketableCount: 20,
+    underpricedCount: 30
   }
 }
 
@@ -1095,5 +1101,5 @@ export const homepageConfirmedMessage = {
   gasUsed: 30000000,
   gasLimit: 90000000,
   blobsOlderThanOneBlock: 2,
-  blobDiscount: '-0.9982',
+  blobDiscount: '-0.9982'
 }

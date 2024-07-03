@@ -185,6 +185,9 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
     case 'erc777':
     case 'height':
     case 'index':
+    case 'marketableCount':
+    case 'underpricedCount':
+    case 'blockedCount':
     case 'nonce': {
       const encodedLengthAndValue = int32Encoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])

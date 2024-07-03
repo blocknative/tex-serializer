@@ -90,10 +90,15 @@ export type AckMessage = {
 }
 
 export type Stats = {
-  erc20: number
-  erc721: number
-  erc777: number
-  interactionTypes: InteractionTypes
+  marketableCount?: number
+  underpricedCount?: number
+  blockedCount?: number
+
+  // Below are deprecated and need to be removed once we have the new stats live
+  erc20?: number
+  erc721?: number
+  erc777?: number
+  interactionTypes?: InteractionTypes
 }
 
 export type InteractionTypes = {

@@ -132,6 +132,9 @@ const decodeV1 = (
     case 'erc777':
     case 'height':
     case 'index':
+    case 'marketableCount':
+    case 'underpricedCount':
+    case 'blockedCount':
     case 'nonce': {
       const decodedValue = int32Parser(value)
       return { key, value: decodedValue }

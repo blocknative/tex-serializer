@@ -54,6 +54,9 @@ export const parameterToTag: Record<string, number> = {
   blobGasUsed: 51,
   blobBaseFeeWei: 52,
   blobDiscount: 53,
+  marketableCount: 54,
+  underpricedCount: 55,
+  blockedCount: 56
 }
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(

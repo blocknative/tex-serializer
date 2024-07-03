@@ -54,7 +54,7 @@ var parameterToTag = {
   blobGasUsed: 51,
   blobBaseFeeWei: 52,
   blobDiscount: 53,
-  marketableCount: 55,
+  marketableCount: 54,
   underpricedCount: 55,
   blockedCount: 56
 };

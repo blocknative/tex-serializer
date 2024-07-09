@@ -6,7 +6,6 @@ import {
   SerializerVersion,
   type TransactionV1,
   type Stats,
-  type InteractionTypes,
   type MessageV1,
   DeserializedResponse,
   TransactionSegmentStats,
@@ -124,12 +123,6 @@ const decodeV1 = (
       return { key, value: decodedValue }
     }
 
-    case 'creation':
-    case 'contract':
-    case 'eoa':
-    case 'erc20':
-    case 'erc721':
-    case 'erc777':
     case 'height':
     case 'index':
     case 'marketableCount':
@@ -263,41 +256,6 @@ const decodeV1 = (
       }
 
       return { key, value: decodedStats }
-    }
-
-    case 'interactionTypes': {
-      const decodedInteractionTypes: InteractionTypes = {} as InteractionTypes
-      let cursor = 0
-
-      while (cursor < value.byteLength) {
-        const tag = value.readUInt8(cursor)
-        cursor++
-
-        let len: number
-
-        if (getTagLengthBytes(tag) === 2) {
-          len = value.readUInt16BE(cursor)
-          cursor += 2
-        } else {
-          len = value.readUInt8(cursor)
-          cursor++
-        }
-
-        const val = value.subarray(cursor, len + cursor)
-        cursor += len
-        const decoded = decodeV1(tag, val)
-
-        if (decoded) {
-          const { key, value } = decoded
-          // @ts-ignore
-          decodedInteractionTypes[key as keyof InteractionTypes] =
-            value as ValueOf<InteractionTypes>
-        } else {
-          console.warn(`Unknown tag: ${tag}`)
-        }
-      }
-
-      return { key, value: decodedInteractionTypes }
     }
 
     case 'stables':

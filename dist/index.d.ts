@@ -59,18 +59,9 @@ export type AckMessage = {
 	id: string;
 };
 export type Stats = {
-	marketableCount?: number;
-	underpricedCount?: number;
-	blockedCount?: number;
-	erc20?: number;
-	erc721?: number;
-	erc777?: number;
-	interactionTypes?: InteractionTypes;
-};
-export type InteractionTypes = {
-	eoa: number;
-	contract: number;
-	creation: number;
+	marketableCount: number;
+	underpricedCount: number;
+	blockedCount: number;
 };
 export type StatsMessage = MessageBase & {
 	stats: Stats;

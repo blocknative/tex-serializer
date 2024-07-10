@@ -205,7 +205,6 @@ var encodeV1 = (key, value) => {
     }
     case "feed":
     case "id":
-    case "interactionType":
     case "message":
     case "status":
     case "timestamp": {
@@ -219,12 +218,6 @@ var encodeV1 = (key, value) => {
       const encodedLengthAndValue = numberEncoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
     }
-    case "creation":
-    case "contract":
-    case "eoa":
-    case "erc20":
-    case "erc721":
-    case "erc777":
     case "height":
     case "index":
     case "marketableCount":
@@ -283,21 +276,6 @@ var encodeV1 = (key, value) => {
       const len = Buffer.allocUnsafe(2);
       len.writeUInt16BE(encodedStats.byteLength);
       return Buffer.concat([tagBuf, len, encodedStats]);
-    }
-    case "interactionTypes": {
-      let encodedInteractionTypes = Buffer.allocUnsafe(0);
-      Object.entries(value).forEach(([key2, value2]) => {
-        const encoded = encodeV1(key2, value2);
-        if (encoded) {
-          encodedInteractionTypes = Buffer.concat([
-            encodedInteractionTypes,
-            encoded
-          ]);
-        }
-      });
-      const len = Buffer.allocUnsafe(2);
-      len.writeUInt16BE(encodedInteractionTypes.byteLength);
-      return Buffer.concat([tagBuf, len, encodedInteractionTypes]);
     }
     case "stables":
     case "ethTransfers":
@@ -449,12 +427,6 @@ var decodeV1 = (tag, value) => {
       const decodedValue = numberParser(value);
       return { key, value: decodedValue };
     }
-    case "creation":
-    case "contract":
-    case "eoa":
-    case "erc20":
-    case "erc721":
-    case "erc777":
     case "height":
     case "index":
     case "marketableCount":
@@ -556,32 +528,6 @@ var decodeV1 = (tag, value) => {
         }
       }
       return { key, value: decodedStats };
-    }
-    case "interactionTypes": {
-      const decodedInteractionTypes = {};
-      let cursor = 0;
-      while (cursor < value.byteLength) {
-        const tag2 = value.readUInt8(cursor);
-        cursor++;
-        let len;
-        if (getTagLengthBytes(tag2) === 2) {
-          len = value.readUInt16BE(cursor);
-          cursor += 2;
-        } else {
-          len = value.readUInt8(cursor);
-          cursor++;
-        }
-        const val = value.subarray(cursor, len + cursor);
-        cursor += len;
-        const decoded = decodeV1(tag2, val);
-        if (decoded) {
-          const { key: key2, value: value2 } = decoded;
-          decodedInteractionTypes[key2] = value2;
-        } else {
-          console.warn(`Unknown tag: ${tag2}`);
-        }
-      }
-      return { key, value: decodedInteractionTypes };
     }
     case "stables":
     case "ethTransfers":

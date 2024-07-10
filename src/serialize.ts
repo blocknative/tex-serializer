@@ -8,7 +8,6 @@ import {
   type MempoolTransactionV1,
   type CompletedTransaction,
   type Stats,
-  type InteractionTypes,
   MarketableSegmentStats
 } from './types-v1.ts'
 
@@ -161,7 +160,6 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
     case 'feed':
     case 'id':
-    case 'interactionType':
     case 'message':
     case 'status':
     case 'timestamp': {
@@ -177,12 +175,6 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, encodedLengthAndValue])
     }
 
-    case 'creation':
-    case 'contract':
-    case 'eoa':
-    case 'erc20':
-    case 'erc721':
-    case 'erc777':
     case 'height':
     case 'index':
     case 'marketableCount':
@@ -262,25 +254,6 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       len.writeUInt16BE(encodedStats.byteLength)
 
       return Buffer.concat([tagBuf, len, encodedStats])
-    }
-    case 'interactionTypes': {
-      let encodedInteractionTypes = Buffer.allocUnsafe(0)
-
-      Object.entries(value as InteractionTypes).forEach(([key, value]) => {
-        const encoded = encodeV1(key, value)
-
-        if (encoded) {
-          encodedInteractionTypes = Buffer.concat([
-            encodedInteractionTypes,
-            encoded
-          ])
-        }
-      })
-
-      const len = Buffer.allocUnsafe(2)
-      len.writeUInt16BE(encodedInteractionTypes.byteLength)
-
-      return Buffer.concat([tagBuf, len, encodedInteractionTypes])
     }
 
     case 'stables':

@@ -36,8 +36,8 @@ export type MempoolMessageV1 = MessageBase & {
 	mempoolData?: MempoolData;
 };
 export type MempoolData = {
-	marketableCount: number;
-	totalCount: number;
+	marketableCount?: number;
+	totalCount?: number;
 };
 export type BlockMessageV1 = MessageBase & {
 	/** tx hashes included in block */

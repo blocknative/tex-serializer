@@ -8,7 +8,8 @@ import {
   type MempoolTransactionV1,
   type CompletedTransaction,
   type Stats,
-  MarketableSegmentStats
+  MarketableSegmentStats,
+  MempoolData
 } from './types-v1.ts'
 
 const hexEncoder = (hex: string) => {
@@ -124,6 +125,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
     case 'privateBlobCount':
     case 'blobCount':
     case 'batchesCount':
+    case 'totalCount':
     case 'txnCount': {
       const encodedLengthAndValue = int16Encoder(value as number)
       return Buffer.concat([tagBuf, encodedLengthAndValue])
@@ -299,6 +301,7 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
 
       return Buffer.concat([tagBuf, len, encodedHomepagePending])
     }
+
     case 'marketable': {
       let encodedHomepagePending = Buffer.allocUnsafe(0)
 
@@ -314,6 +317,26 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
           }
         }
       )
+
+      const len = Buffer.allocUnsafe(2)
+      len.writeUInt16BE(encodedHomepagePending.byteLength)
+
+      return Buffer.concat([tagBuf, len, encodedHomepagePending])
+    }
+
+    case 'mempoolData': {
+      let encodedHomepagePending = Buffer.allocUnsafe(0)
+
+      Object.entries(value as MempoolData).forEach(([key, value]) => {
+        const encoded = encodeV1(key, value)
+
+        if (encoded) {
+          encodedHomepagePending = Buffer.concat([
+            encodedHomepagePending,
+            encoded
+          ])
+        }
+      })
 
       const len = Buffer.allocUnsafe(2)
       len.writeUInt16BE(encodedHomepagePending.byteLength)

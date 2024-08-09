@@ -56,7 +56,9 @@ export const parameterToTag: Record<string, number> = {
   blobDiscount: 53,
   marketableCount: 54,
   underpricedCount: 55,
-  blockedCount: 56
+  blockedCount: 56,
+  mempoolData: 57,
+  totalCount: 58
 }
 
 export const tagToParameter: Record<number, string> = Object.fromEntries(
@@ -75,6 +77,7 @@ export const getTagLengthBytes = (tag: number): number => {
     case 39:
     case 44:
     case 45:
+    case 57:
       return 2
     default:
       return 1

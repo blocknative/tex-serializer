@@ -66,8 +66,8 @@ export type MempoolMessageV1 = MessageBase & {
 }
 
 export type MempoolData = {
-  marketableCount: number
-  totalCount: number
+  marketableCount?: number
+  totalCount?: number
 }
 
 export type BlockMessageV1 = MessageBase & {

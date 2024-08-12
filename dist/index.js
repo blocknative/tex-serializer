@@ -57,7 +57,7 @@ var parameterToTag = {
   marketableCount: 54,
   underpricedCount: 55,
   blockedCount: 56,
-  mempoolData: 57,
+  totalMempoolCounts: 57,
   totalCount: 58
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
@@ -328,7 +328,7 @@ var encodeV1 = (key, value) => {
       len.writeUInt16BE(encodedHomepagePending.byteLength);
       return Buffer.concat([tagBuf, len, encodedHomepagePending]);
     }
-    case "mempoolData": {
+    case "totalMempoolCounts": {
       let encodedHomepagePending = Buffer.allocUnsafe(0);
       Object.entries(value).forEach(([key2, value2]) => {
         const encoded = encodeV1(key2, value2);
@@ -629,8 +629,8 @@ var decodeV1 = (tag, value) => {
       }
       return { key, value: decodedMarketableSegmentStats };
     }
-    case "mempoolData": {
-      const decodedMempoolData = {};
+    case "totalMempoolCounts": {
+      const decodedTotalMempoolCounts = {};
       let cursor = 0;
       while (cursor < value.byteLength) {
         const tag2 = value.readUInt8(cursor);
@@ -648,12 +648,12 @@ var decodeV1 = (tag, value) => {
         const decoded = decodeV1(tag2, val);
         if (decoded) {
           const { key: key2, value: value2 } = decoded;
-          decodedMempoolData[key2] = value2;
+          decodedTotalMempoolCounts[key2] = value2;
         } else {
           console.warn(`Unknown tag: ${tag2}  ${val}`);
         }
       }
-      return { key, value: decodedMempoolData };
+      return { key, value: decodedTotalMempoolCounts };
     }
     default:
       return null;

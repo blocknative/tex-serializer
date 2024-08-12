@@ -1,10 +1,6 @@
 export const mempoolMessage = {
   feed: 'mempool',
   chainId: '0x1',
-  mempoolData: {
-    totalCount: 3212,
-    marketableCount: 98
-  },
   transactions: [
     {
       hash: '0x57626ec0009c20dc367e1f36a326bac3f76a7f375f4147383986096dd49d6109',
@@ -1051,7 +1047,11 @@ export const statsMessage = {
   stats: {
     blockedCount: 40,
     marketableCount: 20,
-    underpricedCount: 30
+    underpricedCount: 30,
+    totalMempoolCounts: {
+      totalCount: 3212,
+      marketableCount: 98
+    }
   }
 }
 

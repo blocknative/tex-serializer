@@ -9,7 +9,7 @@ import {
   type CompletedTransaction,
   type Stats,
   MarketableSegmentStats,
-  MempoolData
+  TotalMempoolCounts
 } from './types-v1.ts'
 
 const hexEncoder = (hex: string) => {
@@ -324,10 +324,10 @@ const encodeV1 = (key: string, value: unknown): Buffer | null => {
       return Buffer.concat([tagBuf, len, encodedHomepagePending])
     }
 
-    case 'mempoolData': {
+    case 'totalMempoolCounts': {
       let encodedHomepagePending = Buffer.allocUnsafe(0)
 
-      Object.entries(value as MempoolData).forEach(([key, value]) => {
+      Object.entries(value as TotalMempoolCounts).forEach(([key, value]) => {
         const encoded = encodeV1(key, value)
 
         if (encoded) {

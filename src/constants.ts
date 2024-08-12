@@ -57,7 +57,7 @@ export const parameterToTag: Record<string, number> = {
   marketableCount: 54,
   underpricedCount: 55,
   blockedCount: 56,
-  mempoolData: 57,
+  totalMempoolCounts: 57,
   totalCount: 58
 }
 

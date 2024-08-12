@@ -33,11 +33,6 @@ export type MessageBase = {
 };
 export type MempoolMessageV1 = MessageBase & {
 	transactions: MempoolTransactionV1[];
-	mempoolData?: MempoolData;
-};
-export type MempoolData = {
-	marketableCount?: number;
-	totalCount?: number;
 };
 export type BlockMessageV1 = MessageBase & {
 	/** tx hashes included in block */
@@ -63,10 +58,15 @@ export type ErrorMessage = MessageBase & {
 export type AckMessage = {
 	id: string;
 };
+export type TotalMempoolCounts = {
+	marketableCount?: number;
+	totalCount?: number;
+};
 export type Stats = {
 	marketableCount: number;
 	underpricedCount: number;
 	blockedCount: number;
+	totalMempoolCounts: TotalMempoolCounts;
 };
 export type StatsMessage = MessageBase & {
 	stats: Stats;

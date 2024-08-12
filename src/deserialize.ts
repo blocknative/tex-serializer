@@ -11,7 +11,7 @@ import {
   TransactionSegmentStats,
   L2SegmentStats,
   MarketableSegmentStats,
-  MempoolData
+  TotalMempoolCounts
 } from './types-v1'
 
 export const hexParser = (buf: Buffer) => {
@@ -367,9 +367,9 @@ const decodeV1 = (
 
       return { key, value: decodedMarketableSegmentStats }
     }
-    case 'mempoolData': {
-      const decodedMempoolData: MempoolData =
-        {} as MempoolData
+    case 'totalMempoolCounts': {
+      const decodedTotalMempoolCounts: TotalMempoolCounts =
+        {} as TotalMempoolCounts
       let cursor = 0
 
       while (cursor < value.byteLength) {
@@ -393,14 +393,14 @@ const decodeV1 = (
         if (decoded) {
           const { key, value } = decoded
           // @ts-ignore
-          decodedMempoolData[key as keyof MempoolData] =
-            value as ValueOf<MempoolData>
+          decodedTotalMempoolCounts[key as keyof TotalMempoolCounts] =
+            value as ValueOf<TotalMempoolCounts>
         } else {
           console.warn(`Unknown tag: ${tag}  ${val}`)
         }
       }
 
-      return { key, value: decodedMempoolData }
+      return { key, value: decodedTotalMempoolCounts }
     }
     default:
       return null

@@ -90,15 +90,15 @@ export type AckMessage = {
 }
 
 export type TotalMempoolCounts = {
-  marketableCount?: number
-  totalCount?: number
+  marketableCount: number
+  totalCount: number
 }
 
 export type Stats = {
   marketableCount: number
   underpricedCount: number
   blockedCount: number
-  totalMempoolCounts: TotalMempoolCounts
+  totalMempoolCounts?: TotalMempoolCounts
 }
 
 export type StatsMessage = MessageBase & {

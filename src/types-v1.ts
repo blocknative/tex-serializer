@@ -98,7 +98,7 @@ export type Stats = {
   marketableCount: number
   underpricedCount: number
   blockedCount: number
-  totalMempoolCounts?: TotalMempoolCounts
+  totalMempoolCounts: TotalMempoolCounts
 }
 
 export type StatsMessage = MessageBase & {

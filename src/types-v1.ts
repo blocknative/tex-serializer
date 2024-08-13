@@ -111,7 +111,7 @@ export type Stats = {
    * Mempool counts for both full and marketable mempoools regardless of when the txns arrived.
    * Top level count properties are counts of txns that have arrived since last block.
    * */
-  totalMempoolCounts: TotalMempoolCounts
+  totalMempoolCounts?: TotalMempoolCounts
 }
 
 export type StatsMessage = MessageBase & {

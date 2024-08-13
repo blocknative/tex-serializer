@@ -1047,7 +1047,11 @@ export const statsMessage = {
   stats: {
     blockedCount: 40,
     marketableCount: 20,
-    underpricedCount: 30
+    underpricedCount: 30,
+    totalMempoolCounts: {
+      totalCount: 3212,
+      marketableCount: 98
+    }
   }
 }
 

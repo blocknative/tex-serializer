@@ -58,10 +58,28 @@ export type ErrorMessage = MessageBase & {
 export type AckMessage = {
 	id: string;
 };
-export type Stats = {
+export type TotalMempoolCounts = {
 	marketableCount: number;
+	totalCount: number;
+};
+export type Stats = {
+	/**
+	 * Marketable txn count that has arrived since the last block
+	 * */
+	marketableCount: number;
+	/**
+	 * Underpriced txn count that has arrived since the last block
+	 * */
 	underpricedCount: number;
+	/**
+	 * Blocked txn count that has arrived since the last block
+	 * */
 	blockedCount: number;
+	/**
+	 * Mempool counts for both full and marketable mempoools regardless of when the txns arrived.
+	 * Top level count properties are counts of txns that have arrived since last block.
+	 * */
+	totalMempoolCounts: TotalMempoolCounts;
 };
 export type StatsMessage = MessageBase & {
 	stats: Stats;

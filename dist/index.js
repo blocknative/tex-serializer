@@ -56,7 +56,9 @@ var parameterToTag = {
   blobDiscount: 53,
   marketableCount: 54,
   underpricedCount: 55,
-  blockedCount: 56
+  blockedCount: 56,
+  totalMempoolCounts: 57,
+  totalCount: 58
 };
 var tagToParameter = Object.fromEntries(Object.entries(parameterToTag).map(([parameter, tag]) => [tag, parameter]));
 var getTagLengthBytes = (tag) => {
@@ -71,6 +73,7 @@ var getTagLengthBytes = (tag) => {
     case 39:
     case 44:
     case 45:
+    case 57:
       return 2;
     default:
       return 1;
@@ -173,6 +176,7 @@ var encodeV1 = (key, value) => {
     case "privateBlobCount":
     case "blobCount":
     case "batchesCount":
+    case "totalCount":
     case "txnCount": {
       const encodedLengthAndValue = int16Encoder(value);
       return Buffer.concat([tagBuf, encodedLengthAndValue]);
@@ -324,6 +328,21 @@ var encodeV1 = (key, value) => {
       len.writeUInt16BE(encodedHomepagePending.byteLength);
       return Buffer.concat([tagBuf, len, encodedHomepagePending]);
     }
+    case "totalMempoolCounts": {
+      let encodedHomepagePending = Buffer.allocUnsafe(0);
+      Object.entries(value).forEach(([key2, value2]) => {
+        const encoded = encodeV1(key2, value2);
+        if (encoded) {
+          encodedHomepagePending = Buffer.concat([
+            encodedHomepagePending,
+            encoded
+          ]);
+        }
+      });
+      const len = Buffer.allocUnsafe(2);
+      len.writeUInt16BE(encodedHomepagePending.byteLength);
+      return Buffer.concat([tagBuf, len, encodedHomepagePending]);
+    }
     default:
       return null;
   }
@@ -380,6 +399,7 @@ var decodeV1 = (tag, value) => {
     case "privateBlobCount":
     case "blobCount":
     case "batchesCount":
+    case "totalCount":
     case "txnCount": {
       const decodedValue = int16Parser(value);
       return { key, value: decodedValue };
@@ -608,6 +628,32 @@ var decodeV1 = (tag, value) => {
         }
       }
       return { key, value: decodedMarketableSegmentStats };
+    }
+    case "totalMempoolCounts": {
+      const decodedTotalMempoolCounts = {};
+      let cursor = 0;
+      while (cursor < value.byteLength) {
+        const tag2 = value.readUInt8(cursor);
+        cursor++;
+        let len;
+        if (getTagLengthBytes(tag2) === 2) {
+          len = value.readUInt16BE(cursor);
+          cursor += 2;
+        } else {
+          len = value.readUInt8(cursor);
+          cursor++;
+        }
+        const val = value.subarray(cursor, len + cursor);
+        cursor += len;
+        const decoded = decodeV1(tag2, val);
+        if (decoded) {
+          const { key: key2, value: value2 } = decoded;
+          decodedTotalMempoolCounts[key2] = value2;
+        } else {
+          console.warn(`Unknown tag: ${tag2}  ${val}`);
+        }
+      }
+      return { key, value: decodedTotalMempoolCounts };
     }
     default:
       return null;

@@ -10,7 +10,8 @@ import {
   DeserializedResponse,
   TransactionSegmentStats,
   L2SegmentStats,
-  MarketableSegmentStats
+  MarketableSegmentStats,
+  TotalMempoolCounts
 } from './types-v1'
 
 export const hexParser = (buf: Buffer) => {
@@ -70,6 +71,7 @@ const decodeV1 = (
     case 'privateBlobCount':
     case 'blobCount':
     case 'batchesCount':
+    case 'totalCount':
     case 'txnCount': {
       const decodedValue = int16Parser(value)
       return { key, value: decodedValue }
@@ -364,6 +366,41 @@ const decodeV1 = (
       }
 
       return { key, value: decodedMarketableSegmentStats }
+    }
+    case 'totalMempoolCounts': {
+      const decodedTotalMempoolCounts: TotalMempoolCounts =
+        {} as TotalMempoolCounts
+      let cursor = 0
+
+      while (cursor < value.byteLength) {
+        const tag = value.readUInt8(cursor)
+        cursor++
+
+        let len: number
+
+        if (getTagLengthBytes(tag) === 2) {
+          len = value.readUInt16BE(cursor)
+          cursor += 2
+        } else {
+          len = value.readUInt8(cursor)
+          cursor++
+        }
+
+        const val = value.subarray(cursor, len + cursor)
+        cursor += len
+        const decoded = decodeV1(tag, val)
+
+        if (decoded) {
+          const { key, value } = decoded
+          // @ts-ignore
+          decodedTotalMempoolCounts[key as keyof TotalMempoolCounts] =
+            value as ValueOf<TotalMempoolCounts>
+        } else {
+          console.warn(`Unknown tag: ${tag}  ${val}`)
+        }
+      }
+
+      return { key, value: decodedTotalMempoolCounts }
     }
     default:
       return null

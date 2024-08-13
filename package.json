@@ -1,6 +1,6 @@
 {
   "name": "tex-serializer",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "module": "dist/index.js",
   "type": "module",
   "devDependencies": {

@@ -62,6 +62,11 @@ type MessageBase = {
 
 export type MempoolMessageV1 = MessageBase & {
   transactions: MempoolTransactionV1[]
+  /**
+   * Mempool counts for both full and marketable mempoools regardless of when the txns arrived.
+   * Top level count properties are counts of txns that have arrived since last block.
+   * */
+  totalMempoolCounts?: TotalMempoolCounts
 }
 
 export type BlockMessageV1 = MessageBase & {
@@ -107,11 +112,6 @@ export type Stats = {
    * Blocked txn count that has arrived since the last block
    * */
   blockedCount: number
-  /**
-   * Mempool counts for both full and marketable mempoools regardless of when the txns arrived.
-   * Top level count properties are counts of txns that have arrived since last block.
-   * */
-  totalMempoolCounts?: TotalMempoolCounts
 }
 
 export type StatsMessage = MessageBase & {
